@@ -3,11 +3,16 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(to right, #1a002e, #240046, #3a0ca3);
+  background: linear-gradient(to right, #2b1055, #753a88);
   background-repeat: no-repeat;
   background-size: cover;
   font-family: "Poppins", sans-serif;
   overflow-x: hidden;
+}
+
+.bg-purple {
+  background: linear-gradient(to right, #2b1055, #753a88) !important;
+  color: white;
 }
 
 /* Ini transisi hover jadi gede */
@@ -35,4 +40,40 @@ body {
 .hoverable:hover .services-icon {
   background-color: white;
   color: black;
+}
+
+.step-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 2rem;
+  color: white;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.step-number {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background-color: #a64bf4;
+  color: white;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border-radius: 60%;
+  padding: 3px;
+}
+
+.purple-icon {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 2rem;
+  color: white;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
 }
