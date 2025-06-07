@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(to right, #1a002e, #240046, #3a0ca3);
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Ini transisi hover jadi gede */
+.hoverable {
+  transition: transform 0.3s ease;
+}
+
+/* Ini kalo dihover jadi gede */
+.hoverable:hover {
+  transform: scale(1.05);
+}
+
+/* Ini transisi hover jadi gede + warnanya jadi putih */
+.hoverable-white {
+  transition: transform 0.3s ease;
+}
+
+/* Ini kalo dihover jadi gede + warnanya jadi putih */
+.hoverable-white:hover {
+  transform: scale(1.05);
+  background-color: white;
+  color: black;
+}
+
+.hoverable:hover .services-icon {
+  background-color: white;
+  color: black;
+}
