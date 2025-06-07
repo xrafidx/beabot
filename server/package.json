@@ -6,6 +6,7 @@
   "scripts": {
     "test": "nodemon index.js"
   },
+  "type": "module",
   "author": "Rafid Wahyu Aditya",
   "license": "ISC",
   "dependencies": {
