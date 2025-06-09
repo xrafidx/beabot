@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <title>Get Started on Beabot</title>
+  </head>
+  <body>
+    <!-- Header Login Register -->
+    <nav class="navbar border-bottom navbar-expand-lg navbar-dark">
+      <div class="container-fluid">
+        <!-- Tombol Back -->
+        <div class="fw-light">
+          <a href="index.html" class="text-white text-decoration-none">
+            <i class="bi bi-arrow-left fs-4"></i>
+          </a>
+        </div>
+
+        <h1 class="navbar-brand me-3 mt-1 fw-bolder">Beabot</h1>
+      </div>
+    </nav>
+    <!-- Akhir Header Login Register -->
+
+    <!-- Register Card -->
+    <div class="container my-5 p-5">
+      <div class="step-box w-100">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="d-flex justify-content-center mb-3">
+              <div class="rounded p-3 purple-icon">
+                <i class="bi bi-person-circle fs-1 fw-bold"></i>
+              </div>
+            </div>
+          </div>
+          <h1 class="text-center fw-bold">Register on Beabot</h1>
+          <p class="fw-light">Join Beabot and start improving your interview skills and essays today</p>
+
+          <!-- Register Form -->
+          <form method="post">
+            <div class="row my-3">
+              <div class="col-12">
+                <div class="form-floating mb-3 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-person"></i>
+                  </span>
+                  <input type="text" id="userName" class="form-control" placeholder="Your name" required />
+                  <label class="text-white fw-lighter ms-5" for="userName">Username</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-floating mb-3 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope"></i>
+                  </span>
+                  <input type="email" id="userEmail" class="form-control" placeholder="Your Email" required />
+                  <label class="text-white fw-lighter ms-5" for="userEmail">Email</label>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-floating mb-3 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input type="password" id="userPassword" class="form-control" placeholder="Enter Password" required />
+                  <label class="text-white fw-lighter ms-5" for="userPassword">Password</label>
+
+                  <!-- Ini belom work juga tombol show passwordnya -->
+                  <!-- <span class="passwordToggler me-2" id="togglePassword">
+                    <i class="bi bi-eye fs-4"></i>
+                  </span> -->
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-floating mb-3 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input type="password" id="userPasswordConfirm" class="form-control" placeholder="Enter Password" required />
+                  <label class="text-white fw-lighter ms-5" for="userPasswordConfirm">Confirm Password</label>
+
+                  <!-- Ini gw komen juga, ini tombol buat show Passwordnya -->
+                  <!-- <span class="passwordToggler me-2 input-group-text" id="togglePasswordConfirm">
+                    <i class="bi bi-eye fs-4"></i>
+                  </span> -->
+                </div>
+
+                <!-- Ini kalo confirm passwordnya beda -->
+                <p class="text-danger" id="passwordError"></p>
+              </div>
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-outline-light my-3">Register</button>
+
+                <p class="fw-lighter">
+                  Already have an account?
+                  <a class="fw-bolder text-white text-decoration-none">Sign In</a>
+                </p>
+              </div>
+            </div>
+          </form>
+
+          <!-- Ini gw comment dulu soalnya blum work njir tombol showPasswordnya kampret -->
+          <!-- <script src="assets/js/form.js"></script> -->
+          <!-- Akhir Register Form -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Akhir Register Card -->
+  </body>
+</html>
