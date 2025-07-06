@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.3.6"
+  },
+  "name": "beabot",
+  "version": "1.0.0",
+  "description": "Website untuk persiapan wawancara beasiswamu dan review essay",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
