@@ -2,15 +2,22 @@
   "name": "backendbeabot",
   "version": "1.0.0",
   "description": "backend dari beabot",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "nodemon index.js"
+    "test": "nodemon ./src/server.js"
   },
   "type": "module",
   "author": "Rafid Wahyu Aditya",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.9.0",
-    "express": "^5.1.0"
+    "@prisma/client": "^6.11.1",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.11.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
