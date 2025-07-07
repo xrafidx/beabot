@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { __filename,__dirname } from "./utils/path.js";
 import authRoutes from './routes/auth.routes.js';
+import errorHandler from "./middlewares/errorHandler.middlewares.js";
 
 dotenv.config();
 const app = express();
@@ -15,6 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/',authRoutes);
 
 
+// error handling
+app.use(errorHandler);
 
 app.listen(PORT,()=>{
     console.log(`Server ini berjalan di port ${PORT}`);

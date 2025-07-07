@@ -1,12 +1,8 @@
 import prisma from '../config/prisma.js'
 export async function findUser(email){
     try {
-        const user = await prisma.user.findUnique({
-            where:{
-                email:email
-            }
-        })
-        return user;
+        const user =  await prisma.$queryRaw`SELECT * from "user" WHERE email = ${email}`
+        return user[0];
     } 
     catch (error) {
         console.error("Database error in findUser:", error);
@@ -14,16 +10,16 @@ export async function findUser(email){
     }
 }
 export async function createUser(name,email,hashedPass){
+    console.log("DEBUG: Hashed Password Type (to Prisma):", typeof hashedPass);
     try {
-    const newUser = await prisma.user.create({
-  data: {
-    name: name,
-    email: email,
-    hashedPassword: hashedPass,
-  },
-});
-    return newUser;
-    } 
+        console.log(name)
+        const newUser = await prisma.$queryRaw`
+            INSERT INTO "user"(name, email, hashedpassword) 
+            VALUES(${name}, ${email}, ${hashedPass}) 
+            RETURNING id, name, email, hashedpassword; 
+        `
+        return newUser;
+    }   
     catch (error) {
         console.error('Database Error in createUser',error);
         throw error
