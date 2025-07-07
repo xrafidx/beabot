@@ -179,10 +179,16 @@
     @apply flex min-h-14 w-full items-center justify-center gap-1.5 rounded-md;
   }
   .btn-primary {
-    @apply w-fit !bg-[#753a88] !text-white hover:!bg-[#542163] !rounded-lg !font-bold px-5 cursor-pointer min-h-10;
+    @apply w-fit !bg-[#753a88] !text-white hover:!bg-[#542163] !rounded-md !font-bold px-2 py-2 cursor-pointer min-h-10;
   }
   .btn-secondary {
     @apply w-fit !bg-dark-200 !text-primary-200 hover:!bg-dark-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10;
+  }
+  .btn-white {
+    @apply w-fit !bg-white rounded font-semibold p-2 hover:!bg-[#c4c4c4];
+  }
+  .btn-outline {
+    @apply w-fit !bg-transparent border rounded font-semibold p-2 hover:!bg-white hover:!text-black;
   }
 
   .btn-upload {
@@ -262,6 +268,12 @@
     .buttons {
       @apply flex w-full justify-evenly gap-4 max-sm:flex-col max-sm:items-center;
     }
+  }
+
+  .hero-section {
+    @apply flex mx-auto w-full flex-col 
+    bg-gradient-to-r from-[#2b1055] to-[#753a88]
+    min-h-screen text-white flex items-center justify-center;
   }
 
   .auth-layout {
