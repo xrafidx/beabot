@@ -24,7 +24,7 @@ const InterviewCard = ({ interviewId, userId, type, topic, fieldOfStudy, created
         <Image src={getRandomInterviewCover()} alt="interview cover" width={90} height={90} className="rounded-full object-fit size-[90px]" />
 
         {/* Judul Interview */}
-        <h3 className="mt-5 capitalize text-white">{topic} Interviews</h3>
+        <h3 className="mt-5 capitalize">{topic} Interviews</h3>
 
         <div className="flex flex-row gap-2">
           {/* Summary singkat Interview */}

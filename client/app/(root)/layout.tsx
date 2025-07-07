@@ -6,7 +6,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
       <nav className="p-4">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center py-3">
           <h2 className="gap-2">Beabot</h2>
         </Link>
       </nav>
