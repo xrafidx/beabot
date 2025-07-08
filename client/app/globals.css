@@ -190,7 +190,9 @@
   .btn-outline {
     @apply w-fit !bg-transparent border rounded font-semibold p-2 hover:!bg-white hover:!text-black;
   }
-
+  .btn-outline-purple {
+    @apply w-fit !bg-transparent border !border-[#753a88] rounded-md font-semibold p-2 hover:!bg-[#753a88] hover:!text-white;
+  }
   .btn-upload {
     @apply bg-dark-200 rounded-full min-h-12 px-5 cursor-pointer border border-input  overflow-hidden;
   }

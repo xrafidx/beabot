@@ -33,7 +33,7 @@ const Page = () => {
               Get Started
             </Link>
 
-            <Link href="/sign-in" className={`transition-colors duration-300 ${scrolled ? "btn-outline border-[#753a88] text-[#753a88]" : "btn-outline text-white"}`}>
+            <Link href="/sign-in" className={`transition-colors duration-300 ${scrolled ? "btn-outline-purple text-[#753a88]" : "btn-outline text-white"}`}>
               Sign In
             </Link>
           </div>
@@ -59,22 +59,34 @@ const Page = () => {
       <div className="root-layout">
         <h2 className="text-center fw-extrabold my-8">Our Services</h2>
 
-        <div className="flex flex-col lg:flex-row flex-wrap justify-center items-stretch gap-6">
+        <div className="flex flex-col lg:flex-row flex-wrap justify-center items-center gap-8.5 mx-auto">
           <div className="w-full lg:w-[22%]">
             <div className="card-border border-[#753a88] p-5">
-              <h3>Mock Interview</h3>
+              <h3 className="text-center my-2">Mock Interview</h3>
+              <p className="text-center my-2">Practice with AI-powered mock interviews tailored to scholarship preparation.</p>
+              <ul className="text-md">
+                <li>Scholarship-specific questions.</li>
+                <li>Real-time feedback</li>
+                <li>Performance analytics</li>
+                <li>Unlimited practice sessions</li>
+              </ul>
+              <div className="w-full justify-center items-center my-3">
+                <Link href="/" className="btn-outline-purple">
+                  Learn More
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="w-full lg:w-[22%]">
             <div className="card-border border-[#753a88] p-5">
-              <h3>Essay Review</h3>
+              <h3 className="text-center">Essay Review</h3>
             </div>
           </div>
 
           <div className="w-full lg:w-[22%]">
             <div className="card-border border-[#753a88] p-5">
-              <h3>AI Feedback</h3>
+              <h3 className="text-center">AI Feedback</h3>
             </div>
           </div>
 
