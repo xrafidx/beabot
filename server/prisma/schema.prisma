@@ -14,3 +14,9 @@ model user {
   email          String @unique
   hashedpassword String
 }
+
+model blacklist {
+  jti String @id @unique
+  expiresat DateTime
+  createdat DateTime @default(now())
+}

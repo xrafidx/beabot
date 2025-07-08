@@ -2,6 +2,7 @@
 import { Router } from "express";
 // import file controller
 import * as authController from '../controllers/auth.controller.js'
+import {isAuthenticated} from "../middlewares/authentication.middlewares.js";
 
 
 const router = Router();
@@ -13,6 +14,8 @@ router.post('/login', authController.login);
 router.post('/register', authController.register);
 
 // kalo user logout
-router.post('/logout', authController.logout);
+router.post('/logout', isAuthenticated ,authController.logout);
+
+router.get('/dashboard', isAuthenticated , authController.dashboard);
 
 export default router

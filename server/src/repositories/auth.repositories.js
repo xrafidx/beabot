@@ -1,7 +1,7 @@
 import prisma from '../config/prisma.js'
 export async function findUser(email){
     try {
-        const user =  await prisma.$queryRaw`SELECT * from "user" WHERE email = ${email}`
+        const user =  await prisma.$queryRaw`SELECT * from "user" WHERE email = ${email}`;
         return user[0];
     } 
     catch (error) {
@@ -24,4 +24,30 @@ export async function createUser(name,email,hashedPass){
         console.error('Database Error in createUser',error);
         throw error
     }
+}
+export async function findToken(jti){
+    try{
+        const token = await prisma.$queryRaw`SELECT * from "blacklist" WHERE jti = ${jti}`;
+        return token[0];
+    }
+    catch (error){
+        console.error('Database error in findToken: ', error);
+        throw error;
+    }
+}
+
+export async function addBlacklist(jti,iat,exp){
+    try{
+        const blacklist = await prisma.$queryRaw`
+        INSERT INTO "blacklist"(jti, expiresat, createdat)
+        VALUES(${jti},${exp},${iat})
+        RETURNING jti, expiresat, createdat;
+        `
+        return blacklist;
+    }
+    catch(error){
+        console.error('Database error in addBlacklist: ',error);
+        throw error;
+    }
+
 }

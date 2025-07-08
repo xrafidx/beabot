@@ -2,7 +2,7 @@ import * as authRepositories from '../repositories/auth.repositories.js';
 import * as password from '../utils/password.js';
 import { v4 as uuidv4 } from 'uuid';
 import { jwtcreate,jwtvalidate } from '../config/JWT.js';
-
+import { findToken } from '../repositories/auth.repositories.js';
 
 // crafting JWT Token
 export function craftToken(userData){
@@ -18,7 +18,7 @@ export function craftToken(userData){
     }
     catch(error){
         console.error('Error dalam membuat token JWT', error);
-        throw new error('Error dalam membuat token JWT');
+        throw new Error('Error dalam membuat token JWT');
     }
 }
 
@@ -74,6 +74,39 @@ export async function verifyUser(email,plainPassword){
         
     } catch (error) {
         console.error("Error in verify user services",error);
-        throw new error("Error in verify user services");
+        throw new Error("Error in verify user services");
     }
+}
+
+export async function blacklistCheck(payload){
+    try{
+        // ngambil data jti iat dan expired
+        const {jti,iat,exp} = payload;
+        // nyari tokennya apakah ada di list blacklist
+        const blacklisted = await findToken(jti);
+        if(blacklisted){
+            // ini kalo tokennya udah di blacklist
+            throw new Error("Token sudah tidak valid");
+        }
+    }
+    catch(error){
+        console.error("Error in blacklistCheck services", error);
+        throw new Error("Error in blacklistCheck services");
+    }
+}
+
+export async function blacklistToken(token){
+    try {
+        // parsing token
+        const {jti, iat, exp} = jwtvalidate(token);
+        //conver iat dan exp jadi date and time
+        const iatConverted = new Date(iat*1000);
+        const expConverted = new Date(exp*1000);
+        // ngeblacklist token
+        const blacklist = await authRepositories.addBlacklist(jti, iatConverted, expConverted);
+    } catch (error) {
+        console.error("Error in blacklistToken services", error);
+        throw new Error("Error in blacklistToken services");
+    }
+
 }
