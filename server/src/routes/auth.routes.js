@@ -8,7 +8,7 @@ import {isAuthenticated} from "../middlewares/authentication.middlewares.js";
 const router = Router();
 
 // kalo user login
-router.post('/login', authController.login);
+router.post('/sign-in', authController.login);
 
 // kalo user register
 router.post('/register', authController.register);
