@@ -39,7 +39,7 @@ export async function register(req,res,next){
         const userJWT = authServices.craftToken(newUser);
 
         // send JWT via cookies
-        res.cookie('accessToken', JWT, {
+        res.cookie('accessToken', userJWT, {
             httpOnly: true,
             secure: true,
             sameSite: 'Lax',
@@ -61,6 +61,7 @@ export async function logout(req,res,next){
     try {
     // ngambil token
     const token = req.cookies.accessToken
+    console.log('CONTROLLER TOKEN',token)
     // ngeblacklist token
     const result = authServices.blacklistToken(token);
     res.status(200).json({
