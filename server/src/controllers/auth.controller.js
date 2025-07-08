@@ -1,81 +1,94 @@
-import * as authServices from '../services/auth.services.js'
+import * as authServices from "../services/auth.services.js";
 
-export async function login(req,res,next){
-    // ngambil email
-    const email = req.body.email;
-    // ngambil passwordplain
-    const plainPassword = req.body.password;
-    try {
-        // verifikasi user
-        const userData = await authServices.verifyUser(email,plainPassword);
-        // craft JWT
-        const JWT = authServices.craftToken(userData);
-        
-        // send jwt via cookies
-        res.cookie('accessToken', JWT, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'Lax',
-            maxAge: 2 * 24 * 60 * 60 * 1000 // 2 hari sama kaya JWT
-        })
+export async function login(req, res, next) {
+  const email = req.body.email;
+  const plainPassword = req.body.password;
+  try {
+    const userData = await authServices.verifyUser(email, plainPassword);
+    const accessToken = authServices.craftToken(userData); // Lebih baik pakai nama 'accessToken' atau 'token'
 
-        // status message
-        res.status(200).json({
-            success:true,
-            message:'Login berhasil'
-        })
-    } catch (error) {
-        next(error);
-    }
-}
-
-
-export async function register(req,res,next){
-    const {name,email,password: plainPassword} = req.body;
-    try {
-        // add new user
-        let newUser = await authServices.newUser(name,email,plainPassword);
-        // craft JWT Token
-        const userJWT = authServices.craftToken(newUser);
-
-        // send JWT via cookies
-        res.cookie('accessToken', JWT, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'Lax',
-            maxAge: 2 * 24 * 60 * 60 * 1000 // 2 hari sama kaya JWT
-        })
-
-        // Respond message
-        res.status(201).json({ 
-            success: true,
-            message: "Registrasi berhasil", 
-        });
-        
-    } catch (error) {
-        next(error);
-    }
-}
-
-export async function logout(req,res,next){
-    try {
-    // ngambil token
-    const token = req.cookies.accessToken
-    // ngeblacklist token
-    const result = authServices.blacklistToken(token);
-    res.status(200).json({
-        success: true,
-        message: "Logout berhasil."
-    });     
-    } catch (error) {
-        next(error);
-    }
-}
-
-export async function dashboard(req,res,next){
-        res.status(200).json({
-        success: true,
-        message: "Akses Diberikan"
+    res.cookie("accessToken", accessToken, {
+      // <-- Perbaikan di sini, gunakan 'accessToken'
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Hanya secure di production
+      sameSite: "Lax",
+      maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hari
     });
+
+    res.status(200).json({
+      success: true,
+      message: "Login berhasil",
+      // Opsi: Kirim data user yang relevan (tanpa password)
+      user: {
+        id: userData.id, // Asumsikan userData memiliki id
+        email: userData.email,
+        name: userData.name, // Asumsikan userData memiliki name
+      },
+    });
+  } catch (error) {
+    // Penting: Tangani error spesifik di sini dan berikan pesan yang relevan ke frontend
+    // Contoh: if (error.message === 'Invalid credentials') res.status(401).json({ message: 'Email atau password salah' });
+    // else next(error);
+    next(error); // Untuk error yang tidak ditangani secara spesifik, kirim ke error handling middleware
+  }
 }
 
+export async function register(req, res, next) {
+  const { name, email, password: plainPassword } = req.body;
+  try {
+    let newUser = await authServices.newUser(name, email, plainPassword);
+    const accessToken = authServices.craftToken(newUser); // Menggunakan accessToken untuk konsistensi
+
+    res.cookie("accessToken", accessToken, {
+      // <-- Perbaikan di sini, gunakan 'accessToken'
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Hanya secure di production
+      sameSite: "Lax",
+      maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hari
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Registrasi berhasil",
+      // Opsi: Kirim data user yang baru terdaftar
+      user: {
+        id: newUser.id, // Asumsikan newUser memiliki id
+        email: newUser.email,
+        name: newUser.name,
+      },
+    });
+  } catch (error) {
+    // Penting: Tangani error spesifik di sini
+    // Contoh: if (error.message === 'Email already exists') res.status(409).json({ message: 'Email sudah terdaftar' });
+    // else next(error);
+    next(error);
+  }
+}
+
+export async function logout(req, res, next) {
+  try {
+    const token = req.cookies.accessToken;
+    const result = authServices.blacklistToken(token); // Pastikan ini menghapus cookie juga
+    // Menghapus cookie di sisi client
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
+    });
+    res.status(200).json({
+      success: true,
+      message: "Logout berhasil.",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function dashboard(req, res, next) {
+  res.status(200).json({
+    success: true,
+    message: "Akses Diberikan",
+    // Kamu mungkin ingin mengirim data pengguna yang sudah terautentikasi di sini
+    // Misalnya: user: req.user
+  });
+}
