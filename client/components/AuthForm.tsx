@@ -1,4 +1,4 @@
-// Ini buat ngerender AuthForm nya. Nanti ni file ngambil komponen dari FormField.tsx
+// AuthForm.tsx
 
 "use client";
 
@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FormField from "./FormField";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation"; // <-- Tambahkan ini
 
 const AuthFormSchema = (type: FormType) => {
   return z.object({
@@ -23,6 +24,7 @@ const AuthFormSchema = (type: FormType) => {
 };
 
 const AuthForm = ({ type }: { type: FormType }) => {
+  const router = useRouter(); // <-- Inisialisasi router di sini
   const formSchema = AuthFormSchema(type);
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -36,15 +38,54 @@ const AuthForm = ({ type }: { type: FormType }) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      const endpoint = type === "register" ? "http://localhost:5000/register" : "http://localhost:5000/sign-in";
+
+      let payload;
+
       if (type === "register") {
-        console.log("Register", values);
+        payload = {
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        };
       } else {
-        console.log("Sign In", values);
+        payload = {
+          email: values.email,
+          password: values.password,
+        };
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(`${type === "register" ? "Registrasi" : "Login"} berhasil!`);
+        console.log("Response dari server:", data);
+
+        // Setelah berhasil login/register
+        // Simpan token jika backend mengembalikan token di body response
+        if (data.token) {
+          localStorage.setItem("authToken", data.token);
+        }
+
+        // <-- REDIRECT PENTING DI SINI -->
+        router.push("/dashboard"); // Arahkan ke halaman dashboard
+      } else {
+        const errorData = await response.json();
+        // Coba tampilkan pesan error yang lebih spesifik dari backend jika ada
+        toast.error(`Gagal ${type === "register" ? "registrasi" : "login"}: ${errorData.message || "Terjadi kesalahan"}`);
+        console.error("Gagal mengirim data:", errorData);
       }
     } catch (error) {
-      toast.error(`There was an error: ${error} `);
+      toast.error(`Terjadi kesalahan: ${error instanceof Error ? error.message : "Tidak diketahui"} `);
     }
   }
 
