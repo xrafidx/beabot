@@ -64,12 +64,18 @@ export async function verifyUser(email,plainPassword){
             }
             // kalo salah
             else{
-                throw new Error("Email atau password anda salah");
+                return res.status(401).json({
+                success: false,
+                message: "Email atau password yang Anda masukkan salah."
+                });
             }
         }
         // ini kalo ga ketemu
         else{
-            throw new Error("Email atau password anda salah");
+            return res.status(401).json({
+            success: false,
+            message: "Email atau password yang Anda masukkan salah."
+            });
         }
         
     } catch (error) {
