@@ -15,16 +15,18 @@ export async function login(req, res, next) {
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hari
     });
 
-    res.status(200).json({
-      success: true,
-      message: "Login berhasil",
-      // Opsi: Kirim data user yang relevan (tanpa password)
-      user: {
-        id: userData.id, // Asumsikan userData memiliki id
-        email: userData.email,
-        name: userData.name, // Asumsikan userData memiliki name
-      },
-    });
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Login berhasil",
+    //   // Opsi: Kirim data user yang relevan (tanpa password)
+    //   user: {
+    //     id: userData.id, // Asumsikan userData memiliki id
+    //     email: userData.email,
+    //     name: userData.name, // Asumsikan userData memiliki name
+    //   },
+    // });
+    res.redirect('/dashboard');
+
   } catch (error) {
     if(error.message === 'Email atau password salah'){
       return res.status(401).json({
@@ -52,16 +54,17 @@ export async function register(req, res, next) {
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hari
     });
 
-    res.status(201).json({
-      success: true,
-      message: "Registrasi berhasil",
-      // Opsi: Kirim data user yang baru terdaftar
-      user: {
-        id: newUser.id, // Asumsikan newUser memiliki id
-        email: newUser.email,
-        name: newUser.name,
-      },
-    });
+    // res.status(201).json({
+    //   success: true,
+    //   message: "Registrasi berhasil",
+    //   // Opsi: Kirim data user yang baru terdaftar
+    //   user: {
+    //     id: newUser.id, // Asumsikan newUser memiliki id
+    //     email: newUser.email,
+    //     name: newUser.name,
+    //   },
+    // });
+    res.redirect('/dashboard');
   } catch (error) {
     // Penting: Tangani error spesifik di sini
     // Contoh: if (error.message === 'Email already exists') res.status(409).json({ message: 'Email sudah terdaftar' });
