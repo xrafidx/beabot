@@ -84,11 +84,4 @@ export async function logout(req, res, next) {
   }
 }
 
-export async function dashboard(req, res, next) {
-  res.status(200).json({
-    success: true,
-    message: "Akses Diberikan",
-    // Kamu mungkin ingin mengirim data pengguna yang sudah terautentikasi di sini
-    // Misalnya: user: req.user
-  });
-}
+

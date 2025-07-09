@@ -16,6 +16,6 @@ router.post('/register', authController.register);
 // kalo user logout
 router.post('/logout', isAuthenticated ,authController.logout);
 
-router.get('/dashboard', isAuthenticated , authController.dashboard);
+
 
 export default router

@@ -1,9 +1,23 @@
+
+// import express
 import express from "express";
+
+// access file .env
 import dotenv from "dotenv";
+
+// buat filename dirname
 import { __filename,__dirname } from "./utils/path.js";
+
+// routes buat authentication
 import authRoutes from './routes/auth.routes.js';
+
+// middleware error handler
 import errorHandler from "./middlewares/errorHandler.middlewares.js";
+
+// ini biar aplikasi dari port yang beda bisa communicate
 import cors from 'cors';
+
+// ini buat parsing data dari cookie
 import cookieParser from 'cookie-parser'
 
 dotenv.config();
@@ -18,7 +32,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // routes
-app.use('/',authRoutes);
+
+// auth routes
+app.use('/api/v1/auth', authRoutes);
+
+// dashboard routes
+app.use('/api/v1', );
+
+// essay-review routes
 
 
 // error handling
