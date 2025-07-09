@@ -18,6 +18,6 @@ export async function essayReviewPrompt(fileName){
     });
     return response.text
     } catch (error) {
-        
+        throw new Error("Error in essayReview services");
     }
 }
