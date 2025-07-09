@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use('/api/v1/auth', authRoutes);
 
 // dashboard routes
-app.use('/api/v1', );
+// app.use('/api/v1', );
 
 // essay-review routes
 
