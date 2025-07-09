@@ -7,7 +7,6 @@ async function hashPass(plainTextPass){
     try {
         const saltRounds = Number(process.env.SALT_ROUNDS);
         const hashedPass = await bcrypt.hash(plainTextPass, saltRounds);
-        console.log("DEBUG: Hashed Password Type (to Prisma):", typeof hashedPass);
         return hashedPass;
     } catch (error) {
         console.error("Hashing error:", error);

@@ -74,7 +74,10 @@ export async function verifyUser(email,plainPassword){
         
     } catch (error) {
         console.error("Error in verify user services",error);
-        throw new Error("Error in verify user services");
+        return res.status(401).json({
+        success: false,
+        message: "Email atau password yang Anda masukkan salah."
+        });
     }
 }
 

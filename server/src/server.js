@@ -20,6 +20,9 @@ import cors from 'cors';
 // ini buat parsing data dari cookie
 import cookieParser from 'cookie-parser'
 
+// routes buat essay review
+import essayReviewRoutes from './routes/essayReview.routes.js';
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
@@ -40,6 +43,7 @@ app.use('/api/v1/auth', authRoutes);
 // app.use('/api/v1', );
 
 // essay-review routes
+app.use('/api/v1', essayReviewRoutes);
 
 
 // error handling

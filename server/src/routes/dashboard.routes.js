@@ -11,4 +11,4 @@ const router = Router();
 
 
 // kalo dashboard diakses
-router.get('/dashboard');
+router.get('/dashboard', isAuthenticated);
