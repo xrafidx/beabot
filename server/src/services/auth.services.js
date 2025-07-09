@@ -36,7 +36,6 @@ export async function newUser(name,email,plainPassword){
     console.log("User is not registered");
     // password dihash
     const hashedPass = await password.hashPass(plainPassword);
-    console.log("DEBUG: Hashed Password Type (to Prisma):", typeof hashedPass);
     // store email,password, sama hash
     const newUser = await authRepositories.createUser(name,email,hashedPass);
     console.log("New User Created");
@@ -49,7 +48,6 @@ export async function newUser(name,email,plainPassword){
 }
 
 export async function verifyUser(email,plainPassword){
-    try {
         // cari email di db
         const user = await authRepositories.findUser(email);
         // kalo user ketemu
@@ -58,33 +56,20 @@ export async function verifyUser(email,plainPassword){
             // verify password
             console.log(plainPassword,hashedPass);
             const result = await password.verifyPass(plainPassword,hashedPass);
+            console.log(result)
             // kalo bener
             if(result){
                 return user;
             }
             // kalo salah
             else{
-                return res.status(401).json({
-                success: false,
-                message: "Email atau password yang Anda masukkan salah."
-                });
+                throw new Error("Email atau password salah");
             }
         }
         // ini kalo ga ketemu
         else{
-            return res.status(401).json({
-            success: false,
-            message: "Email atau password yang Anda masukkan salah."
-            });
+            throw new Error("Email atau password salah");
         }
-        
-    } catch (error) {
-        console.error("Error in verify user services",error);
-        return res.status(401).json({
-        success: false,
-        message: "Email atau password yang Anda masukkan salah."
-        });
-    }
 }
 
 export async function blacklistCheck(payload){

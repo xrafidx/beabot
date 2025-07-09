@@ -26,10 +26,15 @@ export async function login(req, res, next) {
       },
     });
   } catch (error) {
-    // Penting: Tangani error spesifik di sini dan berikan pesan yang relevan ke frontend
-    // Contoh: if (error.message === 'Invalid credentials') res.status(401).json({ message: 'Email atau password salah' });
-    // else next(error);
-    next(error); // Untuk error yang tidak ditangani secara spesifik, kirim ke error handling middleware
+    if(error.message === 'Email atau password salah'){
+      return res.status(401).json({
+        success: false,
+        message: "Email atau password yang Anda masukkan salah."
+      });
+    }
+    else{
+      next(error); // Untuk error yang tidak ditangani secara spesifik, kirim ke error handling middleware
+    }
   }
 }
 
