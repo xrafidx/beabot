@@ -5,12 +5,17 @@ import { createCardsServices, getAllCardsServices, getSpecificCardsServices, del
 export async function createCardsController(req,res,next){
     try {
         // ambil respon buat create kartu
-        const {namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa} = req.body;
+        const {namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa, rating,judulInterview} = req.body;
+        // convert rating ke angka
+        const convertedRating = Number(rating)
+        // convert jadi integer
         const convertedBanyakPertanyaan = Number(banyakPertanyaan)
+        // declare tanggal
+        const tanggal = new Date();
         // ambil id usernya juga
         const uid = req.user.sub;
         // call function create kartu
-        const kartu = await createCardsServices(uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa);
+        const kartu = await createCardsServices(uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa,convertedRating,judulInterview,tanggal);
         // respon sukses
         res.status(201).json({
             success:true,
@@ -25,17 +30,19 @@ export async function createCardsController(req,res,next){
 export async function editCardsController(req,res,next){
     try {
         // ambil respon buat edit kartu
-        
-        const {namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa} = req.body;
+        const {namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa, rating,judulInterview} = req.body;
+        // convert rating ke angka
+        const convertedRating = Number(rating)
+        // convert jadi integer
         const convertedBanyakPertanyaan = Number(banyakPertanyaan)
-        
+        // declare tanggal
+        const tanggal = new Date();
         // ambil id usernya juga
         const uid = req.user.sub;
-        
         // id kartu spesifik yang diinginkan
         const cardId = Number(req.params.id);
         // kartu baru yang udah diedit
-        const kartu = await editSpecificCardsServices(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa);
+        const kartu = await editSpecificCardsServices(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa,convertedRating,judulInterview,tanggal);
         
         // respon sukses
         

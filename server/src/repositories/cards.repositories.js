@@ -1,9 +1,9 @@
 import prisma from "../config/prisma.js";
-export async function addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa) {
+export async function addCards(uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa,rating,judulInterview,tanggal) {
     try {
         const cards = await prisma.$queryRaw`
-        INSERT INTO "interviewcard" (userid, namabeasiswa, banyakpertanyaan, jenisinterview, bahasa)
-        VALUES (${uid},${namaBeasiswa},${banyakPertanyaan},${jenisPertanyaan}, ${bahasa})
+        INSERT INTO "interviewcard" (userid, namabeasiswa, banyakpertanyaan, jenisinterview, bahasa, judulinterview, tanggal, rating)
+        VALUES (${uid},${namaBeasiswa},${convertedBanyakPertanyaan},${jenisPertanyaan}, ${bahasa}, ${judulInterview}, ${tanggal}, ${rating})
         RETURNING *`
         return cards[0];
 
@@ -47,12 +47,12 @@ export async function deleteSpecificCard(uid,cardId){
     }
 }
 
-export async function editSpecificCards(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa){
+export async function editSpecificCards(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa,convertedRating,judulInterview,tanggal){
     try {
         
         const card =  await prisma.$queryRaw`
             UPDATE "interviewcard"
-            SET namabeasiswa = ${namaBeasiswa}, banyakpertanyaan = ${convertedBanyakPertanyaan}, jenisinterview = ${jenisPertanyaan}, bahasa = ${bahasa}
+            SET namabeasiswa = ${namaBeasiswa}, banyakpertanyaan = ${convertedBanyakPertanyaan}, jenisinterview = ${jenisPertanyaan}, bahasa = ${bahasa}, rating = ${convertedRating}, judulinterview = ${judulInterview}, tanggal = ${tanggal}
             WHERE id = ${cardId} AND userid = ${uid}
             RETURNING *;
         `

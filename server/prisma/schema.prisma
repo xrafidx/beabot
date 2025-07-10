@@ -26,10 +26,13 @@ model interviewcard{
   id Int @id @default(autoincrement())
   // FOREIGN KEY
   userid Int
+  judulinterview String
   namabeasiswa String
   banyakpertanyaan Int
   jenisinterview String
   bahasa String
+  tanggal DateTime
+  rating Int
 
   // FOREIGN KEY DEFINITION
   author user @relation(fields: [userid], references: [id])
