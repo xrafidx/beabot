@@ -1,3 +1,5 @@
+"use client";
+
 import InterviewCard from "@/components/InterviewCard";
 import { Button } from "@/components/ui/button";
 import { dummyInterviews } from "@/constants";
@@ -16,7 +18,7 @@ const page = () => {
           <p className="text-lg">Practice on real interview questions & get instant feedback.</p>
           <div className="flex flex-row gap-4">
             <Button asChild className="btn-primary">
-              <Link href="/interview">Start an Interview</Link>
+              <Link href="/dashboard/interview">Start an Interview</Link>
             </Button>
             <Button asChild className="btn-primary">
               <Link href="/essay-review">Start Essay Review</Link>

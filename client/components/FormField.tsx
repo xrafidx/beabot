@@ -11,7 +11,7 @@ interface FormFieldProps<T extends FieldValues> {
   name: Path<T>;
   label: string;
   placeholder?: string;
-  type: "text" | "password" | "email";
+  type: "text" | "password" | "email" | "number";
   description: string;
 }
 
