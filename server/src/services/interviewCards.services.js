@@ -1,4 +1,4 @@
-import { addCards, getAllCards, getSpecificCards, deleteSpecificCard} from "../repositories/cards.repositories.js";
+import { addCards, getAllCards, getSpecificCards, deleteSpecificCard, editSpecificCards} from "../repositories/cards.repositories.js";
 export async function createCardsServices(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa){
     try {
         // call function buat bikin row baru di kartu.
@@ -40,5 +40,18 @@ export async function deleteSpecificCardsServices(uid,cardId){
     }
     catch(error){
         throw error;
+    }
+}
+
+export async function editSpecificCardsServices(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa){
+    try {
+        // call function buat edit kartu
+        const result = await editSpecificCards(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa);
+        if(result.length < 1){
+            throw new Error("Data Tidak Ditemukan");
+        }
+        return result;
+    } catch (error) {
+        throw error
     }
 }

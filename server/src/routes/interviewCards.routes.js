@@ -20,7 +20,7 @@ router.post('/cards', isAuthenticated, createCardsController);
 
 
 // Edit Kartu
-router.patch('/cards',isAuthenticated, editCardsController);
+router.put('/cards/:id',isAuthenticated, editCardsController);
 
 
 // Hapus Kartu
