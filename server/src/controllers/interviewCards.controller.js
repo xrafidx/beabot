@@ -1,4 +1,5 @@
-import { createCardsServices, getAllCardsServices, getSpecificCardsServices } from "../services/interviewCards.services.js";
+import e from "express";
+import { createCardsServices, getAllCardsServices, getSpecificCardsServices, deleteSpecificCardsServices} from "../services/interviewCards.services.js";
 
 
 export async function createCardsController(req,res,next){
@@ -31,9 +32,33 @@ export async function editCardsController(req,res,next){
 
 export async function deleteCardsController(req,res,next){
     try {
-        
+    // id kartu spesifik yang diinginkan untuk dihapus
+    const cardId = Number(req.params.id);
+
+    // id user yang minta
+    const userId = req.user.sub;  
+    
+    // hapus kartu
+
+    const kartu = await deleteSpecificCardsServices(userId,cardId);
+
+    // respon sukses
+    res.status(200).json({
+        success:true,
+        message:"Data berhasil dihapus",
+        data: kartu
+    })
+
     } catch (error) {
-        
+        if(error.message == "Data tidak ditemukan"){
+            res.status(404).json({
+                success: false,
+                message: "Data tidak ditemukan"
+            })
+        }
+        else{
+            next(error)
+        }
     }
 }
 
@@ -77,6 +102,14 @@ export async function getCardByIdController(req,res,next){
     })
 
     } catch (error) {
-       next(error) 
+        if(error.message == "Data tidak ditemukan"){
+            res.status(404).json({
+                success: false,
+                message: "Data tidak ditemukan"
+            })
+        }
+        else{
+          next(error)   
+        }
     }
 }

@@ -24,6 +24,6 @@ router.patch('/cards',isAuthenticated, editCardsController);
 
 
 // Hapus Kartu
-router.delete('/cards',isAuthenticated, deleteCardsController);
+router.delete('/cards/:id',isAuthenticated, deleteCardsController);
 
 export default router;

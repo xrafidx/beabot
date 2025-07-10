@@ -21,6 +21,20 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const fileFilter = (req, file, cb) => {
+  // Cek mimetype file
+  if (file.mimetype === 'application/pdf') {
+    // Jika file adalah PDF, izinkan upload
+    cb(null, true);
+  } else {
+    // Jika bukan PDF, tolak upload dengan memberikan error
+    cb(new Error('Hanya file dengan format PDF yang diizinkan!'), false);
+  }
+}
+
+const upload = multer({ 
+  storage: storage,
+  fileFilter: fileFilter
+ });
 
 export { upload };

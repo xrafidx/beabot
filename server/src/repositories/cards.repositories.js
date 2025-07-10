@@ -33,3 +33,16 @@ export async function getSpecificCards(uid,cardId){
         throw error;
     }
 }
+
+export async function deleteSpecificCard(uid,cardId){
+    try {
+        const card =  await prisma.$queryRaw`
+        DELETE FROM "interviewcard"
+        WHERE userid = ${uid} AND id = ${cardId}
+        RETURNING *;
+        `
+        return card;
+    } catch (error) {
+        throw error;
+    }
+}
