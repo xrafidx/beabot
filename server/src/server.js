@@ -23,6 +23,9 @@ import cookieParser from 'cookie-parser'
 // routes buat essay review
 import essayReviewRoutes from './routes/essayReview.routes.js';
 
+// cards routes
+import cardRoutes from "./routes/interviewCards.routes.js";
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
@@ -47,6 +50,9 @@ app.use('/api/v1/auth', authRoutes);
 
 // essay-review routes
 app.use('/api/v1', essayReviewRoutes);
+
+// cards routes
+app.use('/api/v1', cardRoutes);
 
 
 // error handling

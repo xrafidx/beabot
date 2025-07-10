@@ -29,6 +29,7 @@ model interviewcard{
   namabeasiswa String
   banyakpertanyaan Int
   jenisinterview String
+  bahasa String
 
   // FOREIGN KEY DEFINITION
   author user @relation(fields: [userid], references: [id])
