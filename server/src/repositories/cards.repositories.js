@@ -46,3 +46,18 @@ export async function deleteSpecificCard(uid,cardId){
         throw error;
     }
 }
+
+export async function editSpecificCards(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa){
+    try {
+        
+        const card =  await prisma.$queryRaw`
+            UPDATE "interviewcard"
+            SET namabeasiswa = ${namaBeasiswa}, banyakpertanyaan = ${convertedBanyakPertanyaan}, jenisinterview = ${jenisPertanyaan}, bahasa = ${bahasa}
+            WHERE id = ${cardId} AND userid = ${uid}
+            RETURNING *;
+        `
+        return card;
+    } catch (error) {
+        throw error;
+    }
+}

@@ -1,5 +1,5 @@
 import e from "express";
-import { createCardsServices, getAllCardsServices, getSpecificCardsServices, deleteSpecificCardsServices} from "../services/interviewCards.services.js";
+import { createCardsServices, getAllCardsServices, getSpecificCardsServices, deleteSpecificCardsServices, editSpecificCardsServices} from "../services/interviewCards.services.js";
 
 
 export async function createCardsController(req,res,next){
@@ -24,9 +24,36 @@ export async function createCardsController(req,res,next){
 
 export async function editCardsController(req,res,next){
     try {
+        // ambil respon buat edit kartu
         
+        const {namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa} = req.body;
+        const convertedBanyakPertanyaan = Number(banyakPertanyaan)
+        
+        // ambil id usernya juga
+        const uid = req.user.sub;
+        
+        // id kartu spesifik yang diinginkan
+        const cardId = Number(req.params.id);
+        // kartu baru yang udah diedit
+        const kartu = await editSpecificCardsServices(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa);
+        
+        // respon sukses
+        
+        res.status(200).json({
+            success:true,
+            message:"Data berhasil diubah",
+            data: kartu
+        })
     } catch (error) {
-        
+        if(error.message == "Data tidak ditemukan"){
+            res.status(404).json({
+                success: false,
+                message: "Data tidak ditemukan"
+            })
+        }
+        else{
+            next(error)
+        }
     }
 }
 
