@@ -8,7 +8,7 @@ export async function essayReview(req,res,next){
         const rawResponseText = await essayReviewPrompt(namaFile);
         const jsonMatch = rawResponseText.match(/\{[\s\S]*\}/)
         const parsedResponse = jsonParser(jsonMatch);
-        const hapus = await hapusFile(namaFile);
+        await hapusFile(namaFile);
         res.status(200).json({
             result: parsedResponse
         });

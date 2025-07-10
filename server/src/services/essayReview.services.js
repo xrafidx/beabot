@@ -26,6 +26,7 @@ Fokuslah pada aspek-aspek berikut:
 2.  **Struktur dan Alur Argumen**: Evaluasi bagaimana penulis membangun argumennya, dari pembuka hingga penutup.
 3.  **Kejelasan dan Gaya Bahasa**: Nilai apakah kalimatnya jelas, efektif, dan tidak bertele-tele.
 4.  **Substansi dan Kedalaman Isi**: Analisis kekuatan ide dan kedalaman pemikiran yang disampaikan.
+5.  **Teknikal                   **: Analisis margin, font, spacing yang sekiranya sesuai.
 
 Berikan output HANYA dalam format string JSON yang valid dan bisa langsung di-parse. JANGAN tambahkan teks pembuka, penutup, atau penjelasan apa pun di luar objek JSON. JANGAN gunakan format Markdown seperti \`\`\`json.
 

@@ -13,10 +13,23 @@ model user {
   name           String
   email          String @unique
   hashedpassword String
+  interviewCards interviewcard[]
 }
 
 model blacklist {
   jti String @id @unique
   expiresat DateTime
   createdat DateTime @default(now())
+}
+
+model interviewcard{
+  id Int @id @default (autoincrement())
+  // FOREIGN KEY
+  userid Int
+  namabeasiswa String
+  banyakpertanyaan Int
+  jenisinterview String
+
+  // FOREIGN KEY DEFINITION
+  author user @relation(fields: [userid], references: [id])
 }
