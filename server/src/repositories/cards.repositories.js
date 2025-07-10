@@ -11,3 +11,25 @@ export async function addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan
         throw error;
     }
 }
+
+export async function getAllCards(uid){
+    try {
+        const cards = await prisma.$queryRaw`
+        SELECT * FROM "interviewcard" WHERE "userid" = ${uid};
+        `
+        return cards;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function getSpecificCards(uid,cardId){
+    try {
+    const cards = await prisma.$queryRaw`
+        SELECT * FROM "interviewcard" WHERE "userid" = ${uid} AND "id" = ${cardId};
+        `
+    return cards;
+    } catch (error) {
+        throw error;
+    }
+}

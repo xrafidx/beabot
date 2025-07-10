@@ -1,6 +1,6 @@
 import {Router} from 'express';
 
-import { createCardsController,editCardsController,deleteCardsController, getCardsController } from '../controllers/interviewCards.controller.js';
+import { createCardsController,editCardsController,deleteCardsController, getCardsController, getCardByIdController } from '../controllers/interviewCards.controller.js';
 
 import { isAuthenticated } from '../middlewares/authentication.middlewares.js';
 const router = Router();
@@ -12,6 +12,7 @@ const router = Router();
 router.get('/cards', isAuthenticated, getCardsController);
 
 // ambil data kartu spesifik sesuai pengguna.
+router.get('/cards/:id', isAuthenticated, getCardByIdController);
 
 
 // Buat Kartu

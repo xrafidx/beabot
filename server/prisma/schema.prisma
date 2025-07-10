@@ -23,7 +23,7 @@ model blacklist {
 }
 
 model interviewcard{
-  id Int @id @default (autoincrement())
+  id Int @id @default(autoincrement())
   // FOREIGN KEY
   userid Int
   namabeasiswa String
