@@ -190,27 +190,37 @@ export const mappings = {
 
 export const interviewCovers = ["/kemdikbud.svg", "/tanoto.svg"];
 
-export const dummyInterviews: Interview[] = [
-  {
-    id: "1",
-    userId: "user1",
-    topic: "Frontend Developer",
-    type: "Technical",
-    fieldOfStudy: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
-    level: "Junior",
-    questions: ["What is React?"],
-    finalized: false,
-    createdAt: "2024-03-15T10:00:00Z",
-  },
-  {
-    id: "2",
-    userId: "user1",
-    topic: "Full Stack Developer",
-    type: "Mixed",
-    fieldOfStudy: ["Node.js", "Express", "MongoDB", "React"],
-    level: "Senior",
-    questions: ["What is Node.js?"],
-    finalized: false,
-    createdAt: "2024-03-14T15:30:00Z",
-  },
-];
+// export const dummyInterviews: Interview[] = [
+//   {
+//     id: "1",
+//     userId: "user1",
+//     topic: "Frontend Developer",
+//     type: "Technical",
+//     fieldOfStudy: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
+//     level: "Junior",
+//     questions: ["What is React?"],
+//     finalized: false,
+//     createdAt: "2024-03-15T10:00:00Z",
+//   },
+//   {
+//     id: "2",
+//     userId: "user1",
+//     topic: "Full Stack Developer",
+//     type: "Mixed",
+//     fieldOfStudy: ["Node.js", "Express", "MongoDB", "React"],
+//     level: "Senior",
+//     questions: ["What is Node.js?"],
+//     finalized: false,
+//     createdAt: "2024-03-14T15:30:00Z",
+//   },
+// ];
+
+export const API_ENDPOINTS = {
+  // Buat ambil semua kartu interview
+  GET_ALL_INTERVIEW_CARDS: "/api/v1/cards",
+
+  // Buat bikin kartu interview
+  CREATE_INTERVIEW_CARD: "/api/v1/cards",
+
+  BASE_INTERVIEW_CARD_BY_ID: "/api/v1/cards",
+};

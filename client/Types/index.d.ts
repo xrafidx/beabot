@@ -28,10 +28,25 @@ interface Interview {
 }
 
 interface InterviewCardProps {
-  interviewId?: string;
-  userId?: string;
-  type: string;
-  topic: string;
-  fieldOfStudy: string[];
-  createdAt?: string;
+  interviewId: string;
+  userId: string;
+  judulInterview: string;
+  namaBeasiswa: string;
+  jenisPertanyaan: "Regular" | "Essay-driven";
+  createdAt: Date;
+  coverImageUrl?: string;
+  complete: boolean;
+}
+
+interface BackendInterviewData {
+  interviewId: string;
+  userId: string;
+  judulInterview: string;
+  namaBeasiswa: string;
+  jenisPertanyaan: "Regular" | "Essay-driven";
+  banyakPertanyaan: number;
+  bahasa: "id" | "en";
+  tanggal: string;
+  rating?: number;
+  complete: boolean;
 }

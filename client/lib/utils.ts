@@ -6,16 +6,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const getLogo = async (fieldArray: string[]) => {
-  const logoURLs = fieldArray.map((field) => {
-    return {
-      field,
-      url: `${fieldIconBaseURL}`,
-    };
-  });
+export const getCoverImage = (namaBeasiswa: string): string => {
+  const lowerCaseName = namaBeasiswa.toLowerCase();
 };
-
-// const fieldIconBaseURL = "./public/CompanyName";
 
 export const getRandomInterviewCover = () => {
   const randomIndex = Math.floor(Math.random() * interviewCovers.length);

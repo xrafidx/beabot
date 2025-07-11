@@ -1,13 +1,14 @@
+"use client";
+
 import React from "react";
 import dayjs from "dayjs";
 import { getRandomInterviewCover } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "./ui/button";
 
-const InterviewCard = ({ interviewId, userId, type, topic, fieldOfStudy, createdAt }: InterviewCardProps) => {
-  const feedback = null as Feedback | null;
-  const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
-  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format("MMM D, YYYY");
+const InterviewCard = ({ interviewId, userId, jenisPertanyaan, judulInterview, namaBeasiswa, createdAt, coverImageUrl, complete }: InterviewCardProps) => {
+  const formattedDate = dayjs(createdAt).format("MMM D, YYYY");
+  const displayCoverImage = coverImageUrl;
 
   return (
     // Bikin card
