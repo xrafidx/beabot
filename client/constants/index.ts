@@ -135,3 +135,13 @@ export const API_ENDPOINTS = {
 
   BASE_INTERVIEW_CARD_BY_ID: "/api/v1/cards",
 };
+
+export const INTERVIEW_TYPES_OPTIONS = [
+  { value: "regular", label: "Regular" },
+  { value: "essay-driven", label: "Essay-driven" },
+];
+
+export const INTERVIEW_LANGUAGE_OPTIONS = [
+  { value: "id", label: "Bahasa Indonesia" },
+  { value: "en", label: "English" },
+];

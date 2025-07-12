@@ -18,32 +18,34 @@ interface FormSelectProps<T extends FieldValues> {
 }
 
 const FormSelect = <T extends FieldValues>({ control, name, label, placeholder, options, description }: FormSelectProps<T>) => {
-  <Controller
-    name={name}
-    control={control}
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel className="label">{label}</FormLabel>
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="label">{label}</FormLabel>
 
-        <Select onValueChange={field.onChange} defaultValue={field.value}>
-          <FormControl>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={placeholder}></SelectValue>
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            {options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={placeholder}></SelectValue>
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              {options.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-        {description && <FormDescription className="font-thin text-left">{description}</FormDescription>}
-        <FormMessage></FormMessage>
-      </FormItem>
-    )}></Controller>;
+          {description && <FormDescription className="font-thin text-left">{description}</FormDescription>}
+          <FormMessage></FormMessage>
+        </FormItem>
+      )}></Controller>
+  );
 };
 
 export default FormSelect;

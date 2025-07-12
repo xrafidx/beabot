@@ -1,3 +1,5 @@
+import { FieldValues } from "react-hook-form";
+
 type FormType = "sign-in" | "register";
 
 interface Feedback {
@@ -49,4 +51,21 @@ interface BackendInterviewData {
   tanggal: string;
   rating?: number;
   complete: boolean;
+}
+
+interface InterviewFormData {
+  judulInterview: string;
+  namaBeasiswa: string;
+  jenisPertanyaan: "regular" | "essay-driven";
+  banyakPertanyaan: number;
+  bahasaInterview: "id" | "en";
+  essayAttachment?: FileList;
+}
+
+interface FormFileInputProps<T extends FieldValues> {
+  control: Control<T>;
+  name: Path<T>;
+  label: string;
+  accept?: string;
+  description?: string;
 }
