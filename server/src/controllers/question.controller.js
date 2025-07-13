@@ -38,5 +38,5 @@ export async function createRegularQuestion(req,res,next){
 }
 
 export async function createEssayDrivenQuestion(req,res,next){
-
+    const cardsid = req.params.cardsid;
 }
