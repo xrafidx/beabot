@@ -2,40 +2,50 @@
 
 import { API_ENDPOINTS, INTERVIEW_LANGUAGE_OPTIONS, INTERVIEW_TYPES_OPTIONS } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Form } from "./ui/form";
-import { FormInput } from "lucide-react";
 import FormField from "./FormField";
 import FormSelect from "./FormSelect";
+import FormFileInput from "./FormFileInput";
+import { InterviewFormData } from "@/Types";
+import { Button } from "./ui/button";
 
-const InterviewFormSchema = () => {
-  const interviewSchema = z
-    .object({
-      judulInterview: z.string().min(1, "Please fill the Interview Title"),
-      namaBeasiswa: z.string().min(1, "Please fill the scholarship name."),
-      jenisPertanyaan: z.enum(["regular", "essay-driven"], {
-        errorMap: () => ({ message: "Pilih jenis interview yang valid." }),
-      }),
-      banyakPertanyaan: z.number().min(1, "Jumlah pertanyaan minimal 1.").max(15, "Jumlah pertanyaan maksimal 15.").int("Masukkan angka bulat"),
-      bahasaInterview: z.enum(["Bahasa Indonesia", "English"]),
-      essayAttachment: typeof window === "undefined" ? z.any().optional() : z.instanceof(FileList).optional(),
-    })
-    .superRefine((data, ctx) => {
-      if (data.jenisPertanyaan === "essay-driven") {
-        if (!data.essayAttachment || data.essayAttachment.length === 0) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "The essay file must be uploaded for the essay-driven interview.",
-            path: ["essayAttachment"],
-          });
-        } else {
-          const file = data.essayAttachment[0];
+const InterviewFormSchema = z
+  .object({
+    judulInterview: z.string().min(1, "Please fill the Interview Title"),
+    namaBeasiswa: z.string().min(1, "Please fill the scholarship name."),
+    jenisPertanyaan: z.enum(["regular", "essay-driven"], {
+      errorMap: () => ({ message: "Pilih jenis interview yang valid." }),
+    }),
+    banyakPertanyaan: z.number().min(1, "Jumlah pertanyaan minimal 1.").max(15, "Jumlah pertanyaan maksimal 15.").int("Masukkan angka bulat"),
+    bahasaInterview: z.enum(["id", "en"]),
+    essayAttachment: typeof window === "undefined" ? z.any().optional() : z.instanceof(FileList).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.jenisPertanyaan === "essay-driven") {
+      if (!data.essayAttachment || data.essayAttachment.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "The essay file must be uploaded for the essay-driven interview.",
+          path: ["essayAttachment"],
+        });
+      } else {
+        const file = data.essayAttachment[0];
 
-          if (file && file.type !== "application/pdf") {
+        if (file) {
+          const MAX_FILE_SIZE = 5 * 1024 * 1024;
+          if (file.size > MAX_FILE_SIZE) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Ukuran file tidak boleh lebih dari 5MB.",
+              path: ["essayAttachment"],
+            });
+          }
+          if (file.type !== "application/pdf") {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: "The file must be uploaded in .pdf format.",
@@ -44,14 +54,13 @@ const InterviewFormSchema = () => {
           }
         }
       }
-    });
-};
+    }
+  });
 
 const InterviewForm = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const formSchema = InterviewFormSchema();
 
   // 1. Define your form.
   const form = useForm<InterviewFormData>({
@@ -94,11 +103,7 @@ const InterviewForm = () => {
     formData.append("namaBeasiswa", values.namaBeasiswa);
     formData.append("jenisPertanyaan", values.jenisPertanyaan);
     formData.append("banyakPertanyaan", String(values.banyakPertanyaan));
-    formData.append("bahasa", values.bahasaInterview);
-
-    if (values.essayAttachment && values.essayAttachment.length > 0) {
-      formData.append("essayAttachment", values.essayAttachment[0]);
-    }
+    formData.append("bahasaInterview", values.bahasaInterview);
 
     try {
       const response = await fetch(`http://localhost:5000${API_ENDPOINTS.CREATE_INTERVIEW_CARD}`, {
@@ -149,10 +154,17 @@ const InterviewForm = () => {
           {/* Jenis Interview */}
           <FormSelect control={form.control} name="jenisPertanyaan" label="Jenis Interview" options={INTERVIEW_TYPES_OPTIONS} description="Pilih jenis interview."></FormSelect>
 
-          {/* Essay Attachment (cuma muncul kalo piih essay-driven) */}
-
           {/* Bahasa Interview */}
           <FormSelect control={form.control} name="bahasaInterview" label="Bahasa Interview" options={INTERVIEW_LANGUAGE_OPTIONS} description="Pilih bahasa yang digunakan dalam interview"></FormSelect>
+
+          {/* Essay Attachment (cuma muncul kalo piih essay-driven.) */}
+          {jenisInterviewWatch === "essay-driven" && <FormFileInput control={form.control} name="essayAttachment" label="Unggah Esai (PDF)" accept=".pdf" description="Unggah esai Anda dalam format .pdf (maks. 5MB)"></FormFileInput>}
+
+          {submitError && <p className="text-sm text-red-600">{submitError}</p>}
+
+          <Button type="submit" disabled={isSubmitting} className="btn-primary">
+            {isSubmitting ? "Membuat Interview" : "Mulai Setup Interview"}
+          </Button>
         </form>
       </Form>
     </div>

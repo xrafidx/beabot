@@ -1,6 +1,6 @@
 import React from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
-import { FormControl, FormLabel } from "./ui/form";
+import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 
 interface FormFileInputProps<T extends FieldValues> {
@@ -19,15 +19,17 @@ const FormFileInput = <T extends FieldValues>({ control, name, label, accept, de
       render={({ field: { onChange, value, ...restField } }) => (
         <FormItem>
           <FormLabel className="label">{label}</FormLabel>
-        <FormControl>
+          <FormControl>
             <Input
-            type="file"
-            accept={accept}
-            
-            onChange={(event) = > {
-                onChange(event.target.files)
-            }}></Input>
-        </FormControl>
+              type="file"
+              accept={accept}
+              onChange={(event) => {
+                onChange(event.target.files);
+              }}
+              {...restField}></Input>
+          </FormControl>
+          {description && <FormDescription>{description}</FormDescription>}
+          <FormMessage></FormMessage>
         </FormItem>
       )}></Controller>
   );
