@@ -26,6 +26,9 @@ import essayReviewRoutes from './routes/essayReview.routes.js';
 // cards routes
 import cardRoutes from "./routes/interviewCards.routes.js";
 
+// question routes
+import {router as questionRoutes} from "./routes/question.routes.js";
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
@@ -53,6 +56,9 @@ app.use('/api/v1', essayReviewRoutes);
 
 // cards routes
 app.use('/api/v1', cardRoutes);
+
+// question routes
+app.use('/api/v1', questionRoutes);
 
 
 // error handling

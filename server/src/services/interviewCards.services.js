@@ -1,8 +1,15 @@
 import { addCards, getAllCards, getSpecificCards, deleteSpecificCard, editSpecificCards} from "../repositories/cards.repositories.js";
-export async function createCardsServices(uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa,rating,judulInterview,tanggal){
+export async function createCardsServices(uid,data){
     try {
+        // parsing data body
+        let {judulInterview,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,imageurl} = data;
+        // convert banyak pertanyaan
+        banyakPertanyaan = Number(banyakPertanyaan);
+
+        // generate tanggal
+        const tanggal = new Date();
         // call function buat bikin row baru di kartu.
-        const result = await addCards(uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa,rating,judulInterview,tanggal);
+        const result = await addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,judulInterview,tanggal,imageurl);
         return result;
     } catch (error) {
         throw error
@@ -43,10 +50,16 @@ export async function deleteSpecificCardsServices(uid,cardId){
     }
 }
 
-export async function editSpecificCardsServices(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa,convertedRating,judulInterview,tanggal){
+export async function editSpecificCardsServices(cardId,uid,data){
     try {
+        // parsing data body
+        let {judulInterview,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,imageurl} = data;
+        // convert banyak pertanyaan
+        banyakPertanyaan = Number(banyakPertanyaan);
+        // generate tanggal
+        const tanggal = new Date();
         // call function buat edit kartu
-        const result = await editSpecificCards(cardId,uid,namaBeasiswa,convertedBanyakPertanyaan,jenisPertanyaan,bahasa,convertedRating,judulInterview,tanggal);
+        const result = await editSpecificCards(cardId,uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,judulInterview,tanggal,imageurl);
         if(result.length < 1){
             throw new Error("Data Tidak Ditemukan");
         }
