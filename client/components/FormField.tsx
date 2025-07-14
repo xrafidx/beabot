@@ -23,7 +23,19 @@ const FormField = <T extends FieldValues>({ control, name, label, placeholder, t
       <FormItem>
         <FormLabel className="label">{label}</FormLabel>
         <FormControl>
-          <Input placeholder={placeholder} type={type} {...field} />
+          <Input
+            placeholder={placeholder}
+            type={type}
+            {...field}
+            onChange={(event) => {
+              if (type === "number") {
+                const valueAsNumber = event.target.value === "" ? NaN : Number(event.target.value);
+                field.onChange(valueAsNumber);
+              } else {
+                field.onChange(event.target.value);
+              }
+            }}
+          />
         </FormControl>
         <FormDescription className="font-thin text-left">{description}</FormDescription>
         <FormMessage />

@@ -1,13 +1,13 @@
+"use client";
+
 import React from "react";
 import dayjs from "dayjs";
-import { getRandomInterviewCover } from "@/lib/utils";
+import { getCoverImage, getRandomInterviewCover } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "./ui/button";
 
-const InterviewCard = ({ interviewId, userId, type, topic, fieldOfStudy, createdAt }: InterviewCardProps) => {
-  const feedback = null as Feedback | null;
-  const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
-  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format("MMM D, YYYY");
+const InterviewCard = ({ interviewId, userId, jenisPertanyaan, judulInterview, namaBeasiswa, createdAt, coverImageUrl, complete, rating }: InterviewCardProps) => {
+  const formattedDate = dayjs(createdAt).format("MMM D, YYYY");
 
   return (
     // Bikin card
@@ -16,7 +16,7 @@ const InterviewCard = ({ interviewId, userId, type, topic, fieldOfStudy, created
         <div>
           {/* Ini teks buat kategori interview */}
           <div className="absolute top-0 right-0 w-fit p-2 rounded-bl-lg bg-accent">
-            <p className="badge-text text-black">{normalizedType}</p>
+            <p className="badge-text text-black">{jenisPertanyaan}</p>
           </div>
         </div>
 
@@ -24,11 +24,11 @@ const InterviewCard = ({ interviewId, userId, type, topic, fieldOfStudy, created
         <Image src={getRandomInterviewCover()} alt="interview cover" width={90} height={90} className="rounded-full object-fit size-[90px]" />
 
         {/* Judul Interview */}
-        <h3 className="mt-5 capitalize">{topic} Interviews</h3>
+        <h3 className="mt-5 capitalize">{judulInterview} Interviews</h3>
 
         <div className="flex flex-row gap-2">
           {/* Summary singkat Interview */}
-          <p>{feedback?.finalAssessment || "You haven't take this interview yet. Take it now to improve your skills."}</p>
+          <p>{complete || "You haven't take this interview yet. Take it now to improve your skills."}</p>
         </div>
 
         {/* Icon Kalender */}
@@ -41,7 +41,7 @@ const InterviewCard = ({ interviewId, userId, type, topic, fieldOfStudy, created
           {/* Icon Bintang */}
           <div className="flex flex-row gap-2 items-center">
             <Image src="/star.svg" alt="star" width={22} height={22}></Image>
-            <p>{feedback?.totalScore || "---"}</p>
+            <p>{rating || "---"}</p>
           </div>
         </div>
 
