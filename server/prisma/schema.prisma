@@ -14,6 +14,8 @@ model user {
   email          String @unique
   hashedpassword String
   interviewCards interviewcard[]
+  feedback feedback[]
+  question question[]
 }
 
 model blacklist {
@@ -26,14 +28,76 @@ model interviewcard{
   id Int @id @default(autoincrement())
   // FOREIGN KEY
   userid Int
+  // judul interview
   judulinterview String
+  // nama beasiswa
   namabeasiswa String
+  // banyak pertanyaan yang diajukan oleh AI
   banyakpertanyaan Int
+  // jenis interviewnya, cuma bisa essay-driven dan reguler
   jenisinterview String
+  // bahasa buat interviewnya
   bahasa String
+  // kapan waktu dibikin cardsnya
   tanggal DateTime
-  rating Int
+  // URL image
+  imageurl String?
+
+  // relasi ke feedback
+  feedback feedback?
+  question question?
 
   // FOREIGN KEY DEFINITION
   author user @relation(fields: [userid], references: [id])
+}
+
+// ini buat feedback dari interview
+
+model feedback{
+  // feedback id
+  id Int @id @default(autoincrement())
+  // id dari kartu
+  cardsid Int @unique
+  // id dari integer
+  userid Int
+  // nilai keseluruhan
+  rating Int
+  // nilai kejelasan (1-10)
+  nilaikejelasan Int
+  // nilai relevansi (1-10)
+  nilairelevansi Int
+  // nilai bahasa dan kosakata (1-10)
+  nilaibahasa Int
+  // nilai kelancaran (1-10)
+  nilaikelancaran Int
+  // strenghts (hal-hal yang udah positif dari si pencari beasiswa)
+  strengths String
+  // hal yang masih kureng
+  improvement String
+  // kapan summary dibuat
+  createdat DateTime
+
+
+  // Relasi ke InterviewCard
+  interviewCard interviewcard @relation(fields: [cardsid], references: [id])
+  user      user     @relation(fields: [userid], references: [id])
+
+}
+
+model question{
+  //question id
+  id Int @id @default(autoincrement())
+  // foreign key card
+  userid Int
+  // foreign key user
+  cardsid Int @unique
+  //question
+  question Json
+  // kapan question dibuat
+  createdat DateTime
+  // essay driven
+  essaydriven Boolean
+
+  interviewCard interviewcard @relation(fields: [cardsid], references: [id])
+  user      user     @relation(fields: [userid], references: [id])
 }
