@@ -75,7 +75,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
     }
     // IMPORTANT: No 'return;' here, allow the component to render the form with error messages
   };
-
+  
   // 2. Define a submit handler.
   // This function is called by form.handleSubmit ONLY when validation passes
   async function onSubmit(values: z.infer<typeof formSchema>) {
