@@ -2,7 +2,7 @@ import prisma from "../config/prisma.js";
 export async function getNamaBeasiswa(cardsId){
     try {
     const result = await prisma.$queryRaw`
-    SELECT * FROM "interviewcard" WHERE id = ${cardsId};
+    SELECT "namabeasiswa","banyakpertanyaan","bahasa","userid" FROM "interviewcard" WHERE id = ${cardsId};
     `
     const namaBeasiswa = result[0].namabeasiswa;
     const banyakPertanyaan = result[0].banyakpertanyaan;
@@ -19,16 +19,13 @@ export async function getNamaBeasiswa(cardsId){
 export async function getName(cardsId){
     try {
     // cari userID
-    let userId = await prisma.$queryRaw`
-    SELECT * FROM "interviewcard" WHERE id = ${cardsId}
-    `
-    userId = userId[0].userid
-    // cari nama usernya.
-    let name = await prisma.$queryRaw`
-    SELECT * FROM "user" WHERE id = ${userId}
-    `
-    name = name[0].name;
-    return name;
+    const result = await prisma.$queryRaw`
+      SELECT u.name
+      FROM "user" u
+      JOIN "interviewcard" ic ON u.id = ic.userid
+      WHERE ic.id = ${cardsId};
+    `;
+    return result[0].name;
 
     } catch (error) {
         console.error("Error in getName repositories");
@@ -38,22 +35,14 @@ export async function getName(cardsId){
 
 export async function saveQuestion(userid,cardsId,rawData,tanggal,essaydriven){
     try {
-        // validasi udah ada apa belum
-        const result = await prisma.$queryRaw`
-        SELECT * FROM "question" WHERE userid = ${userid} AND cardsid = ${cardsId}
-        `
-        // kalo belum ada
-        if(result < 1){
-            const data = await prisma.$queryRaw`
-            INSERT INTO "question"(userid,cardsid,question,createdat,essaydriven)
-            VALUES (${userid},${cardsId},${rawData}::jsonb,${tanggal},${essaydriven})`;
-        }
-        // kalo udah ada
-        else{
-            const data = await prisma.$queryRaw`
-            UPDATE "question" SET question = ${rawData}::jsonb, createdat = ${tanggal} WHERE cardsid = ${cardsId}
-            `
-        }   
+        await prisma.$queryRaw`
+        INSERT INTO "question" (userid, cardsid, question, createdat, essaydriven)
+        VALUES (${userid}, ${cardsId}, ${rawData}::jsonb, ${tanggal}, ${essaydriven})
+        ON CONFLICT (cardsid) DO UPDATE SET
+            question = EXCLUDED.question,
+            createdat = EXCLUDED.createdat;
+        `;
+  
     } catch (error) {
         console.error("Error in saveQuestion repositories");
         throw error
@@ -63,7 +52,7 @@ export async function saveQuestion(userid,cardsId,rawData,tanggal,essaydriven){
 export async function getQuestion(cardsId){
     try {
         const data = await prisma.$queryRaw`
-        SELECT * FROM "question" WHERE cardsid = ${cardsId}
+      SELECT "question" FROM "question" WHERE cardsid = ${cardsId};
         `
         return data[0].question;
         

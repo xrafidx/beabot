@@ -1,4 +1,5 @@
-import { createRegQuestion, findRegQuestion } from "../services/question.services.js";
+import { createRegQuestion, findRegQuestion, createEssQuestion, findEssQuestion } from "../services/question.services.js";
+
 export async function getRegularQuestion(req,res,next){
     try {
     // id params
@@ -16,7 +17,20 @@ export async function getRegularQuestion(req,res,next){
     }
 }
 export async function getEssayDrivenQuestion(req,res,next){
+    try {
     // id params
+    const cardsId = Number(req.params.cardsid);
+    // jalanin service buat dapetin question reguler
+    const result = await findEssQuestion(cardsId);
+
+    res.status(201).json({
+        success: true,
+        message: "Data Ditemukan",
+        response: result
+    })
+    } catch (error) {
+        next(error);
+    }
 
 }
 
@@ -38,5 +52,20 @@ export async function createRegularQuestion(req,res,next){
 }
 
 export async function createEssayDrivenQuestion(req,res,next){
-    const cardsid = req.params.cardsid;
+    try {
+        const cardsid = Number(req.params.cardsid);
+        const dataFile = req.file;
+        const result = await createEssQuestion(cardsid,dataFile);
+
+
+        res.status(201).json({
+            success: true,
+            message: "Data Berhasil Dibuat",
+            response: result
+        })
+
+    } catch (error) {
+        next(error);
+    }
+
 }
