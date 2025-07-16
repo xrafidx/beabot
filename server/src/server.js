@@ -29,6 +29,9 @@ import cardRoutes from "./routes/interviewCards.routes.js";
 // question routes
 import {router as questionRoutes} from "./routes/question.routes.js";
 
+// vapi webhook
+import {router as vapiWebHookRoutes} from "./routes/vapiwebhook.routes.js";
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
@@ -58,6 +61,10 @@ app.use('/api/v1', cardRoutes);
 
 // question routes
 app.use('/api/v1', questionRoutes);
+
+// VAPI webhook
+
+app.use('/api/v1', vapiWebHookRoutes);
 
 
 // error handling
