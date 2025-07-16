@@ -18,7 +18,21 @@ export async function createCardsServices(uid,data){
 export async function getAllCardsServices(uid){
     try {
         const result = await getAllCards(uid);
-        return result;
+        const originalDataArray = result;
+        const newDataArray = originalDataArray.map((item)=>{
+            const {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = item; 
+            const dataUntukRespons = {
+                id: id,
+                judulinterview,judulinterview,
+                namabeasiswa:namabeasiswa,
+                tanggal:tanggal,
+                imageurl:imageurl,
+                jenispertanyaan:jenisinterview,
+                bahasa:bahasa
+            }
+            return dataUntukRespons
+        })
+        return newDataArray;
     } catch (error) {
         throw error
     }
@@ -30,7 +44,17 @@ export async function getSpecificCardsServices(uid,cardId){
         if(result.length < 1){
             throw new Error("Data tidak ditemukan");
         }
-        return result;
+        const {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = result;
+        const dataUntukRespons = {
+            id: id,
+            judulinterview,judulinterview,
+            namabeasiswa:namabeasiswa,
+            tanggal:tanggal,
+            imageurl:imageurl,
+            jenispertanyaan:jenisinterview,
+            bahasa:bahasa
+        }
+        return dataUntukRespons;
     } catch (error) {
         throw error;
     }

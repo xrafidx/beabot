@@ -15,7 +15,7 @@ export async function addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan
 export async function getAllCards(uid){
     try {
         const cards = await prisma.$queryRaw`
-            SELECT id, "judulinterview", "namabeasiswa", "tanggal", "imageurl", "jenisinterview"
+            SELECT id, "judulinterview", "namabeasiswa", "tanggal", "imageurl", "jenisinterview", "bahasa"
             FROM "interviewcard" 
             WHERE "userid" = ${uid}
             ORDER BY "tanggal" DESC;`; // Urutkan dari yang terbaru
