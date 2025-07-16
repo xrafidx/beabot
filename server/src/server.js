@@ -48,8 +48,7 @@ app.use(cookieParser());
 // auth routes
 app.use('/api/v1/auth', authRoutes);
 
-// dashboard routes
-// app.use('/api/v1', );
+
 
 // essay-review routes
 app.use('/api/v1', essayReviewRoutes);
