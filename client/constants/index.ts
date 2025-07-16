@@ -133,7 +133,7 @@ export const API_ENDPOINTS = {
   // Buat bikin kartu interview
   CREATE_INTERVIEW_CARD: "/api/v1/cards",
 
-  BASE_INTERVIEW_CARD_BY_ID: "/api/v1/cards",
+  BASE_INTERVIEW_CARD_BY_ID: "/api/v1/cards/:id",
 };
 
 export const INTERVIEW_TYPES_OPTIONS = [

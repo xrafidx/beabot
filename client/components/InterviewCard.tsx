@@ -2,33 +2,34 @@
 
 import React from "react";
 import dayjs from "dayjs";
-import { getCoverImage, getRandomInterviewCover } from "@/lib/utils";
+import { getCoverImage } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { BackendInterviewData, Feedback } from "@/Types";
 
-const InterviewCard = ({ interviewId, userId, jenisPertanyaan, judulInterview, namaBeasiswa, createdAt, coverImageUrl, complete, rating }: InterviewCardProps) => {
-  const formattedDate = dayjs(createdAt).format("MMM D, YYYY");
-
+const InterviewCard = ({ id, uid, judulinterview, namabeasiswa, jenispertanyaan, tanggal, rating }: BackendInterviewData) => {
+  const feedback = null as Feedback | null;
+  const formattedDate = dayjs(tanggal).format("MMM D, YYYY");
   return (
     // Bikin card
-    <div className="card-border w-[360px] max-sm:w-full ">
+    <div className="card-border w-[360px] zmax-sm:w-full ">
       <div className="card-interview">
         <div>
           {/* Ini teks buat kategori interview */}
           <div className="absolute top-0 right-0 w-fit p-2 rounded-bl-lg bg-accent">
-            <p className="badge-text text-black">{jenisPertanyaan}</p>
+            <p className="badge-text text-black">{jenispertanyaan}</p>
           </div>
         </div>
 
         {/* Logo Instansi */}
-        <Image src={getRandomInterviewCover()} alt="interview cover" width={90} height={90} className="rounded-full object-fit size-[90px]" />
+        <Image src={getCoverImage(namabeasiswa)} alt="interview cover" width={90} height={90} className="rounded-full object-fit size-[90px]" />
 
         {/* Judul Interview */}
-        <h3 className="mt-5 capitalize">{judulInterview} Interviews</h3>
+        <h3 className="mt-5 capitalize">{judulinterview}</h3>
 
         <div className="flex flex-row gap-2">
           {/* Summary singkat Interview */}
-          <p>{complete || "You haven't take this interview yet. Take it now to improve your skills."}</p>
+          <p>{feedback?.totalScore || "You haven't take this interview yet. Take it now to improve your skills."}</p>
         </div>
 
         {/* Icon Kalender */}

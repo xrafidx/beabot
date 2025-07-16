@@ -6,8 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const getCoverImage = (namaBeasiswa: string): string => {
-  const lowerCaseName = namaBeasiswa.toLowerCase();
+export const getCoverImage = (namabeasiswa: string): string => {
+  const lowerCaseName = namabeasiswa.toLowerCase();
 
   if (mappings[lowerCaseName]) {
     return mappings[lowerCaseName];
