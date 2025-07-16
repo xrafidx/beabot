@@ -17,38 +17,24 @@ interface Feedback {
   createdAt: string;
 }
 
-interface Interview {
-  id: string;
-  topic: string;
-  level: string;
-  questions: string[];
-  fieldOfStudy: string[];
-  createdAt: string;
-  userId: string;
-  type: string;
-  finalized: boolean;
-}
-
 interface InterviewCardProps {
-  interviewId: string;
-  userId: string;
-  judulInterview: string;
-  namaBeasiswa: string;
-  jenisPertanyaan: "Regular" | "Essay-driven";
-  createdAt: Date;
-  coverImageUrl?: string;
-  complete: boolean;
+  id: string;
+  uid: string;
+  judulinterview: string;
+  namabeasiswa: string;
+  jenispertanyaan: "regular" | "essay-driven";
+  createdat: Date;
+  rating?: number | null;
 }
-
 interface BackendInterviewData {
-  interviewId: string;
-  userId: string;
-  judulInterview: string;
-  namaBeasiswa: string;
-  jenisPertanyaan: "Regular" | "Essay-driven";
+  id: string;
+  uid: string;
+  judulinterview: string;
+  namabeasiswa: string;
+  jenispertanyaan: "regular" | "essay-driven";
   banyakPertanyaan: number;
   bahasa: "id" | "en";
-  tanggal: string;
+  createdat: string;
   rating?: number;
   complete: boolean;
 }
@@ -58,8 +44,8 @@ interface InterviewFormData {
   namaBeasiswa: string;
   jenisPertanyaan: "regular" | "essay-driven";
   banyakPertanyaan: number;
-  bahasaInterview: "id" | "en";
-  essayAttachment?: FileList;
+  bahasa: "id" | "en";
+  essay?: FileList;
 }
 
 interface FormFileInputProps<T extends FieldValues> {
