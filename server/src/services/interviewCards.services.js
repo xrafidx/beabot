@@ -1,4 +1,5 @@
 import { addCards, getAllCards, getSpecificCards, deleteSpecificCard, editSpecificCards} from "../repositories/cards.repositories.js";
+import { format } from 'date-fns';
 export async function createCardsServices(uid,data){
     try {
         // parsing data body
@@ -20,7 +21,10 @@ export async function getAllCardsServices(uid){
         const result = await getAllCards(uid);
         const originalDataArray = result;
         const newDataArray = originalDataArray.map((item)=>{
-            const {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = item; 
+            let {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = item; 
+            // formatting tanggal
+            tanggal = format(new Date(tanggal), 'MMM d, yyyy');
+
             const dataUntukRespons = {
                 id: id,
                 judulinterview,judulinterview,
@@ -44,7 +48,9 @@ export async function getSpecificCardsServices(uid,cardId){
         if(result.length < 1){
             throw new Error("Data tidak ditemukan");
         }
-        const {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = result;
+        let {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = result;
+        // formatting tanggal
+        tanggal = format(new Date(tanggal), 'MMM d, yyyy');
         const dataUntukRespons = {
             id: id,
             judulinterview,judulinterview,

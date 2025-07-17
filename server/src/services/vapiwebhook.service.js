@@ -10,6 +10,25 @@ export async function getInterviewData(cardsid){
 
 }
 
+export async function saveInterviewResult(hangPayload){
+    try {
+        const interviewid = hangPayload.call.variables?.cardsid;
+        const transcript = hangPayload.transcript;
+
+        // ini verifikasi ada apa engga interview idnya
+        if(!interviewid){
+            console.warn("SERVICE: Tidak bisa menyimpan hasil, interviewId tidak ditemukan.");
+            return;
+        }
+
+        // query ke db kalo ada cardsidnya.
+    } catch (error) {
+        console.error("Error on saveInterviewResult");
+        throw error
+        
+    }
+}
+
 export async function handleFunctionCall(functionCallPayload){
     try {
         const {name} = functionCallPayload.functionCall;
