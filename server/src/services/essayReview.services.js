@@ -1,6 +1,7 @@
 import ai from "../config/gemini.js";
 import fs from 'fs';
 import fsp from 'fs/promises'; // Gunakan 'fs/promises'
+import { createEssay, searchSpecificEssay, searchAllEssay } from "../repositories/essayReview.repositories.js";
 
 
 export async function hapusFile(fileName) {
@@ -12,9 +13,6 @@ export async function hapusFile(fileName) {
     console.error(`Gagal menghapus file: ${error.message}`);
   }
 }
-
-
-
 export async function essayReviewPrompt(fileName){
     try {
     const contents = [
@@ -33,7 +31,8 @@ Berikan output HANYA dalam format string JSON yang valid dan bisa langsung di-pa
 Gunakan struktur berikut:
 
 {
-  "nilai": number,
+  "judulessay": string,
+  "rating": number,
   "kesalahan": string[],
   "kelebihan": string[],
   "masukan": string[]
@@ -62,8 +61,23 @@ export function jsonParser(jsonMatch){
             const jsonString = jsonMatch[0];
             // 3. Parse string JSON yang sudah bersih
             const parsedJson = JSON.parse(jsonString);
-            console.log(parsedJson.nilai); // Output: 4
-            return parsedJson;
+            const tanggalHariIni = new Date();
+            const options = {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            };
+            const tanggalFormatted = tanggalHariIni.toLocaleDateString('en-US', options);
+            const {judulessay,nilai,kesalahan,kelebihan,masukan} = parsedJson;
+            const restructuredJson = {
+                judulessay:judulessay,
+                nilai:nilai,
+                kesalahan:kesalahan,
+                kelebihan:kelebihan,
+                masukan:masukan,
+                tanggal:tanggalFormatted
+            }
+            return restructuredJson;
         } catch (error) {
             throw new Error("Gagal mem-parse JSON dari respons AI.");
         }
@@ -71,4 +85,38 @@ export function jsonParser(jsonMatch){
     else {
         throw new Error("Tidak ditemukan format JSON yang valid dalam respons AI.");
     }
+}
+
+export async function getSpecificEssay(essayid,uid){
+    try {
+        const result = await searchSpecificEssay(essayid,uid);
+        return result; 
+    } catch (error) {
+        console.error("Error pada getSpecificEssay services");
+        throw error;
+    }
+}
+
+export async function saveEssay(uid,data){
+    try {
+    const result = await createEssay(uid,data);
+    return result;
+    } catch (error) {
+        console.error("Error pada saveEssay services");
+        throw error;
+    }
+}
+
+export async function getAllEssay(uid){
+    try {
+        const result = await searchAllEssay(uid);
+        return result;
+    } catch (error) {
+        console.error("Error pada getAllEssay services");
+        throw error;
+    }
+}
+
+export async function deleteEssay(essayid,uid){
+    
 }

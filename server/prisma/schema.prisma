@@ -16,6 +16,7 @@ model user {
   interviewCards interviewcard[]
   feedback feedback[]
   question question[]
+  essaycard essaycard[]
 }
 
 model blacklist {
@@ -49,6 +50,17 @@ model interviewcard{
 
   // FOREIGN KEY DEFINITION
   author user @relation(fields: [userid], references: [id])
+}
+
+// cards untuk review essay
+model essaycard{
+  id Int @id @default(autoincrement())
+  // FOREIGN KEY
+  userid Int
+  //json response from ai
+  aireview Json
+  // relation
+  author    user     @relation(fields: [userid], references: [id])
 }
 
 // ini buat feedback dari interview
