@@ -10,6 +10,8 @@ import React from "react";
 import { API_ENDPOINTS } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import { BackendInterviewData, InterviewCardProps } from "@/Types";
+import EssayCard from "@/components/EssayCard";
+import { id } from "zod/v4/locales";
 
 const Page = () => {
   const {
@@ -64,9 +66,8 @@ const Page = () => {
       const namaBeasiswaMapped = card.namabeasiswa || "";
 
       // Fallback untuk properti yang TIDAK ADA di JSON dari backend Anda
-      const jenisPertanyaan = (card as BackendInterviewData).jenisPertanyaan ? (card as BackendInterviewData).jenisPertanyaan.toLowerCase() : "regular";
-
-      const userId = (card as BackendInterviewData).userId || ""; // Misalnya, beri default string kosong
+      const jenisPertanyaan = (card as BackendInterviewData).jenispertanyaan ? (card as BackendInterviewData).jenispertanyaan.toLowerCase() : "regular";
+      const userId = (card as BackendInterviewData).uid || ""; // Misalnya, beri default string kosong
 
       return {
         id: card.id.toString(), // Konversi ID dari number ke string
@@ -74,7 +75,7 @@ const Page = () => {
         judulinterview: judulInterviewMapped,
         namabeasiswa: namaBeasiswaMapped,
         jenispertanyaan: jenisPertanyaan as "regular" | "essay-driven",
-        tanggal: new Date(card.createdat), // Konversi string tanggal ke Date object
+        tanggal: card.tanggal, // Konversi string tanggal ke Date object
       };
     });
 
@@ -139,7 +140,7 @@ const Page = () => {
                 jenispertanyaan={interview.jenispertanyaan}
                 judulinterview={interview.judulinterview}
                 namabeasiswa={interview.namabeasiswa || ""}
-                createdat={interview.createdat}
+                tanggal={interview.tanggal}
               />
             ))
           ) : (
@@ -152,9 +153,13 @@ const Page = () => {
           )}
         </div>
 
-        <Link href="/my-interview" className="btn-primary text-center">
+        <Link href="/dashboard/my-interview" className="btn-primary text-center">
           See all my interview.
         </Link>
+
+        <div className="interviews-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2>Your Essay Review</h2>
+        </div>
       </section>
     </>
   );
