@@ -23,9 +23,11 @@ interface InterviewCardProps {
   judulinterview: string;
   namabeasiswa: string;
   jenispertanyaan: "regular" | "essay-driven";
-  createdat: Date;
+  tanggal: string;
+  completeStatus: boolean;
   rating?: number | null;
 }
+
 interface BackendInterviewData {
   id: string;
   uid: string;
@@ -34,7 +36,7 @@ interface BackendInterviewData {
   jenispertanyaan: "regular" | "essay-driven";
   banyakPertanyaan: number;
   bahasa: "id" | "en";
-  createdat: string;
+  tanggal: string;
   rating?: number;
   complete: boolean;
 }
@@ -55,3 +57,21 @@ interface FormFileInputProps<T extends FieldValues> {
   accept?: string;
   description?: string;
 }
+
+interface EssayReview {
+  id: string;
+  uid: string;
+  judulessay: string;
+  rating?: string;
+  tanggal: string;
+}
+
+interface EssayCardProps {
+  id: string;
+  uid: string;
+  judulessay: string;
+  rating?: string;
+  tanggal: string;
+}
+
+type Category = "all" | "completed" | "incomplete";

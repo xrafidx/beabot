@@ -1,6 +1,8 @@
 // // import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 // // import { z } from "zod";
 
+import { EssayReview } from "@/Types";
+
 export const mappings: { [key: string]: string } = {
   tanoto: "/covers/tanoto.svg",
   "tanoto foundation": "/covers/tanoto.svg",
@@ -101,6 +103,16 @@ export const mappings: { [key: string]: string } = {
 
 export const interviewCovers = ["/kemdikbud.svg", "/tanoto.svg"];
 
+export const dummyEssayReview: EssayReview[] = [
+  { id: "1", uid: "1", judulessay: "Lorem Ipsum", rating: "", tanggal: "16 Jul, 2025" },
+  {
+    id: "2",
+    uid: "1",
+    judulessay: "Lorem Ipsum",
+    rating: "",
+    tanggal: "16 Jul, 2025",
+  },
+];
 // export const dummyInterviews: Interview[] = [
 //   {
 //     id: "1",

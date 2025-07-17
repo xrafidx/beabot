@@ -5,11 +5,10 @@ import dayjs from "dayjs";
 import { getCoverImage } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { BackendInterviewData, Feedback } from "@/Types";
+import { BackendInterviewData, Feedback, InterviewCardProps } from "@/Types";
 
-const InterviewCard = ({ id, uid, judulinterview, namabeasiswa, jenispertanyaan, tanggal, rating }: BackendInterviewData) => {
+const InterviewCard = ({ id, uid, judulinterview, namabeasiswa, jenispertanyaan, tanggal, rating }: InterviewCardProps) => {
   const feedback = null as Feedback | null;
-  const formattedDate = dayjs(tanggal).format("MMM D, YYYY");
   return (
     // Bikin card
     <div className="card-border w-[360px] zmax-sm:w-full ">
@@ -27,6 +26,7 @@ const InterviewCard = ({ id, uid, judulinterview, namabeasiswa, jenispertanyaan,
         {/* Judul Interview */}
         <h3 className="mt-5 capitalize">{judulinterview}</h3>
 
+        <h4 className="mt-5">{namabeasiswa}</h4>
         <div className="flex flex-row gap-2">
           {/* Summary singkat Interview */}
           <p>{feedback?.totalScore || "You haven't take this interview yet. Take it now to improve your skills."}</p>
@@ -36,7 +36,7 @@ const InterviewCard = ({ id, uid, judulinterview, namabeasiswa, jenispertanyaan,
         <div className="flex flex-row gap-5 mt-3">
           <div className="flex flex-row gap-2">
             <Image src="/calendar.svg" alt="calendar" width={22} height={22}></Image>
-            <p>{formattedDate}</p>
+            <p>{tanggal}</p>
           </div>
 
           {/* Icon Bintang */}
