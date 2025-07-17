@@ -23,7 +23,7 @@ router.get('/essay-review',isAuthenticated,allEssay);
 // buat ambil spesifik essay cards
 router.get('/essay-review/:essayid',isAuthenticated,specificEssay);
 // buat hapus specific essay cards
-router.get('/essay-review/:essayid',isAuthenticated, deleteEssay);
+router.delete('/essay-review/:essayid',isAuthenticated, deleteEssay);
 
 export default router;
 

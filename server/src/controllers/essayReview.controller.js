@@ -1,5 +1,5 @@
 import { error } from "console";
-import { essayReviewPrompt,jsonParser, hapusFile, getSpecificEssay, saveEssay, getAllEssay} from "../services/essayReview.services.js"
+import { essayReviewPrompt,jsonParser, hapusFile, getSpecificEssay, saveEssay, getAllEssay,deleteEssayService} from "../services/essayReview.services.js"
 
 export async function essayReview(req,res,next){
     try {
@@ -50,7 +50,15 @@ export async function specificEssay(req,res,next){
             data: essayCards
         })
     } catch (error) {
-        next(error);
+        if(error.message == "Data tidak ditemukan"){
+            res.status(404).json({
+                success:false,
+                message:"Data tidak ditemukan"
+            })
+        }
+        else{
+            next(error);  
+        }
     }
 }
 
@@ -84,14 +92,22 @@ export async function deleteEssay(req,res,next){
             console.error("essayid atau uid tidak ditemukan");
             throw new Error("essayid atau uid tidak ditemukan");
         }
-        const essayCards = await deleteEssay(essayid,uid);
+        const essayCards = await deleteEssayService(essayid,uid);
         // respon sukses
         res.status(200).json({
             success:true,
-            message:"Data berhasil ditemukan",
+            message:"Data berhasil dihapus",
             data: essayCards
         })
     } catch (error) {
-        next(error)
+        if(error.message == "Data tidak ditemukan"){
+            res.status(404).json({
+                success:false,
+                message: "Essay dengan ID tersebut tidak ditemukan atau bukan milik Anda."
+            })
+        }
+        else{
+            next(error);
+        }
     }
 }

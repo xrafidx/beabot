@@ -1,7 +1,7 @@
 import ai from "../config/gemini.js";
 import fs from 'fs';
 import fsp from 'fs/promises'; // Gunakan 'fs/promises'
-import { createEssay, searchSpecificEssay, searchAllEssay } from "../repositories/essayReview.repositories.js";
+import { createEssay, searchSpecificEssay, searchAllEssay, deleteSpecificEssay} from "../repositories/essayReview.repositories.js";
 
 
 export async function hapusFile(fileName) {
@@ -117,6 +117,12 @@ export async function getAllEssay(uid){
     }
 }
 
-export async function deleteEssay(essayid,uid){
-    
+export async function deleteEssayService(essayid,uid){
+    try {
+        const result = await deleteSpecificEssay(essayid,uid);
+        return result; 
+    } catch (error) {
+        console.error("Error pada deleteEssay services");
+        throw error;
+    }
 }
