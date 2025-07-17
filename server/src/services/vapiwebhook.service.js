@@ -1,4 +1,4 @@
-import { getQuestion } from "../repositories/question.repositories";
+import { getQuestion } from "../repositories/question.repositories.js";
 
 export async function getInterviewData(cardsid){
     try {

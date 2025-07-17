@@ -1,4 +1,4 @@
-import { handleFunctionCall } from "../services/vapiwebhook.service";
+import { handleFunctionCall } from "../services/vapiwebhook.service.js";
 export async function vapiWebHook(req,res,next){
     const {message} = req.body;
     if(message?.type === 'function-call'){
