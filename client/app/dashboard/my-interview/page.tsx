@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 import CategoryTabs from "@/components/CategoryTabs";
 import Link from "next/link";
+import DataStatusDisplay from "@/components/DataStatusDisplay";
 
 const Page = () => {
   const [activeCategory, setActiveCategory] = useState<Category>("all");
@@ -78,23 +79,8 @@ const Page = () => {
   const completedCount = mappedCards.filter((card) => card.completeStatus).length;
   const incompleteCount = mappedCards.filter((card) => !card.completeStatus).length;
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-center text-gray-500">Loading all your interviews</p>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-center">
-        <p className="text-red-500">Error: {error?.message || "Gagal memuat interviews."}</p>
-        <Button onClick={() => refetch()} className="btn-primary">
-          Refresh Page
-        </Button>
-      </div>
-    );
+  if (isError || isLoading) {
+    return <DataStatusDisplay isLoading={isLoading} isError={isError} onRetry={refetch} loadingMessage="Memuat interview anda." errorMessage="Gagal memuat daftar Interview"></DataStatusDisplay>;
   }
   return (
     <section className="container mx-auto py-10">

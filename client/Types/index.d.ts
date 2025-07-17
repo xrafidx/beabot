@@ -75,3 +75,12 @@ interface EssayCardProps {
 }
 
 type Category = "all" | "completed" | "incomplete";
+
+interface DataStatusDisplayProps {
+  isLoading: boolean;
+  isError: boolean;
+  error?: Error | null;
+  onRetry: () => void;
+  loadingMessage?: string;
+  errorMessage?: string;
+}

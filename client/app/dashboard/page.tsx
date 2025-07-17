@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BackendInterviewData, InterviewCardProps } from "@/Types";
 import EssayCard from "@/components/EssayCard";
 import { id } from "zod/v4/locales";
+import DataStatusDisplay from "@/components/DataStatusDisplay";
 
 const Page = () => {
   const {
@@ -76,6 +77,7 @@ const Page = () => {
         namabeasiswa: namaBeasiswaMapped,
         jenispertanyaan: jenisPertanyaan as "regular" | "essay-driven",
         tanggal: card.tanggal, // Konversi string tanggal ke Date object
+        completeStatus: card.complete,
       };
     });
 
@@ -86,23 +88,8 @@ const Page = () => {
       .slice(0, 3); // Ambil 3 data pertama setelah diurutkan
   }, [rawInterviews]); // Dependensi tetap pada rawInterviews
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-center text-gray-500">Loading for your interview.</p>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen text-center">
-        <p className="text-red-500">Error: {error?.message || "Failed to load data."}</p>
-        <Button onClick={() => refetch()} className="btn-primary mt-4">
-          Try Again
-        </Button>
-      </div>
-    );
+  if (isError || isLoading) {
+    return <DataStatusDisplay isLoading={isLoading} isError={isError} error={error} onRetry={refetch} loadingMessage="Memuat semua interview anda" errorMessage="Gagal memuat daftar interview"></DataStatusDisplay>;
   }
 
   return (
