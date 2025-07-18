@@ -18,7 +18,7 @@ export async function createUser(name,email,hashedPass){
             VALUES(${name}, ${email}, ${hashedPass}) 
             RETURNING id, name, email, hashedpassword; 
         `
-        return newUser;
+        return newUser[0];
     }   
     catch (error) {
         console.error('Database Error in createUser',error);

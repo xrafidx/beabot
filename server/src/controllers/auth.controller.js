@@ -43,15 +43,15 @@ export async function register(req, res, next) {
   const { name, email, password: plainPassword } = req.body;
   try {
     let newUser = await authServices.newUser(name, email, plainPassword);
-    const accessToken = authServices.craftToken(newUser); // Menggunakan accessToken untuk konsistensi
+    // const accessToken = authServices.craftToken(newUser); // Menggunakan accessToken untuk konsistensi
 
-    res.cookie("accessToken", accessToken, {
-      // <-- Perbaikan di sini, gunakan 'accessToken'
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Hanya secure di production
-      sameSite: "Lax",
-      maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hari
-    });
+    // res.cookie("accessToken", accessToken, {
+    //   // <-- Perbaikan di sini, gunakan 'accessToken'
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production", // Hanya secure di production
+    //   sameSite: "Lax",
+    //   maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hari
+    // });
 
     res.status(201).json({
       success: true,
@@ -68,7 +68,15 @@ export async function register(req, res, next) {
     // Penting: Tangani error spesifik di sini
     // Contoh: if (error.message === 'Email already exists') res.status(409).json({ message: 'Email sudah terdaftar' });
     // else next(error);
-    next(error);
+    if(error.message == "Email sudah terdaftar"){
+      res.status(409).json({
+        success:false,
+        message:"Email sudah terdaftar"
+      });
+    }
+    else{
+      next(error);
+    }
   }
 }
 
