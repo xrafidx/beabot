@@ -47,7 +47,7 @@ export async function searchAllEssay(uid){
         if(result.length == 0){
             return [];
         }
-        return result[0];
+        return result;
 
     } catch (error) {
         console.error('Error pada searchSpecificEssay di repositories');
