@@ -75,7 +75,7 @@ const Page = () => {
               <Link href="/dashboard/interview-form">Start an Interview</Link>
             </Button>
             <Button asChild className="btn-primary">
-              <Link href="/essay-review">Start Essay Review</Link>
+              <Link href="/dashboard/essay-form">Start Essay Review</Link>
             </Button>
           </div>
         </div>
@@ -109,7 +109,7 @@ const Page = () => {
         <CardList
           cards={essayCards.sort((a, b) => parseInt(b.essayid) - parseInt(a.essayid)).slice(0, 3)} // Ambil 3 teratas
           activeCategory="all"
-          createNewUrl="/essay-review/form" // URL untuk form essay Anda
+          createNewUrl="/dashboard/essay-form" // URL untuk form essay Anda
           noDataButtonText="Mulai Review Essay Baru"
           CardComponent={EssayCard} // Meneruskan komponen EssayCard
           title="essay reviews" // Judul untuk pesan no data
