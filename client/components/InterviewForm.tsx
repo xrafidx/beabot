@@ -129,7 +129,7 @@ const InterviewForm = () => {
       const result = await response.json();
       console.log("Interview berhasil dibuat:", result);
       toast.success("Interview berhasil dibuat!");
-      queryClient.invalidateQueries({ queryKey: ["userInterviews"] });
+      queryClient.invalidateQueries({ queryKey: ["userInterviewsDashboard"] });
       form.reset();
       router.push("/dashboard");
     } catch (error: any) {

@@ -9,89 +9,60 @@ import Link from "next/link";
 import React from "react";
 import { API_ENDPOINTS } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
-import { BackendInterviewData, InterviewCardProps } from "@/Types";
+import { BackendEssayData, BackendInterviewData, EssayCardProps, InterviewCardProps } from "@/Types";
 import EssayCard from "@/components/EssayCard";
 import { id } from "zod/v4/locales";
 import DataStatusDisplay from "@/components/DataStatusDisplay";
+import { mapBackendEssayToCard, mapBackendInterviewToCard, useFetchCardsData } from "@/hooks/useFetchCardsData";
+import CardWrapper from "@/components/CardWrapper";
+import CardList from "@/components/CardList";
 
 const Page = () => {
+  // Bakal fetch data interviews
   const {
-    data: rawInterviews, // Data mentah dari backend (BackendInterviewData[])
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery<BackendInterviewData[], Error>({
-    // Output queryFn adalah BackendInterviewData[]
-    queryKey: ["userInterviews"],
-    queryFn: async () => {
-      const response = await fetch(`http://localhost:5000${API_ENDPOINTS.GET_ALL_INTERVIEW_CARDS}`, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status === 401) {
-          throw new Error("Authentication invalid. Please try signing in back.");
-        }
-        throw new Error(errorData.message || `Failed to fetch user's data interview: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (!Array.isArray(result.data)) {
-        console.error("Backend response data is not an array, received:", result.data);
-        throw new Error("Backend did not return an array of interviews.");
-      }
-      return result.data as BackendInterviewData[];
-    },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    mappedCards: interviewCards,
+    isLoading: isLoadingInterviews,
+    isError: isErrorInterviews,
+    error: errorInterviews,
+    refetch: refetchInterviews,
+  } = useFetchCardsData({
+    queryKey: ["userInterviewsDashboard"],
+    apiEndpoint: API_ENDPOINTS.GET_ALL_INTERVIEW_CARDS,
+    mapper: mapBackendInterviewToCard,
   });
 
-  // LOG DATA MENTAH UNTUK DEBUGGING (biarkan ini)
-  console.log("Raw Interviews Data from Backend:", rawInterviews);
+  // Bakal fetch data essay
 
-  // LOGIKA SORTING DAN SLICE DI FRONTEND
-  const userInterviews: InterviewCardProps[] = React.useMemo(() => {
-    if (!rawInterviews) return [];
+  const {
+    mappedCards: essayCards,
+    isLoading: isLoadingEssays,
+    isError: isErrorEssays,
+    error: errorEssays,
+    refetch: refetchEssays,
+  } = useFetchCardsData<BackendEssayData, EssayCardProps>({
+    queryKey: ["userEssaysDashboard"],
+    apiEndpoint: API_ENDPOINTS.ESSAY_REVIEW,
+    mapper: mapBackendEssayToCard,
+  });
 
-    // Langkah 1: Map data mentah dari backend ke format InterviewCardProps
-    // Ini menangani konversi casing dan memberikan fallback untuk properti yang hilang
-    const mappedCards: InterviewCardProps[] = rawInterviews.map((card, index) => {
-      // LOG SETIAP CARD YANG DIPROSES UNTUK DEBUGGING (biarkan ini)
-      console.log(`Mapping card index ${index}: ID=${card.id}, judulinterview=${card.judulinterview}`);
+  const isLoading = isLoadingEssays || isLoadingInterviews;
+  const isError = isErrorEssays || isErrorInterviews;
+  const error = errorEssays || errorInterviews;
 
-      // Memastikan properti yang casingnya berbeda di-mapping dengan benar
-      const judulInterviewMapped = card.judulinterview;
-      const namaBeasiswaMapped = card.namabeasiswa || "";
-
-      // Fallback untuk properti yang TIDAK ADA di JSON dari backend Anda
-      const jenisPertanyaan = (card as BackendInterviewData).jenispertanyaan ? (card as BackendInterviewData).jenispertanyaan.toLowerCase() : "regular";
-      const userId = (card as BackendInterviewData).uid || ""; // Misalnya, beri default string kosong
-
-      return {
-        id: card.id.toString(), // Konversi ID dari number ke string
-        userId: userId,
-        judulinterview: judulInterviewMapped,
-        namabeasiswa: namaBeasiswaMapped,
-        jenispertanyaan: jenisPertanyaan as "regular" | "essay-driven",
-        tanggal: card.tanggal, // Konversi string tanggal ke Date object
-        completeStatus: card.complete,
-      };
-    });
-
-    // Langkah 2: Urutkan dan Ambil 3 Teratas
-    // Asumsi 'id' adalah number dari backend, di sini sudah menjadi string, jadi perlu di-parse lagi untuk sort numerik
-    return mappedCards
-      .sort((a, b) => parseInt(b.id) - parseInt(a.id)) // Urutkan berdasarkan ID dari terbesar ke terkecil
-      .slice(0, 3); // Ambil 3 data pertama setelah diurutkan
-  }, [rawInterviews]); // Dependensi tetap pada rawInterviews
-
-  if (isError || isLoading) {
-    return <DataStatusDisplay isLoading={isLoading} isError={isError} error={error} onRetry={refetch} loadingMessage="Memuat semua interview anda" errorMessage="Gagal memuat daftar interview"></DataStatusDisplay>;
+  if (isLoading || isError) {
+    return (
+      <DataStatusDisplay
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        onRetry={() => {
+          refetchEssays();
+          refetchInterviews();
+        }}
+        loadingMessage="Memuat dashboard..."
+        errorMessage="Gagal memuat dashboard"></DataStatusDisplay>
+    );
   }
-
   return (
     <>
       {/* Hero Section */}
@@ -114,39 +85,40 @@ const Page = () => {
         </div>
       </section>
 
+      {/* Bagian Interview Cards (hanya menampilkan 3 teratas) */}
       <section className="flex flex-col gap-4 mt-8">
-        <h2>Your Interviews</h2>
+        <h2>Your Recent Interviews</h2> {/* Judul lebih spesifik */}
+        <CardList
+          cards={interviewCards.sort((a, b) => parseInt(b.id) - parseInt(a.id)).slice(0, 3)} // Ambil 3 teratas
+          activeCategory="all" // Untuk dashboard, biasanya menampilkan 'all'
+          createNewUrl="/dashboard/interview-form"
+          noDataButtonText="Buat Interview Baru"
+          CardComponent={InterviewCard} // Meneruskan komponen InterviewCard
+          title="interviews" // Judul untuk pesan no data (akan jadi 'interviews' kecil di pesan)
+        />
+        {interviewCards.length > 3 && ( // Tampilkan tombol "See all" jika ada lebih dari 3
+          <Link href="/dashboard/my-interview" className="btn-primary text-center mt-4">
+            See all my interviews.
+          </Link>
+        )}
+      </section>
 
-        <div className="interviews-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {userInterviews.length > 0 ? (
-            userInterviews.map((interview) => (
-              <InterviewCard
-                key={interview.id}
-                id={interview.id}
-                uid={interview.uid}
-                jenispertanyaan={interview.jenispertanyaan}
-                judulinterview={interview.judulinterview}
-                namabeasiswa={interview.namabeasiswa || ""}
-                tanggal={interview.tanggal}
-              />
-            ))
-          ) : (
-            <div className="col-span-full flex flex-col items-center justify-center p-10 bg-white rounded-lg shadow-md">
-              <p className="text-lg text-gray-600 mb-4">Anda belum memiliki interview yang dibuat.</p>
-              <Link href="/dashboard/interview">
-                <Button className="px-6 py-3 bg-green-600 text-white rounded-md shadow-lg hover:bg-green-700">Buat Interview Pertama Anda</Button>
-              </Link>
-            </div>
-          )}
-        </div>
-
-        <Link href="/dashboard/my-interview" className="btn-primary text-center">
-          See all my interview.
-        </Link>
-
-        <div className="interviews-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <h2>Your Essay Review</h2>
-        </div>
+      {/* Bagian Essay Cards (juga bisa menampilkan 3 teratas atau sesuai kebutuhan) */}
+      <section className="flex flex-col gap-4 mt-8">
+        <h2>Your Recent Essay Reviews</h2> {/* Judul untuk essay */}
+        <CardList
+          cards={essayCards.sort((a, b) => parseInt(b.essayid) - parseInt(a.essayid)).slice(0, 3)} // Ambil 3 teratas
+          activeCategory="all"
+          createNewUrl="/essay-review/form" // URL untuk form essay Anda
+          noDataButtonText="Mulai Review Essay Baru"
+          CardComponent={EssayCard} // Meneruskan komponen EssayCard
+          title="essay reviews" // Judul untuk pesan no data
+        />
+        {essayCards.length > 3 && ( // Tampilkan tombol "See all" jika ada lebih dari 3
+          <Link href="/dashboard/my-essays" className="btn-primary text-center mt-4">
+            See all my essay reviews.
+          </Link>
+        )}
       </section>
     </>
   );

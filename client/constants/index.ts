@@ -146,6 +146,8 @@ export const API_ENDPOINTS = {
   CREATE_INTERVIEW_CARD: "/api/v1/cards",
 
   BASE_INTERVIEW_CARD_BY_ID: "/api/v1/cards/:id",
+
+  ESSAY_REVIEW: "/api/v1/essay-review",
 };
 
 export const INTERVIEW_TYPES_OPTIONS = [

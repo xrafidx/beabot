@@ -2,6 +2,10 @@ import { FieldValues } from "react-hook-form";
 
 type FormType = "sign-in" | "register";
 
+type BackendCardData = BackendInterviewData | BackendEssayData;
+
+type CardProps = InterviewCardProps | EssayCardProps;
+
 interface Feedback {
   id: string;
   interviewId: string;
@@ -58,20 +62,32 @@ interface FormFileInputProps<T extends FieldValues> {
   description?: string;
 }
 
-interface EssayReview {
-  id: string;
-  uid: string;
-  judulessay: string;
-  rating?: string;
-  tanggal: string;
+interface BackendEssayData {
+  essayid: string;
+  userid: string;
+  aireview: string | null;
 }
 
 interface EssayCardProps {
-  id: string;
+  essayid: string;
   uid: string;
   judulessay: string;
-  rating?: string;
+  rating?: number | null;
   tanggal: string;
+  completestatus: boolean;
+}
+
+interface EssayUploadFormData {
+  file: FileList;
+}
+
+interface AiReviewContent {
+  rating: number | null;
+  masukan: string | null;
+  tanggal: string;
+  kelebihan: string[] | null;
+  kesalahan: string[] | null;
+  judulessay: string;
 }
 
 type Category = "all" | "completed" | "incomplete";
@@ -83,4 +99,15 @@ interface DataStatusDisplayProps {
   onRetry: () => void;
   loadingMessage?: string;
   errorMessage?: string;
+}
+
+type CardComponentType = React.FC<AnycardProps>;
+
+interface CardListProps {
+  cards: AnyCardsProps[];
+  activeCategory: Category;
+  createNewUrl?: string;
+  noDataButtonText?: string;
+  CardComponent: CardComponentType;
+  title: string;
 }
