@@ -25,6 +25,7 @@ Fokuslah pada aspek-aspek berikut:
 3.  **Kejelasan dan Gaya Bahasa**: Nilai apakah kalimatnya jelas, efektif, dan tidak bertele-tele.
 4.  **Substansi dan Kedalaman Isi**: Analisis kekuatan ide dan kedalaman pemikiran yang disampaikan.
 5.  **Teknikal                   **: Analisis margin, font, spacing yang sekiranya sesuai.
+6. **Penilaian akhir pada kolom rating**: Berikan nilai dari skala 0-100, berapa nilai yang cocok untuk essay tersebut.
 
 Berikan output HANYA dalam format string JSON yang valid dan bisa langsung di-parse. JANGAN tambahkan teks pembuka, penutup, atau penjelasan apa pun di luar objek JSON. JANGAN gunakan format Markdown seperti \`\`\`json.
 
@@ -32,7 +33,7 @@ Gunakan struktur berikut:
 
 {
   "judulessay": string,
-  "rating": number,
+  "rating": integer,
   "kesalahan": string[],
   "kelebihan": string[],
   "masukan": string[]
@@ -68,10 +69,10 @@ export function jsonParser(jsonMatch){
             day: 'numeric',
             };
             const tanggalFormatted = tanggalHariIni.toLocaleDateString('en-US', options);
-            const {judulessay,nilai,kesalahan,kelebihan,masukan} = parsedJson;
+            const {judulessay,rating,kesalahan,kelebihan,masukan} = parsedJson;
             const restructuredJson = {
                 judulessay:judulessay,
-                nilai:nilai,
+                rating:rating,
                 kesalahan:kesalahan,
                 kelebihan:kelebihan,
                 masukan:masukan,
