@@ -63,18 +63,21 @@ interface FormFileInputProps<T extends FieldValues> {
 }
 
 interface BackendEssayData {
-  essayid: string;
+  id: string;
   userid: string;
   aireview: string | null;
 }
 
 interface EssayCardProps {
-  essayid: string;
-  uid: string;
+  id: string;
+  userid: string;
   judulessay: string;
   rating?: number | null;
   tanggal: string;
   completestatus: boolean;
+  masukanreview: string[] | null;
+  kelebihanreview: string[] | null;
+  kesalahanreview: string[] | null;
 }
 
 interface EssayUploadFormData {
@@ -83,7 +86,7 @@ interface EssayUploadFormData {
 
 interface AiReviewContent {
   rating: number | null;
-  masukan: string | null;
+  masukan: string[] | null;
   tanggal: string;
   kelebihan: string[] | null;
   kesalahan: string[] | null;

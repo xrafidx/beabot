@@ -66,32 +66,38 @@ export const mapBackendInterviewToCard = (card: BackendInterviewData): Interview
 };
 
 export const mapBackendEssayToCard = (card: BackendEssayData): EssayCardProps => {
-  let aiReviewParsed: AiReviewContent | null = null;
+  let aiReviewParsed = card.aireview; // Sekarang ini langsung objek AiReviewContent atau null
   let judulEssayFromReview = "Judul Essay Tidak Ditemukan";
   let ratingFromReview: number | null = null;
   let completeStatusCalculated = false;
-  let masukanReview: string[] | null;
+  let masukanReview: string[] | null = null;
+  let kelebihanReview: string[] | null = null;
+  let kesalahanReview: string[] | null = null;
   let tanggalReview: string = "";
 
-  if (card.aireview) {
-    try {
-      aiReviewParsed = JSON.parse(card.aireview);
-      judulEssayFromReview = aiReviewParsed.judulessay || judulEssayFromReview;
-      ratingFromReview = aiReviewParsed.rating;
-      completeStatusCalculated = ratingFromReview !== null && ratingFromReview !== undefined;
-      tanggalReview = aiReviewParsed.tanggal;
-    } catch (e) {
-      console.error("Failed to parse AiReview JSON for essay ID:", card.essayid, e);
-      aiReviewParsed = null;
-    }
-  }
+  if (aiReviewParsed) {
+    judulEssayFromReview = aiReviewParsed.judulessay || judulEssayFromReview;
+    ratingFromReview = aiReviewParsed.rating;
+    completeStatusCalculated = ratingFromReview !== null && ratingFromReview !== undefined;
+    masukanReview = aiReviewParsed.masukan; // Ambil masukan
+    kelebihanReview = aiReviewParsed.kelebihan; // Ambil kelebihan
+    kesalahanReview = aiReviewParsed.kesalahan; // Ambil kesalahan
+    tanggalReview = aiReviewParsed.tanggal; // Tanggal sudah string dari backend
+  } // Default untuk namaBeasiswa (karena tidak ada di JSON essay)
+
+  const essayNamaBeasiswa = "";
 
   return {
-    essayid: card.essayid.toString(),
-    uid: card.userid,
-    judulessay: judulEssayFromReview,
-    tanggal: tanggalReview,
+    id: card.id.toString(), // Gunakan card.id, bukan essayid, dan konversi ke string
+    uid: card.userid, // <-- KOREKSI: Gunakan userId (camelCase)
+    judulessay: judulEssayFromReview, // <-- KOREKSI: Gunakan judulEssay (camelCase)
+
+    tanggal: tanggalReview, // Tanggal sudah string dari backend
     rating: ratingFromReview,
-    completestatus: completeStatusCalculated,
+    completestatus: completeStatusCalculated, // <-- KOREKSI: Gunakan completeStatus (camelCase)
+    // Tambahkan properti review lainnya jika EssayCardProps menampilkannya
+    masukanReview: masukanReview,
+    kelebihanReview: kelebihanReview,
+    kesalahanReview: kesalahanReview,
   };
 };

@@ -148,6 +148,10 @@ export const API_ENDPOINTS = {
   BASE_INTERVIEW_CARD_BY_ID: "/api/v1/cards",
 
   ESSAY_REVIEW: "/api/v1/essay-review",
+
+  REGISTER: "/api/v1/auth/register",
+
+  SIGN_IN: "/api/v1/auth/sign-in",
 };
 
 export const INTERVIEW_TYPES_OPTIONS = [

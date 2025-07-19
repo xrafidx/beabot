@@ -76,7 +76,7 @@ const EssayUploadForm = () => {
 
       const tempId = `temp-${Date.now()}`;
       const optimisticEssay: BackendEssayData = {
-        essayid: tempId,
+        id: tempId,
         userid: "temp-user",
         aireview: null,
       };
@@ -93,11 +93,13 @@ const EssayUploadForm = () => {
       if (context?.previousEssays) {
         queryClient.setQueryData<BackendEssayData[]>(["userEssaysDashboard"], context.previousEssays);
       }
-      toast.error(`Gaal mengunggah esai: ${err.message}`);
+      toast.error(`Gagal mengunggah esai: ${err.message}`);
       console.error("Error submit esai:", err);
+      toast.dismiss();
     },
     onSettled: (data, error, variables, context) => {
       queryClient.invalidateQueries({ queryKey: ["userEssaysDashboard"] });
+      toast.dismiss();
     },
   });
 

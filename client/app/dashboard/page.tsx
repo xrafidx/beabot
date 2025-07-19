@@ -107,7 +107,7 @@ const Page = () => {
       <section className="flex flex-col gap-4 mt-8">
         <h2>Your Recent Essay Reviews</h2> {/* Judul untuk essay */}
         <CardList
-          cards={essayCards.sort((a, b) => parseInt(b.essayid) - parseInt(a.essayid)).slice(0, 3)} // Ambil 3 teratas
+          cards={essayCards.sort((a, b) => parseInt(b.id) - parseInt(a.id)).slice(0, 3)} // Ambil 3 teratas
           activeCategory="all"
           createNewUrl="/dashboard/essay-form" // URL untuk form essay Anda
           noDataButtonText="Mulai Review Essay Baru"
