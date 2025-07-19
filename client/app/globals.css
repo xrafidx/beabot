@@ -60,41 +60,6 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --white: oklch(1 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: var(--light-100);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -278,8 +243,32 @@
     min-h-screen text-white flex items-center justify-center;
   }
 
-  .auth-layout {
-    @apply flex justify-center items-center mx-auto max-w-7xl flex-col gap-12 my-12 px-16 max-sm:px-4 max-sm:my-8;
+  .auth-split-layout {
+    @apply flex min-h-screen;
+    @apply flex-col lg:flex-row;
+  }
+
+  .auth-left-panel {
+    /* DEFAULT untuk MOBILE/TABLET: Sembunyikan */
+    @apply hidden;
+
+    /* UNTUK LAYAR BESAR (lg:): Tampilkan sebagai flex dan atur propertinya */
+    @apply lg:flex lg:flex-1 lg:w-1/2 lg:items-center lg:justify-center lg:p-8;
+
+    /* Terapkan gaya visual hanya untuk tampilan desktop */
+    @apply purple-gradient lg:text-white lg:relative lg:overflow-hidden;
+  }
+
+  .auth-right-panel {
+    @apply flex-1 w-full lg:w-1/2 flex flex-col items-center justify-center bg-white p-1;
+  }
+
+  .auth-left-text {
+    @apply max-w-md text-4xl font-bold leading-tight;
+  }
+
+  .auth-left-text strong {
+    @apply text-white;
   }
 
   .root-layout {
