@@ -2,6 +2,13 @@ import ai from "../config/gemini.js";
 import fs from 'fs';
 import fsp from 'fs/promises'; // Gunakan 'fs/promises'
 import { createEssay, searchSpecificEssay, searchAllEssay, deleteSpecificEssay} from "../repositories/essayReview.repositories.js";
+import path from 'path';
+import { fileURLToPath } from "url";
+
+// Dapatkan path file saat ini
+const __filename = fileURLToPath(import.meta.url);
+// Dapatkan path direktori dari path file
+const __dirname = path.dirname(__filename);
 
 
 export async function hapusFile(fileName) {
@@ -15,6 +22,8 @@ export async function hapusFile(fileName) {
 }
 export async function essayReviewPrompt(fileName){
     try {
+    const dynamicPath = path.join(__dirname, '..', '..','upload', fileName);
+    console.log(dynamicPath);
     const contents = [
         { text: `
 Anda adalah seorang penilai esai yang berpengalaman dan kritis untuk sebuah yayasan beasiswa bergengsi. Tugas Anda adalah memberikan analisis tajam dan konstruktif terhadap teks esai berikut.
@@ -42,7 +51,7 @@ Gunakan struktur berikut:
         {
             inlineData: {
                 mimeType: 'application/pdf',
-                data: Buffer.from(fs.readFileSync(`../../beabot/server/upload/${fileName}`)).toString("base64")
+                data: Buffer.from(fs.readFileSync(dynamicPath)).toString("base64")
             }
         }
     ];
@@ -127,3 +136,4 @@ export async function deleteEssayService(essayid,uid){
         throw error;
     }
 }
+
