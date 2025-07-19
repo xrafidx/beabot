@@ -37,7 +37,7 @@ export async function specificEssay(req,res,next){
         // ambil essay cards yang specific
         const essayid = Number(req.params.essayid);
         // ambil id user
-        const uid = req.user.sub;
+        const uid = Number(req.user.sub);
         if(!essayid || !uid){
             console.error("essayid atau uid tidak ditemukan");
             throw new Error("essayid atau uid tidak ditemukan");
@@ -87,7 +87,7 @@ export async function deleteEssay(req,res,next){
         // ambil essay cards yang specific
         const essayid = Number(req.params.essayid);
         // ambil id user
-        const uid = req.user.sub;
+        const uid = Number(req.user.sub);
         if(!essayid || !uid){
             console.error("essayid atau uid tidak ditemukan");
             throw new Error("essayid atau uid tidak ditemukan");
