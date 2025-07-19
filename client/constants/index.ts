@@ -107,7 +107,7 @@ export const dummyEssayReview: BackendEssayData[] = [
   { essayid: "1", uid: "1", judulessay: "Lorem Ipsum", rating: "", tanggal: "16 Jul, 2025" },
   {
     essayid: "2",
-    uid: "1",
+    userid: "1",
     judulessay: "Lorem Ipsum",
     rating: "",
     tanggal: "16 Jul, 2025",
@@ -145,7 +145,7 @@ export const API_ENDPOINTS = {
   // Buat bikin kartu interview
   CREATE_INTERVIEW_CARD: "/api/v1/cards",
 
-  BASE_INTERVIEW_CARD_BY_ID: "/api/v1/cards/:id",
+  BASE_INTERVIEW_CARD_BY_ID: "/api/v1/cards",
 
   ESSAY_REVIEW: "/api/v1/essay-review",
 };
