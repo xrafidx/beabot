@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/Footer";
 // import Image from "next/image";
 import LogoutButton from "@/components/LogoutButton";
 import UserNavbar from "@/components/UserNavbar";
@@ -11,6 +12,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     <div>
       <UserNavbar></UserNavbar>
       <div className="root-layout">{children}</div>
+      <Footer></Footer>
     </div>
   );
 };
