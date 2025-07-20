@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 // import { FaInstagram, FaGlobe } from "react-icons/fa";
 // import { FaFacebookF } from "react-icons/fa6";
 
@@ -10,8 +12,7 @@ export default function Footer() {
         {/* Kiri */}
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <div className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-[#753a88] font-bold">be</div>
-            <span className="text-lg font-bold">beabot</span>
+            <Image src="/beabot-icon/beabot-logo-putih-samping.png" alt="beabot logo" width={100} height={100}></Image>
           </div>
           <p className="text-sm text-gray-200">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.</p>
         </div>
@@ -48,14 +49,14 @@ export default function Footer() {
           <h3 className="font-bold mb-4">Social Media</h3>
           <ul className="space-y-2 text-sm text-gray-200">
             <li className="flex items-center gap-2">@beabot</li>
-            <li className="flex items-center gap-2">Beabot Indonesia</li>
+            <li className="flex items-center gap-2">Beabot</li>
             <li className="flex items-center gap-2">@beabot</li>
           </ul>
         </div>
       </div>
 
       {/* Copyright */}
-      <div className="mt-10 text-center text-xs text-gray-300 border-t border-white/20 pt-4">2025 Beabot Squad. All right reserved</div>
+      <div className="mt-10 text-center text-xs text-gray-300 border-t border-white/20 pt-4">2025 Digidaw Team. All right reserved</div>
     </footer>
   );
 }
