@@ -138,6 +138,8 @@ export const dummyEssayReview: BackendEssayData[] = [
 //   },
 // ];
 
+export const BASE_URL = "http://localhost:5000";
+
 export const API_ENDPOINTS = {
   // Buat ambil semua kartu interview
   GET_ALL_INTERVIEW_CARDS: "/api/v1/cards",
@@ -152,6 +154,8 @@ export const API_ENDPOINTS = {
   REGISTER: "/api/v1/auth/register",
 
   SIGN_IN: "/api/v1/auth/sign-in",
+
+  USER_DATA: "api/v1/user-data",
 };
 
 export const INTERVIEW_TYPES_OPTIONS = [
