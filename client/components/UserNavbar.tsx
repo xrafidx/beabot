@@ -8,15 +8,14 @@ import { Button } from "./ui/button";
 import { MenuIcon, UserCircleIcon } from "lucide-react";
 import LogoutButton from "./LogoutButton";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
-
-const API_URL = "http://localhost:5000/api/v1/user-data"; // ubah sesuai endpointmu
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
 
 export default function UserNavbar() {
   const pathname = usePathname();
   const [user, setUser] = useState({ name: "Guest", email: "-" });
 
   useEffect(() => {
-    fetch(API_URL, {
+    fetch(`${BASE_URL}${API_ENDPOINTS.USER_DATA}`, {
       method: "GET",
       credentials: "include",
     })
