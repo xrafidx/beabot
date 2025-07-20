@@ -9,8 +9,7 @@ import React, { ReactNode } from "react";
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
-      <LogoutButton></LogoutButton>
-      {/* <UserNavbar></UserNavbar> */}
+      <UserNavbar></UserNavbar>
       <div className="root-layout">{children}</div>
     </div>
   );
