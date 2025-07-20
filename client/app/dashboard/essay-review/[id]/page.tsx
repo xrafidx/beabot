@@ -71,8 +71,8 @@ const Page = ({ params }: EssayDetailPageProps) => {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center text-gray-600">
         <p>Detail esai tidak ditemukan atau tidak dapat diproses.</p>
-        <Link href="/dashboard/my-essays">
-          <Button className="btn-primary">Kembali ke Daftar Esai</Button>
+        <Link href="/dashboard">
+          <Button className="btn-primary">Kembali ke Dashboard</Button>
         </Link>
       </div>
     );
@@ -124,7 +124,7 @@ const Page = ({ params }: EssayDetailPageProps) => {
       </div>
 
       <div className="text-center">
-        <Link href="/dashboard/my-essays">
+        <Link href="/dashboard/">
           <Button className="btn-secondary">Kembali ke Daftar Esai</Button>
         </Link>
       </div>

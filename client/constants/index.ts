@@ -155,7 +155,7 @@ export const API_ENDPOINTS = {
 
   SIGN_IN: "/api/v1/auth/sign-in",
 
-  USER_DATA: "api/v1/user-data",
+  USER_DATA: "/api/v1/user-data",
 };
 
 export const INTERVIEW_TYPES_OPTIONS = [

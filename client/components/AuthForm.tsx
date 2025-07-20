@@ -140,7 +140,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
   return (
     <div>
       <div className="flex flex-row gap-2 justify-center mb-3">
-        <h2>Beabot</h2>
+        <Image src="/beabot-icon/beabot-logo-ungu-samping.png" alt="beabot logo" height={120} width={120}></Image>
       </div>
       <div className="card-border lg:min-w-[566px] shadow-2xl">
         <div className="flex flex-col gap-3 card py-14 px-10">

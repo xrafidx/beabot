@@ -148,24 +148,36 @@ const InterviewForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onError)}>
           {/* Judul Interview */}
-          <FormField control={form.control} name="judulInterview" label="Judul Interview" type="text" placeholder="Contoh: Latihan Interview Beasiswa 1" description="Masukkan judul interview anda"></FormField>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4 shadow-sm">
+            <FormField control={form.control} name="judulInterview" label="Judul Interview" type="text" placeholder="Contoh: Latihan Interview Beasiswa 1" description="Masukkan judul interview anda"></FormField>
+          </div>
 
           {/* Nama Beasiswa */}
-          <FormField control={form.control} name="namaBeasiswa" label="Nama Beasiswa" type="text" placeholder="Contoh: Beasiswa Unggulan" description="Masukkan nama beasiswa"></FormField>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4 shadow-sm">
+            <FormField control={form.control} name="namaBeasiswa" label="Nama Beasiswa" type="text" placeholder="Contoh: Beasiswa Unggulan" description="Masukkan nama beasiswa"></FormField>
+          </div>
 
-          {/* Banyak Pertanyaan */}
-          <FormField control={form.control} name="banyakPertanyaan" label="Banyak Pertanyaan" type="number" placeholder="Contoh: 8" description="Tentukan banyaknya pertanyaan yang akan diajukan (maksimal : 15)."></FormField>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4 shadow-sm">
+            {/* Banyak Pertanyaan */}
+            <FormField control={form.control} name="banyakPertanyaan" label="Banyak Pertanyaan" type="number" placeholder="Contoh: 8" description="Tentukan banyaknya pertanyaan yang akan diajukan (maksimal : 15)."></FormField>
+          </div>
 
-          {/* Jenis Interview */}
-          <FormSelect control={form.control} name="jenisPertanyaan" label="Jenis Interview" options={INTERVIEW_TYPES_OPTIONS} description="Pilih jenis interview."></FormSelect>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4 shadow-sm">
+            {/* Jenis Interview */}
+            <FormSelect control={form.control} name="jenisPertanyaan" label="Jenis Interview" options={INTERVIEW_TYPES_OPTIONS} description="Pilih jenis interview."></FormSelect>
+          </div>
 
-          {/* Bahasa Interview */}
-          <FormSelect control={form.control} name="bahasa" label="Bahasa Interview" options={INTERVIEW_LANGUAGE_OPTIONS} description="Pilih bahasa yang digunakan dalam interview"></FormSelect>
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4 shadow-sm">
+            {/* Bahasa Interview */}
+            <FormSelect control={form.control} name="bahasa" label="Bahasa Interview" options={INTERVIEW_LANGUAGE_OPTIONS} description="Pilih bahasa yang digunakan dalam interview"></FormSelect>
+          </div>
 
-          {/* Essay Attachment (cuma muncul kalo piih essay-driven.) */}
-          {jenisInterviewWatch === "essay-driven" && <FormFileInput control={form.control} name="essay" label="Unggah Esai (PDF)" accept=".pdf" description="Unggah esai Anda dalam format .pdf (maks. 5MB)"></FormFileInput>}
+          <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4 shadow-sm">
+            {/* Essay Attachment (cuma muncul kalo piih essay-driven.) */}
+            {jenisInterviewWatch === "essay-driven" && <FormFileInput control={form.control} name="essay" label="Unggah Esai (PDF)" accept=".pdf" description="Unggah esai Anda dalam format .pdf (maks. 5MB)"></FormFileInput>}
 
-          {submitError && <p className="text-sm text-red-600">{submitError}</p>}
+            {submitError && <p className="text-sm text-red-600">{submitError}</p>}
+          </div>
 
           <Button type="submit" disabled={isSubmitting} className="btn-primary">
             {isSubmitting ? "Membuat Interview" : "Mulai Setup Interview"}
