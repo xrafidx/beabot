@@ -9,6 +9,8 @@ import { BackendInterviewData, Feedback, InterviewCardProps } from "@/Types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_ENDPOINTS } from "@/constants";
 import { toast } from "sonner";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { MoreVertical } from "lucide-react";
 
 const InterviewCard = ({ id, uid, judulinterview, namabeasiswa, jenispertanyaan, tanggal, rating }: InterviewCardProps) => {
   const feedback = null as Feedback | null;
@@ -60,49 +62,54 @@ const InterviewCard = ({ id, uid, judulinterview, namabeasiswa, jenispertanyaan,
   };
   return (
     // Bikin card
-    <div className="card-border w-[360px] zmax-sm:w-full ">
-      <div className="card-interview">
-        <div>
-          {/* Ini teks buat kategori interview */}
-          <div className="absolute top-0 right-0 w-fit p-2 rounded-bl-lg bg-accent">
-            <p className="badge-text text-black">{jenispertanyaan}</p>
+    <div className="card-border w-[360px] max-sm:w-full relative">
+      <div className="card-interview flex flex-col gap-4">
+        {/* Badge kategori */}
+        <div className="absolute top-0 right-0 bg-[#753a88] rounded-bl-lg px-3 py-1">
+          <span className="badge-text text-white text-sm font-medium">{jenispertanyaan}</span>
+        </div>
+
+        {/* Logo instansi */}
+        <div className="flex justify-start mt-3">
+          <Image src={getCoverImage(namabeasiswa)} alt="interview cover" width={70} height={70} className="rounded-full object-fit" />
+        </div>
+
+        {/* Judul dan nama beasiswa */}
+        <div className="mt-1">
+          <h3 className="text-lg font-semibold capitalize">{judulinterview}</h3>
+          <h4 className="text-sm text-gray-600">{namabeasiswa}</h4>
+        </div>
+
+        {/* Feedback */}
+        <p className="text-sm text-gray-700 text-justify">{feedback?.totalScore || "You haven't take this interview yet. Take it now to improve your skills."}</p>
+
+        {/* Tanggal & Rating */}
+        <div className="flex gap-6 text-sm text-gray-600 mt-1">
+          <div className="flex items-center gap-1">
+            <Image src="/calendar.svg" alt="calendar" width={20} height={20} />
+            <span>{tanggal ? dayjs(tanggal).format("MMM DD, YYYY") : "---"}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Image src="/star.svg" alt="star" width={20} height={20} />
+            <span>{rating || "---"}</span>
           </div>
         </div>
 
-        {/* Logo Instansi */}
-        <Image src={getCoverImage(namabeasiswa)} alt="interview cover" width={90} height={90} className="rounded-full object-fit size-[90px]" />
-
-        {/* Judul Interview */}
-        <h3 className="mt-5 capitalize">{judulinterview}</h3>
-
-        <h4 className="mt-5">{namabeasiswa}</h4>
-        <div className="flex flex-row gap-2">
-          {/* Summary singkat Interview */}
-          <p>{feedback?.totalScore || "You haven't take this interview yet. Take it now to improve your skills."}</p>
-        </div>
-
-        {/* Icon Kalender */}
-        <div className="flex flex-row gap-5 mt-3">
-          <div className="flex flex-row gap-2">
-            <Image src="/calendar.svg" alt="calendar" width={22} height={22}></Image>
-            <p>{tanggal}</p>
-          </div>
-
-          {/* Icon Bintang */}
-          <div className="flex flex-row gap-2 items-center">
-            <Image src="/star.svg" alt="star" width={22} height={22}></Image>
-            <p>{rating || "---"}</p>
-          </div>
-        </div>
-
-        <div className="flex flex-row gap-5 mt-3">
-          <div className="flex flex-row justify-between">
-            {/* <DisplayFieldLogo></DisplayFieldLogo> */}
-            <Button className="btn-primary">View an interview</Button>
-            <Button variant="destructive" size="sm" onClick={handleDelete} disabled={deleteMutation.isPending}>
-              {deleteMutation.isPending ? "Menghapus" : "Hapus"}
-            </Button>
-          </div>
+        {/* Tombol */}
+        <div className="flex justify-between items-center mt-4">
+          <Button className="btn-primary">View an interview</Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-muted-foreground">
+                <MoreVertical className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleDelete} className="text-red-600 focus:text-red-700">
+                {deleteMutation.isPending ? "Menghapus..." : "Hapus"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

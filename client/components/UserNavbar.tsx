@@ -86,37 +86,38 @@ export default function UserNavbar() {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-full sm:max-w-xs">
-            <div className="flex flex-col justify-between h-full py-6">
-              {/* User Info + Nav Links */}
-              <div>
-                <div className="flex items-center gap-x-3 px-2 mb-6">
-                  <UserCircleIcon className="w-8 h-8 text-gray-600" />
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-sm">{user.name}</span>
-                    <span className="text-xs text-gray-500">{user.email}</span>
-                  </div>
-                </div>
-                <hr className="mb-4" />
+          <SheetContent side="right" className="w-full sm:max-w-xs p-4 flex flex-col justify-between">
+            {/* Bagian Atas: Logo */}
+            <div className="flex justify-center mb-6">
+              <Image src="/beabot-icon/beabot-logo-ungu-samping.png" alt="beabot icon" width={120} height={120} />
+            </div>
 
-                <div className="flex flex-col gap-3 px-2">
-                  {navLinks.map((link) => (
-                    <SheetClose asChild key={link.name}>
-                      <Link href={link.href} className={`block w-full px-2 py-2 rounded-md transition-colors duration-200 ${pathname === link.href ? "text-purple-600 font-semibold" : "text-gray-700 hover:text-purple-600"}`}>
-                        {link.name}
-                      </Link>
-                    </SheetClose>
-                  ))}
+            {/* Bagian Tengah: Link Navigasi */}
+            <div className="flex-1">
+              {navLinks.map((link) => (
+                <SheetClose asChild key={link.name}>
+                  <Link href={link.href} className={`block w-full px-2 py-2 rounded-md transition-colors duration-200 ${pathname === link.href ? "text-purple-600 font-semibold" : "text-gray-700 hover:text-purple-600"}`}>
+                    {link.name}
+                  </Link>
+                </SheetClose>
+              ))}
+            </div>
+
+            {/* Bagian Bawah: User Info + Logout */}
+            <div className="mt-6">
+              {/* Profil */}
+              <div className="flex items-center gap-2 px-2 mb-3">
+                <UserCircleIcon className="w-7 h-7 text-gray-600" />
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm">{user.name}</span>
+                  <span className="text-xs text-gray-500">{user.email}</span>
                 </div>
               </div>
 
               {/* Logout */}
-              <div className="mt-8 px-2">
-                <hr className="mb-3" />
-                <SheetClose asChild>
-                  <LogoutButton />
-                </SheetClose>
-              </div>
+              <SheetClose asChild>
+                <LogoutButton />
+              </SheetClose>
             </div>
           </SheetContent>
         </Sheet>

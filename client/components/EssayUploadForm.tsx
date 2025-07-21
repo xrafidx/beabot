@@ -12,6 +12,7 @@ import { z } from "zod";
 import FormFileInput from "./FormFileInput";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { FileUp } from "lucide-react";
 
 const EssayUploadFormSchema = z.object({
   essay:
@@ -87,6 +88,7 @@ const EssayUploadForm = () => {
 
       toast.loading("Esai sedang diunggah dan diproses oleh AI...");
       return { previousEssays };
+      router.push("/dashboard");
     },
 
     onError: (err, newEssayUpload, context) => {
@@ -110,24 +112,11 @@ const EssayUploadForm = () => {
     <div className="container mx-auto p-4 max-w-lg">
       <h1 className="text-2xl font-bold mb-6 text-center">Unggah Esai untuk Review</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onError)}>
-          {/* FormField untuk Judul Esai (jika ada di form upload, sesuaikan schema) */}
-          {/* <FormField control={form.control} name="judulEssay" label="Judul Esai" type="text" placeholder="Contoh: Esai Beasiswa Impian" description="Masukkan judul esai Anda."></FormField> */}
-
-          {/* FormFileInput untuk Unggah File Esai */}
-          <FormFileInput
-            control={form.control}
-            name="essay" // Nama field harus sesuai dengan schema dan backend (multer)
-            label="Unggah Esai (PDF)"
-            accept=".pdf"
-            description="Unggah esai Anda dalam format .pdf (maks. 5MB) untuk di-review AI."
-          />
-
-          {/* Tampilkan error umum jika ada */}
-          {essayMutation.isError && <p className="text-sm text-red-600 mt-2">{essayMutation.error?.message}</p>}
-
-          <Button type="submit" disabled={isSubmitting || essayMutation.isPending} className="btn-primary mt-4">
-            {essayMutation.isPending ? "Memproses Esai..." : "Unggah & Dapatkan Review"}
+        <form onSubmit={form.handleSubmit(onSubmit, onError)} className="flex flex-col items-center justify-center gap-6 p-8 rounded-xl w-72 h-72 border-2 border-dashed border-[#753a88] bg-white shadow-md">
+          <FileUp className="w-12 h-12 text-[#753a88]" />
+          <FormFileInput control={form.control} name="essay" className="text-center text-sm text-gray-600" />
+          <Button type="submit" disabled={isSubmitting} className="btn-primary">
+            Upload
           </Button>
         </form>
       </Form>
