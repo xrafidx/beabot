@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { API_ENDPOINTS } from "@/constants";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 import { BackendEssayData, BackendInterviewData, EssayCardProps, InterviewCardProps } from "@/Types";
 import EssayCard from "@/components/EssayCard";
 import { id } from "zod/v4/locales";

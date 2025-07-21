@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import InterviewCard from "@/components/InterviewCard";
 import { useQuery } from "@tanstack/react-query";
 import { BackendInterviewData, Category, InterviewCardProps } from "@/Types";
-import { API_ENDPOINTS } from "@/constants";
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 import CategoryTabs from "@/components/CategoryTabs";
@@ -17,12 +17,11 @@ const Page = () => {
     data: userInterviews,
     isLoading,
     isError,
-    error,
     refetch,
   } = useQuery<BackendInterviewData[], Error>({
     queryKey: ["userInterviews"],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:5000${API_ENDPOINTS.GET_ALL_INTERVIEW_CARDS}`, {
+      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.GET_ALL_INTERVIEW_CARDS}`, {
         method: "GET",
         credentials: "include",
       });

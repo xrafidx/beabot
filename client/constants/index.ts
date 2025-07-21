@@ -5,9 +5,11 @@ import { BackendEssayData } from "@/Types";
 
 export const mappings: { [key: string]: string } = {
   tanoto: "/covers/tanoto.svg",
-  "tanoto foundation": "/covers/tanoto.svg",
   kemdikbud: "/covers/kemdikbud.svg",
   "kementerian pendidikan": "/covers/kemdikbud.svg",
+  unggulan: "/covers/kemdikbud.svg",
+  kip: "/covers/kemdikbud.svg",
+  "kartu indonesia pintar": "/covers/kemdikbud.svg",
 };
 
 // // export const interviewer: CreateAssistantDTO = {

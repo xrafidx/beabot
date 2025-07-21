@@ -37,6 +37,8 @@ export default function UserNavbar() {
 
   const navLinks = [
     { name: "Dashboard", href: "/dashboard" },
+    { name: "Interviews", href: "/dashboard/my-interview" },
+    { name: "Essays", href: "/dashboard/my-essays" },
     { name: "About Us", href: "/dashboard/about-us" },
     { name: "Help", href: "/dashboard/help" },
   ];

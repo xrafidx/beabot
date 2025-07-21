@@ -74,10 +74,9 @@ interface EssayCardProps {
   judulessay: string;
   rating?: number | null;
   tanggal: string;
-  completestatus: boolean;
-  masukanreview: string[] | null;
-  kelebihanreview: string[] | null;
-  kesalahanreview: string[] | null;
+  masukanreview?: string[] | null;
+  kelebihanreview?: string[] | null;
+  kesalahanreview?: string[] | null;
 }
 
 interface EssayUploadFormData {

@@ -3,7 +3,7 @@ import { BackendEssayData } from "@/Types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { resolve } from "path";
-import React from "react";
+import React, { use } from "react";
 import { Form } from "@/components/ui/form";
 import { FieldErrors, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -46,7 +46,6 @@ const EssayUploadForm = () => {
     const errorMessage = errors[firstErrorKey]?.message;
     toast.error(errorMessage || "Mohon periksa form Anda.");
   };
-
   const essayMutation = useMutation({
     mutationFn: async (dataToUpload: EssayUploadFormData) => {
       const formData = new FormData();
@@ -88,7 +87,6 @@ const EssayUploadForm = () => {
 
       toast.loading("Esai sedang diunggah dan diproses oleh AI...");
       return { previousEssays };
-      router.push("/dashboard");
     },
 
     onError: (err, newEssayUpload, context) => {
@@ -101,7 +99,12 @@ const EssayUploadForm = () => {
     },
     onSettled: (data, error, variables, context) => {
       queryClient.invalidateQueries({ queryKey: ["userEssaysDashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["userEssays"] });
       toast.dismiss();
+    },
+
+    onSuccess: () => {
+      router.push("/dashboard");
     },
   });
 

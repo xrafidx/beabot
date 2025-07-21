@@ -7,17 +7,17 @@ import { Button } from "./ui/button";
 import CardWrapper from "./CardWrapper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { API_ENDPOINTS } from "@/constants";
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 
-const EssayCard = ({ id, judulessay, tanggal, rating, completestatus }: EssayCardProps) => {
+const EssayCard = ({ id, judulessay, tanggal, rating }: EssayCardProps) => {
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
     mutationFn: async (essayIdToDelete: string) => {
-      const response = await fetch(`http://localhost:5000${API_ENDPOINTS.ESSAY_REVIEW}/${essayIdToDelete}`, {
+      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.ESSAY_REVIEW}/${essayIdToDelete}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -63,11 +63,11 @@ const EssayCard = ({ id, judulessay, tanggal, rating, completestatus }: EssayCar
     <CardWrapper>
       {/* Badge */}
       <div className="absolute top-0 right-0 w-fit p-2 rounded-bl-lg bg-[#753a88]">
-        <p className="badge-text text-white">Essay Review</p>
+        <p className="badge-text text-white">{rating > 90 ? "A+" : rating > 80 ? "A" : rating > 70 ? "B" : rating > 60 ? "C" : rating < 60 ? "D" : "Pending"}</p>
       </div>
 
       {/* Judul */}
-      <h3 className="mt-5 text-lg font-semibold capitalize">{judulessay} Essay</h3>
+      <h3 className="mt-5 text-lg font-semibold capitalize">{judulessay}</h3>
 
       {/* Info: Tanggal & Rating */}
       <div className="flex justify-between items-center mt-4 text-sm text-muted-foreground">
@@ -85,7 +85,7 @@ const EssayCard = ({ id, judulessay, tanggal, rating, completestatus }: EssayCar
       <div className="mt-4 flex justify-between items-center">
         <Button className="btn-primary" asChild>
           <Link href={`/dashboard/essay-review/${id}/`} passHref>
-            Lihat Essay
+            Lihat Review
           </Link>
         </Button>
 
