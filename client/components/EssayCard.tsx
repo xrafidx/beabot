@@ -11,8 +11,10 @@ import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const EssayCard = ({ id, judulessay, tanggal, rating }: EssayCardProps) => {
+  const path = usePathname();
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
@@ -31,7 +33,7 @@ const EssayCard = ({ id, judulessay, tanggal, rating }: EssayCardProps) => {
     onMutate: async (essayIdToDelete: string) => {
       await queryClient.cancelQueries({ queryKey: ["userEssaysDashboard"] });
       const previousEssays = queryClient.getQueryData<EssayCardProps[]>(["userEssaysDashboard"]);
-      queryClient.setQueryData<EssayCardProps[]>(["userEssaysDashboard"], (old) => (old ? old.filter((essay) => essay.id !== essayIdToDelete) : []));
+      queryClient.setQueryData<EssayCardProps[]>([`${path === "/dashboard/my-essay" ? "userEssays" : "userEssaysDashboard"}`], (old) => (old ? old.filter((essay) => essay.id !== essayIdToDelete) : []));
       toast.loading("Menghapus review...");
       return { previousEssays };
     },
