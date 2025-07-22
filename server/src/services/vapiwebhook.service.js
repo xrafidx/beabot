@@ -31,13 +31,14 @@ export async function saveInterviewResult(hangPayload){
 
 export async function handleFunctionCall(functionCallPayload){
     try {
+        // ngambil nama fungsinya
         const {name} = functionCallPayload.functionCall;
+        // ngambil nama variables
         const {variables} = functionCallPayload.call;
 
         if(name === 'getInterviewData'){
             return getInterviewData(variables.cardsid);
         }
-        
         throw new Error(`Fungsi tidak dikenal: ${name}`);  
     } catch (error) {
         console.error("Error in handleFunctionCall services");

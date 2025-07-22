@@ -1,5 +1,5 @@
 import e from "express";
-import { createCardsServices, getAllCardsServices, getSpecificCardsServices, deleteSpecificCardsServices, editSpecificCardsServices} from "../services/interviewCards.services.js";
+import { createCardsServices, getAllCardsServices, getSpecificCardsServices, deleteSpecificCardsServices, editSpecificCardsServices, deleteSpecificFeedbackServices, deleteSpecificQuestionServices} from "../services/interviewCards.services.js";
 
 
 export async function createCardsController(req,res,next){
@@ -59,16 +59,23 @@ export async function deleteCardsController(req,res,next){
 
     // id user yang minta
     const userId = req.user.sub;  
+
+    // hapus feedback
+    const feedback = await deleteSpecificFeedbackServices(cardId);
+
+    // hapus question
+    const question = await deleteSpecificQuestionServices(cardId);
     
     // hapus kartu
 
     const kartu = await deleteSpecificCardsServices(userId,cardId);
+    
 
     // respon sukses
     res.status(200).json({
         success:true,
         message:"Data berhasil dihapus",
-        data: kartu
+        data: kartu,feedback,question
     })
 
     } catch (error) {

@@ -63,3 +63,28 @@ export async function editSpecificCards(cardId,uid,namaBeasiswa,banyakPertanyaan
         throw error;
     }
 }
+
+export async function deleteFeedback(cardId){
+    try {
+        const feedback = await prisma.$queryRaw`
+            DELETE FROM "feedback"
+            WHERE cardsid = ${cardId}
+            RETURNING *;`; 
+        return feedback;
+    } catch (error) {
+        console.error("Error in deleteFeedback repositories");
+        throw error;
+    }
+}
+
+export async function deleteQuestion(cardId){
+    try {
+        const feedback = await prisma.$queryRaw`
+            DELETE FROM "question"
+            WHERE cardsid = ${cardId}
+            RETURNING *;`; 
+        return feedback;
+    } catch (error) {
+        
+    }
+}

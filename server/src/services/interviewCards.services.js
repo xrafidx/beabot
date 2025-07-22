@@ -1,4 +1,4 @@
-import { addCards, getAllCards, getSpecificCards, deleteSpecificCard, editSpecificCards} from "../repositories/cards.repositories.js";
+import { addCards, getAllCards, getSpecificCards, deleteSpecificCard, editSpecificCards, deleteFeedback, deleteQuestion} from "../repositories/cards.repositories.js";
 import { format } from 'date-fns';
 export async function createCardsServices(uid,data){
     try {
@@ -96,5 +96,26 @@ export async function editSpecificCardsServices(cardId,uid,data){
         return result;
     } catch (error) {
         throw error
+    }
+}
+
+export async function deleteSpecificFeedbackServices(cardId){
+    try {
+        const result = await deleteFeedback(cardId);
+        return result;   
+    } catch (error) {
+        console.error("Error in deleteSpecificFeedbackServices");
+        throw error;
+    }
+
+}
+
+export async function deleteSpecificQuestionServices(cardId){
+    try {
+        const result = await deleteQuestion(cardId);
+        return result;
+    } catch (error) {
+        console.error("Error in deleteSpecificQuestionServices");
+        throw error;
     }
 }

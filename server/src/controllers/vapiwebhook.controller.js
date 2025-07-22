@@ -1,9 +1,24 @@
 import { handleFunctionCall } from "../services/vapiwebhook.service.js";
 export async function vapiWebHook(req,res,next){
+
+// contoh message
+// {
+
+//   "message": {
+
+//     "type": "function-call",
+
+//     "call": { Call Object },
+
+//     ...other message properties
+
+//   }
+
+// }
     const {message} = req.body;
-    if(message?.type === 'function-call'){
+    if(message.type === 'function-call'){
         try {
-            const resultData = handleFunctionCall(message);
+            const resultData = await handleFunctionCall(message);
             return res.json({
                 result:{
                     type: 'function-call-result',
