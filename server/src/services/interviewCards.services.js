@@ -7,10 +7,13 @@ export async function createCardsServices(uid,data){
         // convert banyak pertanyaan
         banyakPertanyaan = Number(banyakPertanyaan);
 
+        // initial status
+        const intialstatus = "PENDING_QUESTIONS";
+
         // generate tanggal
         const tanggal = new Date();
         // call function buat bikin row baru di kartu.
-        const result = await addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,judulInterview,tanggal,imageurl);
+        const result = await addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,judulInterview,tanggal,imageurl,intialstatus);
         return result;
     } catch (error) {
         throw error
@@ -21,7 +24,7 @@ export async function getAllCardsServices(uid){
         const result = await getAllCards(uid);
         const originalDataArray = result;
         const newDataArray = originalDataArray.map((item)=>{
-            let {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = item; 
+            let {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa,status} = item; 
             // formatting tanggal
             tanggal = format(new Date(tanggal), 'MMM d, yyyy');
 
@@ -32,7 +35,8 @@ export async function getAllCardsServices(uid){
                 tanggal:tanggal,
                 imageurl:imageurl,
                 jenispertanyaan:jenisinterview,
-                bahasa:bahasa
+                bahasa:bahasa,
+                interviewstatus:status
             }
             return dataUntukRespons
         })

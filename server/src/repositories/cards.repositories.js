@@ -1,11 +1,12 @@
 import prisma from "../config/prisma.js";
-export async function addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,judulInterview,tanggal,imageurl) {
+export async function addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,judulInterview,tanggal,imageurl,intialstatus) {
     try {
-        const cards = await prisma.$queryRaw`
-            INSERT INTO "interviewcard" (userid, namabeasiswa, banyakpertanyaan, jenisinterview, bahasa, judulinterview, tanggal, imageurl)
-            VALUES (${uid}, ${namaBeasiswa}, ${banyakPertanyaan}, ${jenisPertanyaan}, ${bahasa}, ${judulInterview}, ${tanggal}, ${imageurl})
-            RETURNING id;`; // Cukup kembalikan ID
-        return cards[0];
+    const cards = await prisma.$queryRaw`
+        INSERT INTO "interviewcard" (userid, namabeasiswa, banyakpertanyaan, jenisinterview, bahasa, judulinterview, tanggal, imageurl, status)
+        VALUES (${uid}, ${namaBeasiswa}, ${banyakPertanyaan}, ${jenisPertanyaan}, ${bahasa}, ${judulInterview}, ${tanggal}, ${imageurl}, ${intialstatus}::interviewstatus)
+        RETURNING id;`; // Tambahkan ::interviewstatus untuk melakukan CAST
+
+    return cards[0];
 
     } catch (error) {
         throw error;
@@ -14,12 +15,12 @@ export async function addCards(uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan
 
 export async function getAllCards(uid){
     try {
-        const cards = await prisma.$queryRaw`
-            SELECT id, "judulinterview", "namabeasiswa", "tanggal", "imageurl", "jenisinterview", "bahasa"
-            FROM "interviewcard" 
-            WHERE "userid" = ${uid}
-            ORDER BY "tanggal" DESC;`; // Urutkan dari yang terbaru
-        return cards;
+    const cards = await prisma.$queryRaw`
+        SELECT id, "judulinterview", "namabeasiswa", "tanggal", "imageurl", "jenisinterview", "bahasa", "status"
+        FROM "interviewcard" 
+        WHERE "userid" = ${uid}
+        ORDER BY "tanggal" DESC;`; // Ganti "interviewstatus" menjadi "status"
+    return cards;
     } catch (error) {
         throw error;
     }

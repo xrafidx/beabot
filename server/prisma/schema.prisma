@@ -8,6 +8,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
 model user {
   id             Int @id @default(autoincrement())
   name           String
@@ -23,6 +25,14 @@ model blacklist {
   jti String @id @unique
   expiresat DateTime
   createdat DateTime @default(now())
+}
+
+enum interviewstatus{
+  PENDING_SETUP
+  PENDING_QUESTIONS
+  QUESTIONS_GENERATED
+  INTERVIEW_COMPLETED
+  INTERVIEW_CANCELLED
 }
 
 model interviewcard{
@@ -43,6 +53,8 @@ model interviewcard{
   tanggal DateTime
   // URL image
   imageurl String?
+  // status
+  status interviewstatus @default(PENDING_QUESTIONS)
 
   // relasi ke feedback
   feedback feedback?
