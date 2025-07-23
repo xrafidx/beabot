@@ -1,4 +1,4 @@
-import { createRegQuestion, findRegQuestion, createEssQuestion, findEssQuestion } from "../services/question.services.js";
+import { createRegQuestion, findRegQuestion, createEssQuestion, findEssQuestion, updateCardsStatus } from "../services/question.services.js";
 
 export async function getRegularQuestion(req,res,next){
     try {
@@ -41,6 +41,9 @@ export async function createRegularQuestion(req,res,next){
     // jalanin service buat create pertanyaan biasa
     const result = await createRegQuestion(cardsId);  
 
+    // jalanin service buat update status di interviewcards
+    const cards = await updateCardsStatus(cardsId);
+
     res.status(201).json({
         success: true,
         message: "Data Berhasil Dibuat",
@@ -56,6 +59,8 @@ export async function createEssayDrivenQuestion(req,res,next){
         const cardsid = Number(req.params.cardsid);
         const dataFile = req.file;
         const result = await createEssQuestion(cardsid,dataFile);
+         // jalanin service buat update status di interviewcards
+        const cards = await updateCardsStatus(cardsid);
 
 
         res.status(201).json({

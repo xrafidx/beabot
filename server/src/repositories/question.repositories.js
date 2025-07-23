@@ -61,3 +61,16 @@ export async function getQuestion(cardsId){
         throw error
     }
 }
+
+export async function updateCardstoGenerated(cardsId){
+    try {
+        const result = await prisma.$executeRaw`
+        UPDATE "interviewcard"
+        SET "status" = 'QUESTIONS_GENERATED'::interviewstatus
+        WHERE "id" = ${cardsId}`
+        return result;
+    } catch (error) {
+        console.error("Error in updateCardstoGenerated repositories");
+        throw error;
+    }
+}

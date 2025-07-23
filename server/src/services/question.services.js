@@ -1,4 +1,4 @@
-import { getNamaBeasiswa,getName,saveQuestion,getQuestion } from "../repositories/question.repositories.js";
+import { getNamaBeasiswa,getName,saveQuestion,getQuestion, updateCardstoGenerated } from "../repositories/question.repositories.js";
 import fs from 'fs'
 import ai from "../config/gemini.js";
 import fsp from 'fs/promises'; // Gunakan 'fs/promises'
@@ -129,6 +129,16 @@ export async function findEssQuestion(cardsid){
         return result;
     } catch (error) {
         console.error("Error in findEssQuestion");
+        throw error
+    }
+}
+
+export async function updateCardsStatus(cardsId){
+    try {
+        const result = await updateCardstoGenerated(cardsId);
+        return result;
+    } catch (error) {
+        console.error("Error in updateCardsStatus Services");
         throw error
     }
 }
