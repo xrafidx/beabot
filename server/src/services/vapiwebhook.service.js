@@ -5,7 +5,7 @@ export async function getInterviewData(cardsid){
         const questionData = await getQuestion(cardsid);
         return questionData; 
     } catch (error) {
-        
+        throw error;
     }
 
 }
