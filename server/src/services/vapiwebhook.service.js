@@ -10,6 +10,21 @@ export async function getInterviewData(cardsid){
 
 }
 
+export async function createFeedback(payload){
+    const {cardsid,userid,transcript} = payload;
+    try {
+        const formattedTranscript = transcript
+        .map((sentence) => {
+            `- ${sentence.role}: ${sentence.content}\n`
+        }).join('');
+    const { object } = await generateObject
+        
+    } catch (error) {
+        console.error("Error saving feedback");
+        throw error;
+    }
+}
+
 export async function saveInterviewResult(hangPayload){
     try {
         const interviewid = hangPayload.call.variables?.cardsid;
