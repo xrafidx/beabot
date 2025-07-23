@@ -96,7 +96,7 @@ const InterviewCard = ({
         </div>
       ) : (
         // UI normal jika tidak dalam status PENDING_QUESTIONS
-        <div className="card-interview flex flex-col gap-4">
+        <div className="">
           {/* Badge kategori */}
           <div className="absolute top-0 right-0 bg-[#753a88] rounded-bl-lg px-3 py-1">
             <span className="badge-text text-white text-sm font-medium">{jenispertanyaan}</span>
