@@ -112,14 +112,20 @@ const EssayUploadForm = () => {
     essayMutation.mutate(values);
   };
   return (
-    <div className="container mx-auto p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-6 text-center">Unggah Esai untuk Review</h1>
+    <div className="container mx-auto px-4 py-8 max-w-xl">
+      <h1 className="text-3xl font-bold mb-8 text-center text-[#753a88]">Unggah Esai untuk Review</h1>
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onError)} className="flex flex-col items-center justify-center gap-6 p-8 rounded-xl w-72 h-72 border-2 border-dashed border-[#753a88] bg-white shadow-md">
-          <FileUp className="w-12 h-12 text-[#753a88]" />
-          <FormFileInput control={form.control} name="essay" className="text-center text-sm text-gray-600" />
-          <Button type="submit" disabled={isSubmitting} className="btn-primary">
-            Upload
+        <form onSubmit={form.handleSubmit(onSubmit, onError)} className="flex flex-col gap-6 p-8 rounded-2xl border-2 border-dashed border-[#753a88] bg-white shadow-lg">
+          <div className="flex flex-col items-center gap-3">
+            <FileUp className="w-14 h-14 text-[#753a88]" />
+            <p className="text-sm text-gray-600 text-center max-w-sm">Seret dan lepas esai Anda di sini atau pilih file dari perangkat Anda</p>
+          </div>
+
+          <FormFileInput control={form.control} name="essay" className="w-full" />
+
+          <Button type="submit" disabled={isSubmitting} className="btn-primary self-center w-full sm:w-40">
+            {isSubmitting ? "Mengunggah..." : "Upload"}
           </Button>
         </form>
       </Form>

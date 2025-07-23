@@ -103,9 +103,11 @@ const Page = () => {
           title="interviews" // Judul untuk pesan no data (akan jadi 'interviews' kecil di pesan)
         />
         {interviewCards.length > 3 && ( // Tampilkan tombol "See all" jika ada lebih dari 3
-          <Link href="/dashboard/my-interview" className="btn-primary text-center mt-4">
-            See all my interviews.
-          </Link>
+          <div className="flex flex-col items-center">
+            <Link href="/dashboard/my-interview" className="btn-primary text-center mt-4">
+              See all my interviews.
+            </Link>
+          </div>
         )}
       </section>
 
@@ -121,9 +123,11 @@ const Page = () => {
           title="essay reviews" // Judul untuk pesan no data
         />
         {essayCards.length > 3 && ( // Tampilkan tombol "See all" jika ada lebih dari 3
-          <Link href="/dashboard/my-essays" className="btn-primary text-center mt-4">
-            See all my essay reviews.
-          </Link>
+          <div className="flex flex-col items-center">
+            <Link href="/dashboard/my-essays" className="btn-primary text-center mt-4">
+              See all my interviews.
+            </Link>
+          </div>
         )}
       </section>
     </>

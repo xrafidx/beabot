@@ -2,16 +2,16 @@
 "use client";
 
 import React from "react";
-// import dayjs from "dayjs";
+// import dayjs from "dayjs"; // Tidak dikomentari jika ingin memformat tanggal
 import { getCoverImage } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { InterviewCardProps, InterviewStatus } from "@/Types/index";
+import { InterviewCardProps, InterviewStatus } from "@/Types/index"; // Pastikan InterviewStatus diimpor
 import CardWrapper from "./CardWrapper";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { API_ENDPOINTS } from "@/constants";
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
@@ -24,22 +24,24 @@ const InterviewCard = ({
   jenispertanyaan,
   tanggal,
   rating,
-  completestatus,
-  interviewstatus, // Ini adalah prop status yang diterima
+  // completestatus, // Tidak perlu lagi jika menggunakan interviewstatus sepenuhnya
+  interviewstatus, // Ini adalah prop status yang diterima, pastikan selalu ada
 }: InterviewCardProps) => {
+  // Format tanggal jika diperlukan
   // const formattedDate = dayjs(tanggal).format("MMM DD, YYYY");
   const queryClient = useQueryClient();
 
-  // KOREKSI UTAMA DI SINI:
-  // Logika untuk menampilkan status pemrosesan/siap
-  const isPendingQuestions = interviewstatus === InterviewStatus.PENDING_QUESTIONS || interviewstatus === InterviewStatus.PENDING_SETUP; // <-- KOREKSI: Gunakan 'interviewstatus' untuk kedua pengecekan
-  const isReadyToStart = interviewstatus === InterviewStatus.QUESTIONS_GENERATED;
-  const isCompleted = interviewstatus === InterviewStatus.INTERVIEW_COMPLETED;
-  const isCancelled = interviewstatus === InterviewStatus.INTERVIEW_CANCELLED;
+  // Logika utama untuk menentukan status dan UI
+  // Pastikan definisi InterviewStatus di Types/index.ts mencakup semua ini
+  const showPendingUI = interviewstatus === InterviewStatus.PENDING_QUESTIONS || interviewstatus === InterviewStatus.PENDING_SETUP;
+
+  const showReadyToStartUI = interviewstatus === InterviewStatus.QUESTIONS_GENERATED;
+  const showCompletedUI = interviewstatus === InterviewStatus.INTERVIEW_COMPLETED;
+  const showCancelledUI = interviewstatus === InterviewStatus.INTERVIEW_CANCELLED;
 
   const deleteMutation = useMutation({
     mutationFn: async (interviewIdToDelete: string) => {
-      const response = await fetch(`http://localhost:5000${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${interviewIdToDelete}`, {
+      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${interviewIdToDelete}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -62,7 +64,9 @@ const InterviewCard = ({
     onSuccess: (data, variables, context) => {
       toast.dismiss(context?.toastId);
       toast.success("Interview berhasil dihapus!");
+      // Invalidasi kedua query key jika Anda menggunakannya di tempat berbeda
       queryClient.invalidateQueries({ queryKey: ["userInterviewsDashboard"] });
+      // queryClient.invalidateQueries({ queryKey: ["userInterviews"] }); // Ini mungkin tidak perlu jika "userInterviewsDashboard" adalah satu-satunya sumber
     },
     onError: (err, interviewIdToDelete, context) => {
       if (context?.previousInterviews) {
@@ -88,73 +92,79 @@ const InterviewCard = ({
 
   return (
     <CardWrapper>
-      {isPendingQuestions ? ( // Tampilkan UI loading jika sedang menunggu pertanyaan
+      {showPendingUI ? (
+        // UI loading/pending
         <div className="flex flex-col items-center justify-center p-4 min-h-[200px] text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-purple-500 mb-4"></div>
           <h3 className="text-lg font-semibold text-gray-800">Mempersiapkan Interview...</h3>
           <p className="text-gray-600">Pertanyaan sedang digenerate oleh AI.</p>
         </div>
       ) : (
-        // UI normal jika tidak dalam status PENDING_QUESTIONS
-        <div className="">
+        // UI normal untuk status selain pending
+        <div className="flex flex-col h-full">
+          {" "}
+          {/* Tambah flex-col h-full agar konten card memenuhi tinggi */}
           {/* Badge kategori */}
           <div className="absolute top-0 right-0 bg-[#753a88] rounded-bl-lg px-3 py-1">
-            <span className="badge-text text-white text-sm font-medium">{jenispertanyaan}</span>
+            <span className="badge-text text-white text-sm font-medium capitalize">{jenispertanyaan}</span> {/* Tambah capitalize */}
           </div>
-
           {/* Logo instansi */}
           <div className="flex justify-start mt-3">
             <Image src={getCoverImage(namabeasiswa)} alt="interview cover" width={70} height={70} className="rounded-full object-cover" />
           </div>
-
           {/* Judul dan nama beasiswa */}
-          <div className="mt-1">
+          <div className="mt-1 flex-grow">
+            {" "}
+            {/* flex-grow agar mengambil ruang yang tersedia */}
             <h3 className="text-lg font-semibold capitalize">{judulinterview}</h3>
             <h4 className="text-sm text-gray-600">{namabeasiswa}</h4>
           </div>
-
           {/* Feedback / Status */}
-          <p className="text-sm text-gray-700 text-justify">
-            {isCompleted // Jika sudah selesai
-              ? `Rating: ${rating?.toFixed(1) || "N/A"}`
-              : "Anda belum mengambil interview ini. Ambil sekarang untuk meningkatkan skill Anda."}
+          <p className="text-sm text-gray-700 text-justify mt-2">
+            {
+              showCompletedUI // Jika sudah selesai
+                ? `Rating Anda: ${rating !== null && rating !== undefined ? rating.toFixed(1) : "N/A"}` // Tampilkan rating
+                : showReadyToStartUI // Jika siap mulai
+                ? "Interview Anda siap dimulai. Klik tombol di bawah untuk memulai."
+                : showCancelledUI // Jika dibatalkan
+                ? "Interview ini telah dibatalkan."
+                : "Ambil sekarang untuk meningkatkan skill Anda." // Default: belum diambil (jika ada status "belum diambil")
+            }
           </p>
-
-          {/* Tanggal & Rating */}
-          <div className="flex gap-6 text-sm text-gray-600 mt-1">
+          {/* Tanggal & Rating (hanya jika sudah selesai) */}
+          <div className="flex gap-6 text-sm text-gray-600 mt-2">
             <div className="flex items-center gap-1">
               <Image src="/calendar.svg" alt="calendar" width={20} height={20} />
-              <span>{tanggal}</span>
+              <span>{tanggal}</span> {/* Gunakan formattedDate */}
             </div>
-            <div className="flex items-center gap-1">
-              <Image src="/star.svg" alt="star" width={20} height={20} />
-              <span>{rating !== null && rating !== undefined ? rating.toFixed(1) : "---"}</span>
-            </div>
+            {showCompletedUI && ( // Tampilkan rating hanya jika sudah selesai
+              <div className="flex items-center gap-1">
+                <Image src="/star.svg" alt="star" width={20} height={20} />
+                <span>{rating !== null && rating !== undefined ? rating.toFixed(1) : "---"}</span>
+              </div>
+            )}
           </div>
-
           {/* Tombol & Dropdown Menu */}
           <div className="flex justify-between items-center mt-4">
-            {isReadyToStart && ( // Tombol "Mulai Interview" jika pertanyaan siap
+            {showReadyToStartUI && ( // Tombol "Mulai Interview" jika pertanyaan siap
               <Button asChild className="btn-primary">
                 <Link href={`/dashboard/interview-room/${id}`}>Mulai Interview</Link>
               </Button>
             )}
-            {isCompleted && ( // Tombol "Lihat Feedback" jika sudah selesai
+            {showCompletedUI && ( // Tombol "Lihat Feedback" jika sudah selesai
               <Button asChild className="btn-primary">
                 <Link href={`/dashboard/interview-feedback/${id}`}>Lihat Feedback</Link>
               </Button>
             )}
-            {!isReadyToStart &&
-              !isCompleted &&
-              !isPendingQuestions &&
-              !isCancelled && ( // Fallback jika status tidak dikenal
-                <Button className="btn-primary" disabled>
-                  Status Tidak Diketahui
-                </Button>
-              )}
-            {isCancelled && (
+            {showCancelledUI && ( // Tombol "Interview Dibatalkan" jika dibatalkan
               <Button className="btn-primary" disabled>
                 Interview Dibatalkan
+              </Button>
+            )}
+            {/* Fallback untuk status yang tidak ada tombol khusus */}
+            {!showReadyToStartUI && !showCompletedUI && !showCancelledUI && (
+              <Button className="btn-primary" disabled>
+                Proses Belum Selesai {/* atau sesuaikan pesan status lain */}
               </Button>
             )}
 

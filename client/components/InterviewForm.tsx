@@ -185,6 +185,7 @@ const InterviewForm = () => {
     },
     onSuccess: (resultFromMainMutation, variables, context) => {
       queryClient.invalidateQueries({ queryKey: ["userInterviewsDashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["userDashboard"] });
 
       toast.success("Interview berhasil dibuat dan pertanyaan sedang digenerate!");
       form.reset();
