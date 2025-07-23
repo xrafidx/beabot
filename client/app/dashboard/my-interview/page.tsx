@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import CategoryTabs from "@/components/CategoryTabs";
 import Link from "next/link";
 import DataStatusDisplay from "@/components/DataStatusDisplay";
+import { useRouter } from "next/router";
 
 const Page = () => {
   const [activeCategory, setActiveCategory] = useState<Category>("all");
@@ -30,6 +31,7 @@ const Page = () => {
         const errorData = await response.json();
         if (response.status === 401) {
           throw new Error("Authentication invalid. Please try signing in back.");
+          route.push("/sign-in");
         }
         throw new Error(errorData.message || `Failed to fetch data: ${response.status}`);
       }

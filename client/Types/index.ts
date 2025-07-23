@@ -1,12 +1,12 @@
-import { FieldValues } from "react-hook-form";
+import { Control, FieldValues, Path } from "react-hook-form";
 
-type FormType = "sign-in" | "register";
+export type FormType = "sign-in" | "register";
 
-type BackendCardData = BackendInterviewData | BackendEssayData;
+export type BackendCardData = BackendInterviewData | BackendEssayData;
 
-type CardProps = InterviewCardProps | EssayCardProps;
+export type CardProps = InterviewCardProps | EssayCardProps;
 
-interface Feedback {
+export interface Feedback {
   id: string;
   interviewId: string;
   totalScore: number;
@@ -21,18 +21,27 @@ interface Feedback {
   createdAt: string;
 }
 
-interface InterviewCardProps {
+export enum InterviewStatus { // <-- Pastikan ini ada di sini dan diekspor
+  PENDING_SETUP = "PENDING_SETUP",
+  PENDING_QUESTIONS = "PENDING_QUESTIONS",
+  QUESTIONS_GENERATED = "QUESTIONS_GENERATED",
+  INTERVIEW_COMPLETED = "INTERVIEW_COMPLETED",
+  INTERVIEW_CANCELLED = "INTERVIEW_CANCELLED",
+}
+
+export interface InterviewCardProps {
   id: string;
   uid: string;
   judulinterview: string;
   namabeasiswa: string;
   jenispertanyaan: "regular" | "essay-driven";
   tanggal: string;
-  completeStatus: boolean;
+  completestatus: boolean;
   rating?: number | null;
+  interviewstatus: InterviewStatus;
 }
 
-interface BackendInterviewData {
+export interface BackendInterviewData {
   id: string;
   uid: string;
   judulinterview: string;
@@ -43,9 +52,10 @@ interface BackendInterviewData {
   tanggal: string;
   rating?: number;
   complete: boolean;
+  interviewstatus: InterviewStatus;
 }
 
-interface InterviewFormData {
+export interface InterviewFormData {
   judulInterview: string;
   namaBeasiswa: string;
   jenisPertanyaan: "regular" | "essay-driven";
@@ -54,7 +64,7 @@ interface InterviewFormData {
   essay?: FileList;
 }
 
-interface FormFileInputProps<T extends FieldValues> {
+export interface FormFileInputProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   label: string;
@@ -62,13 +72,13 @@ interface FormFileInputProps<T extends FieldValues> {
   description?: string;
 }
 
-interface BackendEssayData {
+export interface BackendEssayData {
   id: string;
   userid: string;
   aireview: string | null;
 }
 
-interface EssayCardProps {
+export interface EssayCardProps {
   id: string;
   userid: string;
   judulessay: string;
@@ -79,11 +89,11 @@ interface EssayCardProps {
   kesalahanreview?: string[] | null;
 }
 
-interface EssayUploadFormData {
+export interface EssayUploadFormData {
   file: FileList;
 }
 
-interface AiReviewContent {
+export interface AiReviewContent {
   rating: number | null;
   masukan: string[] | null;
   tanggal: string;
@@ -92,9 +102,9 @@ interface AiReviewContent {
   judulessay: string;
 }
 
-type Category = "all" | "completed" | "incomplete";
+export type Category = "all" | "completed" | "incomplete";
 
-interface DataStatusDisplayProps {
+export interface DataStatusDisplayProps {
   isLoading: boolean;
   isError: boolean;
   error?: Error | null;
@@ -103,10 +113,10 @@ interface DataStatusDisplayProps {
   errorMessage?: string;
 }
 
-type CardComponentType = React.FC<AnycardProps>;
+export type CardComponentType = React.FC<CardProps>;
 
-interface CardListProps {
-  cards: AnyCardsProps[];
+export interface CardListProps {
+  cards: CardProps[];
   activeCategory: Category;
   createNewUrl?: string;
   noDataButtonText?: string;

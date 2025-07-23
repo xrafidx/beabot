@@ -9,7 +9,7 @@ import Link from "next/link";
 import React from "react";
 import { API_ENDPOINTS } from "@/constants";
 // import { useQuery } from "@tanstack/react-query";
-import { BackendEssayData, BackendInterviewData, EssayCardProps, InterviewCardProps } from "@/Types";
+import { BackendEssayData, BackendInterviewData, EssayCardProps, InterviewCardProps, InterviewStatus } from "@/Types";
 import EssayCard from "@/components/EssayCard";
 import { id } from "zod/v4/locales";
 import DataStatusDisplay from "@/components/DataStatusDisplay";
@@ -25,10 +25,16 @@ const Page = () => {
     isError: isErrorInterviews,
     error: errorInterviews,
     refetch: refetchInterviews,
-  } = useFetchCardsData({
+  } = useFetchCardsData<BackendInterviewData, InterviewCardProps>({
     queryKey: ["userInterviewsDashboard"],
     apiEndpoint: API_ENDPOINTS.GET_ALL_INTERVIEW_CARDS,
     mapper: mapBackendInterviewToCard,
+    refetchInterval: (query) => {
+      const currentInterviewCards = query.state.data as InterviewCardProps[] | undefined;
+      const pendingCount = currentInterviewCards?.filter((card) => card.interviewstatus === InterviewStatus.PENDING_QUESTIONS).length || 0;
+      return pendingCount > 0 ? 5000 : false;
+    },
+    refetchIntervalInBackground: true,
   });
 
   // Bakal fetch data essay
