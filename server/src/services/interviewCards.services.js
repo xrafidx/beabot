@@ -52,7 +52,7 @@ export async function getSpecificCardsServices(uid,cardId){
         if(result.length < 1){
             throw new Error("Data tidak ditemukan");
         }
-        let {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = result;
+        let {id,judulinterview,namabeasiswa,tanggal,imageurl,jenisinterview,bahasa} = result[0];
         // formatting tanggal
         tanggal = format(new Date(tanggal), 'MMM d, yyyy');
         const dataUntukRespons = {
