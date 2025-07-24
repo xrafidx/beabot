@@ -57,7 +57,7 @@ export const INTERVIEW_LANGUAGE_OPTIONS = [
 ];
 
 export const INTERVIEW_DURATION_OPTIONS = [
-  { label: "Pendek (1 pertanyaan)", value: "1" },
-  { label: "Normal (3 pertanyaan)", value: "3" },
-  { label: "Panjang (5 pertanyaan)", value: "5" },
+  { label: "Pendek", value: "1" },
+  { label: "Normal", value: "3" },
+  { label: "Panjang", value: "5" },
 ];

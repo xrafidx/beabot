@@ -3,7 +3,7 @@
 
 import React from "react";
 import FAQItem from "@/components/FAQItem"; // Pastikan path ini benar
-import Link from "next/link";
+// import Link from "next/link";
 
 const HelpPage: React.FC = () => {
   // Data dummy untuk FAQ Anda
@@ -19,9 +19,9 @@ const HelpPage: React.FC = () => {
         "Beabot menyediakan dua mode interview untuk mensimulasikan situasi wawancara seperti di dunia nyata. Pada mode regular, AI akan bertanya pertanyaan umum seputar diri anda untuk menerima Beasiswa. Sementara Essay-driven mewajibkan user untuk mengupload sebuah pdf essay. Nantinya isi .pdf tersebut akan dirangkum oleh AI kami dan akan men-generate pertanyaan yang berhubungan dengan seputar isi essay",
     },
     {
-      question: "Jenis beasiswa apa saja yang didukung Beabot?",
+      question: "Mengapa setelah beberapa pertanyaan saya diharuskan menjawab selesai?",
       answer:
-        "Beabot dirancang untuk membantu berbagai jenis beasiswa, termasuk akademik, berbasis prestasi, berbasis kebutuhan, dan beasiswa program khusus. Platform kami dapat disesuaikan dengan persyaratan spesifik berbagai aplikasi beasiswa.",
+        "AI Interview akan memiliki 4 fase pada interview yang akan ditemani Bella sang assistant. Pada fase pertama Bella akan bertanya beberapa pertanyaan dasar seperti perkenalan, prestasi, kelebihan dan kekurangan, serta rencana masa depan. Lalu pada fase kedua Bella akan bertanya seputar pertanyaan lain (jika memilih essay-driven Bella akan bertanya terkait esai yang kamu buat). Lalu pada fase ketiga Bella akan menggali lebih dalam jawaban yang anda buat dari pertanyaan sebelumnya. Pada fase keempat, Bella akan memberikan penilaian oleh jawaban anda.",
     },
     {
       question: "Apakah Beabot gratis untuk digunakan?",
@@ -44,18 +44,13 @@ const HelpPage: React.FC = () => {
               key={index}
               question={item.question}
               answer={item.answer}
-              isOpenInitially={index === 0} // Buat pertanyaan pertama terbuka secara default
+              isOpenInitially={false} // Buat pertanyaan pertama terbuka secara default
             />
           ))}
         </div>
 
         {/* Anda bisa menambahkan bagian lain di sini, seperti Contact Us atau More Resources */}
-        <div className="text-center mt-12">
-          <p className="text-lg text-gray-700 mb-4">Tidak menemukan jawaban yang Anda cari?</p>
-          <Link href="/contact" className="px-6 py-3 bg-purple-700 text-white rounded-md font-semibold hover:bg-purple-800 transition duration-300">
-            Hubungi Kami
-          </Link>
-        </div>
+        <div className="text-center mt-12"></div>
       </div>
     </div>
   );

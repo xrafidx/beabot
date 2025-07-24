@@ -120,17 +120,6 @@ const InterviewCard = ({
             <h4 className="text-sm text-gray-600">{namabeasiswa}</h4>
           </div>
           {/* Feedback / Status */}
-          <p className="text-sm text-gray-700 text-justify mt-2">
-            {
-              showCompletedUI // Jika sudah selesai
-                ? `Rating Anda: ${rating !== null && rating !== undefined ? rating.toFixed(1) : "N/A"}` // Tampilkan rating
-                : showReadyToStartUI // Jika siap mulai
-                ? "Interview Anda siap dimulai. Klik tombol di bawah untuk memulai."
-                : showCancelledUI // Jika dibatalkan
-                ? "Interview ini telah dibatalkan."
-                : "Ambil sekarang untuk meningkatkan skill Anda." // Default: belum diambil (jika ada status "belum diambil")
-            }
-          </p>
           {/* Tanggal & Rating (hanya jika sudah selesai) */}
           <div className="flex gap-6 text-sm text-gray-600 mt-2">
             <div className="flex items-center gap-1">

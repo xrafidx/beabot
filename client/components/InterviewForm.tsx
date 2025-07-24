@@ -1,6 +1,6 @@
 "use client";
 
-import { API_ENDPOINTS, BASE_URL, INTERVIEW_LANGUAGE_OPTIONS, INTERVIEW_TYPES_OPTIONS } from "@/constants";
+import { API_ENDPOINTS, BASE_URL, INTERVIEW_DURATION_OPTIONS, INTERVIEW_LANGUAGE_OPTIONS, INTERVIEW_TYPES_OPTIONS } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -25,7 +25,12 @@ const InterviewFormSchema = z
     jenisPertanyaan: z.enum(["regular", "essay-driven"], {
       errorMap: () => ({ message: "Pilih jenis interview yang valid." }),
     }),
-    banyakPertanyaan: z.number().min(1, "Jumlah pertanyaan minimal 1.").max(15, "Jumlah pertanyaan maksimal 15.").int("Masukkan angka bulat"),
+
+    //     banyakPertanyaan: z.enum(["1", "3", "5"], { // -- HARUSNYA INI!
+    //       errorMap: () => ({ message: "Pilih durasi interview yang valid." }),
+    banyakPertanyaan: z.enum(["1", "3", "5"], {
+      errorMap: () => ({ message: "Pilih durasi interview." }),
+    }),
     bahasa: z.enum(["id", "en"]),
     essay:
       typeof window === "undefined"
@@ -62,7 +67,7 @@ const InterviewForm = () => {
       judulInterview: "",
       namaBeasiswa: "",
       jenisPertanyaan: "regular",
-      banyakPertanyaan: 3,
+      banyakPertanyaan: "3",
       bahasa: "id",
       essay: undefined,
     },
@@ -167,7 +172,7 @@ const InterviewForm = () => {
         banyakPertanyaan: newInterviewData.banyakPertanyaan,
         bahasa: newInterviewData.bahasa,
         tanggal: new Date().toISOString(), // ISO string
-        rating: null, // <-- KOREKSI: Ganti 0 menjadi null untuk pending state
+        // rating: null, // <-- KOREKSI: Ganti 0 menjadi null untuk pending state
         complete: false,
         // KOREKSI: Tambahkan properti status
         status: InterviewStatus.PENDING_QUESTIONS, // <-- TAMBAHKAN INI
@@ -188,6 +193,7 @@ const InterviewForm = () => {
       queryClient.invalidateQueries({ queryKey: ["userDashboard"] });
 
       toast.success("Interview berhasil dibuat dan pertanyaan sedang digenerate!");
+      toast.dismiss();
       form.reset();
       router.push("/dashboard");
     },
@@ -222,7 +228,13 @@ const InterviewForm = () => {
           </div>
 
           <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4 shadow-sm">
-            <FormField control={form.control} name="banyakPertanyaan" label="Banyak Pertanyaan" type="number" placeholder="Contoh: 8" description="Tentukan banyaknya pertanyaan yang akan diajukan (maksimal : 15)."></FormField>
+            <FormSelect // <-- KOREKSI: Gunakan FormSelect
+              control={form.control}
+              name="banyakPertanyaan"
+              label="Durasi Interview" // <-- KOREKSI: Ubah label
+              options={INTERVIEW_DURATION_OPTIONS} // <-- KOREKSI: Gunakan opsi baru
+              description="Pilih durasi interview Anda." // <-- Sesuaikan deskripsi
+            ></FormSelect>
           </div>
 
           <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4 shadow-sm">

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Footer from "@/components/Footer";
+import FAQItem from "@/components/FAQItem";
 
 const faqs = [
   {
@@ -126,12 +127,13 @@ const Page = () => {
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8 text-[#753a88]">Help & FAQ</h2>
           <div className="space-y-4">
-            {faqs.map((faq, index) => (
+            {faqs.map((item, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <button onClick={() => setOpenFAQ(openFAQ === index ? null : index)} className="w-full text-left px-6 py-4 font-medium text-lg text-[#753a88] focus:outline-none">
-                  {faq.question}
-                </button>
-                {openFAQ === index && <div className="px-6 pb-4 text-gray-700 transition-all duration-300">{faq.answer}</div>}
+                <FAQItem
+                  question={item.question}
+                  answer={item.answer}
+                  isOpenInitially={index === 0} // Pertanyaan pertama terbuka default
+                />
               </div>
             ))}
           </div>

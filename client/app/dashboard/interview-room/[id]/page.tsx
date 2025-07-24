@@ -86,6 +86,39 @@ export default function VapiWorkflowButton() {
       });
   }, [cards.id, cards.jenispertanyaan]);
 
+  // Fungsi untuk mengupdate status interview di backend
+  const updateInterviewStatus = async (status: string) => {
+    if (!cards.id) {
+      console.warn("Tidak ada cards.id untuk memperbarui status interview.");
+      return;
+    }
+    try {
+      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${cards.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          interviewstatus: status,
+          // Anda bisa menambahkan properti lain di sini jika diperlukan,
+          // misalnya, `rating: 0` atau `complete: true`
+          // Untuk saat ini, kita hanya fokus pada interviewstatus
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Failed to update interview status: ${response.status}`);
+      }
+      console.log(`Interview status updated to ${status}`);
+      // Opsional: Lakukan refresh data di dashboard jika Anda menggunakan react-query di sana
+      // queryClient.invalidateQueries(['userInterviewsDashboard']); // uncomment jika ada queryClient
+    } catch (error) {
+      console.error("Error updating interview status:", error);
+    }
+  };
+
   const startWorkflowCall = async () => {
     try {
       if (!user.name || !cards.id || !cards.bahasa || questionList.length === 0) {
@@ -115,11 +148,13 @@ export default function VapiWorkflowButton() {
 
   useEffect(() => {
     const onCallStart = () => setIsCalling(true);
-    const onCallEnd = () => {
+    const onCallEnd = async () => {
       setIsCalling(false);
       setAssistantSpeaking(false);
       setUserSpeaking(false);
+      await updateInterviewStatus("INTERVIEW_COMPLETED");
     };
+
     const onSpeechStart = () => setAssistantSpeaking(true);
     const onSpeechEnd = () => setAssistantSpeaking(false);
     const onVolumeLevel = (volume: number) => {
