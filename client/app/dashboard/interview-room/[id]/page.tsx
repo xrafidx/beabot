@@ -60,7 +60,7 @@ export default function VapiWorkflowButton() {
           judulinterview: data.data.judulinterview,
           namabeasiswa: data.data.namabeasiswa,
           banyakpertanyaan: data.banyakpertanyaan ? String(data.banyakpertanyaan) : "", // Pastikan menjadi string
-          imageurl: data.data.imageurl === undefined ? null : data.imageurl, // Pastikan penanganan null/undefined
+          // imageurl: data.data.imageurl === undefined ? null : data.imageurl, // Pastikan penanganan null/undefined
         });
       })
       .catch((err) => {
