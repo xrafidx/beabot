@@ -111,7 +111,7 @@ export default function VapiWorkflowButton() {
             judulInterview: cards.judulinterview,
             bahasa: cards.bahasa,
             banyakPertanyaan: cards.banyakpertanyaan,
-            imageurl: cards.imageurl,
+            // imageurl: cards.imageurl,
             userid: cards.userid,
           }),
         });
