@@ -10,11 +10,11 @@ import LogoutButton from "./LogoutButton";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function UserNavbar() {
   const pathname = usePathname();
   const [user, setUser] = useState({ name: "Guest", email: "-" });
-
   useEffect(() => {
     fetch(`${BASE_URL}${API_ENDPOINTS.USER_DATA}`, {
       method: "GET",
@@ -59,9 +59,7 @@ export default function UserNavbar() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative p-0 h-auto rounded-full focus-visible: ring-offset-0 focus-visible:ring-0">
-              <UserCircleIcon className="w-8 h-8 hover:text-purple-600 transition-colors duration-200">
-                <span className="sr-only">User Profile Menu</span>
-              </UserCircleIcon>
+              <UserCircleIcon className="w-8 h-8 hover:text-purple-600 transition-colors duration-200">{/* <span className="sr-only">User Profile Menu</span> */}</UserCircleIcon>
             </Button>
           </DropdownMenuTrigger>
 
@@ -85,7 +83,7 @@ export default function UserNavbar() {
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon">
               <MenuIcon className="h-6 w-6" />
-              <span className="sr-only">Toggle navigation menu</span>
+              {/* <span className="sr-only">Toggle navigation menu</span> */}
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-full sm:max-w-xs p-4 flex flex-col justify-between">

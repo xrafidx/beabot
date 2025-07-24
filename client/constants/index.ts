@@ -158,6 +158,10 @@ export const API_ENDPOINTS = {
   SIGN_IN: "/api/v1/auth/sign-in",
 
   USER_DATA: "/api/v1/user-data",
+
+  GENERATE_REGULAR_QUESTION: "/api/v1/question-regular",
+
+  GENERATE_ESSAY_QUESTION: "/api/v1/question-essay",
 };
 
 export const INTERVIEW_TYPES_OPTIONS = [

@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
 import UserNavbar from "@/components/UserNavbar";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { ReactNode } from "react";
 
 const RootLayout = ({ children }: { children: ReactNode }) => {

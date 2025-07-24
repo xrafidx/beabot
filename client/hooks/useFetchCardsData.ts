@@ -1,8 +1,6 @@
-import { AiReviewContent, BackendCardData, BackendEssayData, BackendInterviewData, CardProps, EssayCardProps, InterviewCardProps } from "@/Types";
-import { string } from "zod";
+import { AiReviewContent, BackendCardData, BackendEssayData, BackendInterviewData, CardProps, EssayCardProps, InterviewCardProps, InterviewStatus } from "@/Types";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { extend } from "dayjs";
 
 interface UseFetchCardsDataProps<TBackend extends BackendCardData, TFrontend extends CardProps> {
   queryKey: string[];
@@ -46,25 +44,51 @@ export function useFetchCardsData<TBackend extends BackendCardData, TFrontend ex
   return { mappedCards, isLoading, isError, error, refetch };
 }
 export const mapBackendInterviewToCard = (card: BackendInterviewData): InterviewCardProps => {
-  const judulInterviewMapped = card.judulinterview;
-  const namaBeasiswaMapped = card.namabeasiswa || "";
+  // Ambil properti dari card (sesuai casing backend yang Anda konfirmasi)
+  const idFromBackend = card.id;
+  const uidFromBackend = card.uid;
+  const judulinterviewFromBackend = card.judulinterview;
+  const namabeasiswaFromBackend = card.namabeasiswa;
+  const jenispertanyaanFromBackend = card.jenispertanyaan;
+  const tanggalFromBackend = card.tanggal;
+  const ratingFromBackend = card.rating;
+  const completeFromBackend = card.complete;
+  const interviewstatusFromBackend = card.interviewstatus; // <-- Ini adalah status aktual dari backend JSON
 
-  const jenisPertanyaanMapped = (card.jenispertanyaan || "regular").toLowerCase() as "regular" | "essay-driven";
-  const userIdMapped = card.uid || "";
-  const completeStatus = card.rating !== null && card.rating !== undefined;
+  let inferredStatus: InterviewStatus;
 
+  // KOREKSI UTAMA: Prioritaskan status yang dikirim oleh backend terlebih dahulu
+  if (interviewstatusFromBackend === InterviewStatus.INTERVIEW_COMPLETED) {
+    inferredStatus = InterviewStatus.INTERVIEW_COMPLETED;
+  } else if (interviewstatusFromBackend === InterviewStatus.QUESTIONS_GENERATED) {
+    inferredStatus = InterviewStatus.QUESTIONS_GENERATED; // <-- INI YANG AKAN TERPICU JIKA BACKEND MENGIRIM INI
+  } else if (interviewstatusFromBackend === InterviewStatus.PENDING_QUESTIONS) {
+    inferredStatus = InterviewStatus.PENDING_QUESTIONS;
+  } else if (interviewstatusFromBackend === InterviewStatus.PENDING_SETUP) {
+    inferredStatus = InterviewStatus.PENDING_SETUP;
+  } else if (interviewstatusFromBackend === InterviewStatus.INTERVIEW_CANCELLED) {
+    inferredStatus = InterviewStatus.INTERVIEW_CANCELLED;
+  }
+  // Jika backend mengembalikan status yang tidak cocok dengan enum yang valid, baru gunakan inferensi lain
+  // Atau default ke PENDING_SETUP/QUESTIONS
+  else {
+    // Fallback jika status dari backend tidak valid atau tidak ada
+    inferredStatus = InterviewStatus.PENDING_SETUP; // Atau PENDING_QUESTIONS
+  }
+
+  // ... (return objek, tidak ada perubahan di sini) ...
   return {
-    id: card.id.toString(),
-    uid: userIdMapped,
-    judulinterview: judulInterviewMapped,
-    namabeasiswa: namaBeasiswaMapped,
-    jenispertanyaan: jenisPertanyaanMapped,
-    completeStatus: completeStatus,
-    rating: card.rating,
-    tanggal: card.tanggal,
+    id: idFromBackend,
+    uid: uidFromBackend,
+    judulinterview: judulinterviewFromBackend,
+    namabeasiswa: namabeasiswaFromBackend,
+    jenispertanyaan: jenispertanyaanFromBackend as "regular" | "essay-driven",
+    tanggal: tanggalFromBackend,
+    completestatus: completeFromBackend, // Ini sesuai dengan complete dari backend
+    rating: ratingFromBackend,
+    interviewstatus: inferredStatus, // Status yang sudah disimpulkan (berdasarkan prioritas status backend)
   };
 };
-
 export const mapBackendEssayToCard = (card: BackendEssayData): EssayCardProps => {
   let aiReviewParsed = card.aireview; // Sekarang ini langsung objek AiReviewContent atau null
   let judulEssayFromReview = "Judul Essay Tidak Ditemukan";
