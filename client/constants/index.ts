@@ -20,6 +20,7 @@ export const mappings: { [key: string]: string } = {
   "Yayasan Alumni IPB": "/covers/Yayasan-Alumni-IPB.png",
 };
 
+// a
 export const interviewCovers = ["/kemdikbud.svg", "/tanoto.svg"];
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
