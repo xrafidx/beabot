@@ -9,8 +9,8 @@ export async function login(req, res, next) {
     res.cookie("accessToken", accessToken, {
       // <-- Perbaikan di sini, gunakan 'accessToken'
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Hanya secure di production
-      sameSite: "Lax",
+      secure: true, //process.env.NODE_ENV === "production", // Hanya secure di production
+      sameSite: "None",
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hariSSSSS
     });
 
