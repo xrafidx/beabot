@@ -36,7 +36,6 @@ export interface InterviewCardProps {
   namabeasiswa: string;
   jenispertanyaan: "regular" | "essay-driven";
   tanggal: string;
-  completestatus: boolean;
   rating?: number | null;
   interviewstatus?: InterviewStatus;
 }

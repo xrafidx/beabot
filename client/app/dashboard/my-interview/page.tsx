@@ -115,7 +115,7 @@ const Page = () => {
               tanggal={interview.tanggal}
               interviewstatus={interview.interviewstatus} // Pastikan ini meneruskan status yang benar
               rating={interview.rating} // Jangan lupa meneruskan rating
-              completestatus={interview.completestatus}
+              // completestatus={interview.completestatus}
             />
           ))
         ) : (
