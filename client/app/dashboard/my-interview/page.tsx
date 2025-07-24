@@ -6,7 +6,7 @@ import InterviewCard from "@/components/InterviewCard";
 import { useQuery } from "@tanstack/react-query";
 import { BackendInterviewData, Category, InterviewCardProps, InterviewStatus } from "@/Types"; // Pastikan InterviewStatus diimpor
 import { API_ENDPOINTS, BASE_URL } from "@/constants";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 import CategoryTabs from "@/components/CategoryTabs";
 import Link from "next/link";
@@ -115,6 +115,7 @@ const Page = () => {
               tanggal={interview.tanggal}
               interviewstatus={interview.interviewstatus} // Pastikan ini meneruskan status yang benar
               rating={interview.rating} // Jangan lupa meneruskan rating
+              completestatus={interview.completestatus}
             />
           ))
         ) : (
