@@ -55,7 +55,7 @@ export async function editSpecificCards(cardId,uid,namaBeasiswa,banyakPertanyaan
         
         const card =  await prisma.$queryRaw`
             UPDATE "interviewcard"
-            SET namabeasiswa = ${namaBeasiswa}, banyakpertanyaan = ${banyakPertanyaan}, jenisinterview = ${jenisPertanyaan}, bahasa = ${bahasa}, imageurl = ${imageurl}, judulinterview = ${judulInterview}, tanggal = ${tanggal}, status = ${interviewstatus}
+            SET namabeasiswa = ${namaBeasiswa}, banyakpertanyaan = ${banyakPertanyaan}, jenisinterview = ${jenisPertanyaan}, bahasa = ${bahasa}, imageurl = ${imageurl}, judulinterview = ${judulInterview}, tanggal = ${tanggal}, status = ${interviewstatus}::interviewstatus
             WHERE id = ${cardId} AND userid = ${uid}
             RETURNING *;
         `
