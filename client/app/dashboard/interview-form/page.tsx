@@ -1,12 +1,13 @@
-"use client";
-
 import InterviewForm from "@/components/InterviewForm";
+import { requireUser } from "@/lib/cookies";
 import React from "react";
 
-const page = () => {
+const page = async () => {
+  const user = await requireUser();
+
   return (
     <div>
-      <InterviewForm></InterviewForm>
+      <InterviewForm user={user}></InterviewForm>
     </div>
   );
 };

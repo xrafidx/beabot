@@ -1,13 +1,10 @@
-"use client";
-import EssayUploadForm from "@/components/EssayUploadForm";
 import React from "react";
+import EssayUpPage from "./EssayUpPage";
+import { requireUser } from "@/lib/cookies";
 
-const page = () => {
-  return (
-    <div>
-      <EssayUploadForm></EssayUploadForm>
-    </div>
-  );
+const page = async () => {
+  const user = await requireUser();
+  return <EssayUpPage user={user} />;
 };
 
 export default page;

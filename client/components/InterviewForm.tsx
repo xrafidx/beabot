@@ -57,7 +57,7 @@ const InterviewFormSchema = z
   });
 
 // Ganti nama komponen dari InterviewForm menjadi InterviewFormPage jika ini adalah file page.tsx
-const InterviewForm = () => {
+const InterviewForm = ({ user }: { user: any }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
