@@ -40,7 +40,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(cors({
-    origin:'http://localhost:3000', // FE
+    origin: process.env.FRONT_END_URL, // FE
     credentials: true
 }))
 
