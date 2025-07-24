@@ -59,7 +59,7 @@ export interface InterviewFormData {
   judulInterview: string;
   namaBeasiswa: string;
   jenisPertanyaan: "regular" | "essay-driven";
-  banyakPertanyaan: number;
+  banyakPertanyaan: string;
   bahasa: "id" | "en";
   essay?: FileList;
 }
