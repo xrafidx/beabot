@@ -12,6 +12,7 @@ import DataStatusDisplay from "@/components/DataStatusDisplay";
 import { API_ENDPOINTS } from "@/constants";
 import { AiReviewContent, BackendEssayData } from "@/Types"; // Pastikan AiReviewContent diimpor
 
+// essay detal props
 interface EssayDetailPageProps {
   params: {
     id: string;
