@@ -38,7 +38,7 @@ export interface InterviewCardProps {
   tanggal: string;
   completestatus: boolean;
   rating?: number | null;
-  interviewstatus: InterviewStatus;
+  interviewstatus?: InterviewStatus;
 }
 
 export interface BackendInterviewData {
