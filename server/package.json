@@ -4,7 +4,9 @@
   "description": "backend dari beabot",
   "main": "server.js",
   "scripts": {
-    "test": "nodemon ./src/server.js"
+    "test": "nodemon ./src/server.js",
+    "postinstall": "prisma generate",
+    "start": "node ./src/server.js"
   },
   "type": "module",
   "author": "Rafid Wahyu Aditya",
