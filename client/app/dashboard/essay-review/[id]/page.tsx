@@ -3,7 +3,7 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 // import dayjs from "dayjs";
 import Link from "next/link";
 
@@ -13,17 +13,15 @@ import { API_ENDPOINTS } from "@/constants";
 import { AiReviewContent, BackendEssayData } from "@/Types"; // Pastikan AiReviewContent diimpor
 
 // essay detal props
-interface EssayDetailPageProps {
-  params: {
-    id: string;
-  };
-}
+// interface EssayDetailPageProps {
+//   params: {
+//     id: string;
+//   };
+// }
 
-const Page = ({ params }: EssayDetailPageProps) => {
-  const essayId =
-    typeof params.id === "object" && params.id !== null && "then" in params.id
-      ? React.use(params.id) // Jika params.id adalah Promise
-      : params.id; // Jika params.id adalah string biasa
+const Page = () => {
+  const params = useParams(); // Ambil params dari router
+  const essayId = params?.id;
 
   const {
     data: rawEssayData,
@@ -106,7 +104,7 @@ const Page = ({ params }: EssayDetailPageProps) => {
 
       <div className="bg-white shadow-md rounded-lg p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <p className="text-lg text-gray-700">Tanggal Review: {dayjs(parsedReview.tanggal).format("DD MMMM YYYY")}</p>
+          <p className="text-lg text-gray-700">Tanggal Review: {parsedReview.tanggal}</p>
           <p className="text-2xl font-bold text-blue-600">Skor: {parsedReview.rating !== null ? parsedReview.rating.toFixed(1) : "N/A"}</p>
         </div>
 
