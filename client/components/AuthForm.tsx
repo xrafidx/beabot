@@ -6,8 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FieldErrors } from "react-hook-form"; // Import FieldErrors for type safety
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import Image from "next/image"; // If you are using Image from next/image
 import Link from "next/link";
 import FormField from "./FormField"; // Assuming this is your custom FormField component
@@ -51,12 +50,20 @@ const AuthForm = ({ type }: { type: FormType }) => {
   // 1. Define your form with zodResolver and defaultValues
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "", // Keep these even if optional, to ensure React Hook Form manages them
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
+    defaultValues:
+      type === "register"
+        ? {
+            // Untuk register, semua field ada
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          }
+        : {
+            // Untuk sign-in, hanya email dan password
+            email: "",
+            password: "",
+          },
   });
 
   // Function to handle validation errors from React Hook Form
@@ -88,15 +95,17 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
       let payload;
 
+      // let payload;
+
       if (type === "register") {
-        // Ensure only relevant data is sent to the backend for registration
+        // values sudah pasti bertipe: { name, email, password, confirmPassword }
         payload = {
-          name: values.name,
+          name: (values as any).name,
           email: values.email,
           password: values.password,
         };
       } else {
-        // Ensure only relevant data is sent for sign-in
+        // values hanya: { email, password }
         payload = {
           email: values.email,
           password: values.password,

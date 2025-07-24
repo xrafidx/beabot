@@ -60,12 +60,19 @@ const EssayCard = ({ id, judulessay, tanggal, rating }: EssayCardProps) => {
       deleteMutation.mutate(id);
     }
   };
-
+  const displayRatingBadge = () => {
+    // Pastikan rating adalah number sebelum melakukan perbandingan
+    if (typeof rating !== "number") {
+      return "Pending"; // Atau nilai default lain jika rating null/undefined
+    }
+    // Lakukan perbandingan jika rating sudah pasti number
+    return rating > 90 ? "A+" : rating > 80 ? "A" : rating > 70 ? "B" : rating > 60 ? "C" : "D";
+  };
   return (
     <CardWrapper>
       {/* Badge */}
       <div className="absolute top-0 right-0 w-fit p-2 rounded-bl-lg bg-[#753a88]">
-        <p className="badge-text text-white">{rating > 90 ? "A+" : rating > 80 ? "A" : rating > 70 ? "B" : rating > 60 ? "C" : rating < 60 ? "D" : "Pending"}</p>
+        <p className="badge-text text-white">{displayRatingBadge()}</p>
       </div>
 
       {/* Judul */}

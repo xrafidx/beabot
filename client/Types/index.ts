@@ -4,7 +4,9 @@ export type FormType = "sign-in" | "register";
 
 export type BackendCardData = BackendInterviewData | BackendEssayData;
 
-export type CardProps = InterviewCardProps | EssayCardProps;
+export type CardProps = {
+  id: string;
+};
 
 export interface Feedback {
   id: string;
@@ -29,7 +31,7 @@ export enum InterviewStatus { // <-- Pastikan ini ada di sini dan diekspor
   INTERVIEW_CANCELLED = "INTERVIEW_CANCELLED",
 }
 
-export interface InterviewCardProps {
+export interface InterviewCardProps extends CardProps {
   id: string;
   uid: string;
   judulinterview: string;
@@ -58,7 +60,7 @@ export interface InterviewFormData {
   judulInterview: string;
   namaBeasiswa: string;
   jenisPertanyaan: "regular" | "essay-driven";
-  banyakPertanyaan: string;
+  banyakPertanyaan: "1" | "3" | "5";
   bahasa: "id" | "en";
   essay?: FileList;
 }
@@ -77,7 +79,7 @@ export interface BackendEssayData {
   aireview: string | null;
 }
 
-export interface EssayCardProps {
+export interface EssayCardProps extends CardProps {
   id: string;
   userid: string;
   judulessay: string;

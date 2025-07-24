@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/constants";
 import { AiReviewContent, BackendCardData, BackendEssayData, BackendInterviewData, CardProps, EssayCardProps, InterviewCardProps, InterviewStatus } from "@/Types";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -6,6 +7,7 @@ interface UseFetchCardsDataProps<TBackend extends BackendCardData, TFrontend ext
   queryKey: string[];
   apiEndpoint: string;
   mapper: (card: TBackend) => TFrontend;
+  refetchInterval?: number | false | ((query: any) => number | false);
 }
 
 export function useFetchCardsData<TBackend extends BackendCardData, TFrontend extends CardProps>({ queryKey, apiEndpoint, mapper }: UseFetchCardsDataProps<TBackend, TFrontend>) {
@@ -18,7 +20,7 @@ export function useFetchCardsData<TBackend extends BackendCardData, TFrontend ex
   } = useQuery<TBackend[], Error>({
     queryKey: queryKey,
     queryFn: async () => {
-      const response = await fetch(`http://localhost:5000${apiEndpoint}`, {
+      const response = await fetch(`${BASE_URL}${apiEndpoint}`, {
         method: "GET",
         credentials: "include",
       });
@@ -52,7 +54,7 @@ export const mapBackendInterviewToCard = (card: BackendInterviewData): Interview
   const jenispertanyaanFromBackend = card.jenispertanyaan;
   const tanggalFromBackend = card.tanggal;
   const ratingFromBackend = card.rating;
-  const completeFromBackend = card.complete;
+  // const completeFromBackend = card.complete;
   const interviewstatusFromBackend = card.interviewstatus; // <-- Ini adalah status aktual dari backend JSON
 
   let inferredStatus: InterviewStatus;
@@ -84,13 +86,30 @@ export const mapBackendInterviewToCard = (card: BackendInterviewData): Interview
     namabeasiswa: namabeasiswaFromBackend,
     jenispertanyaan: jenispertanyaanFromBackend as "regular" | "essay-driven",
     tanggal: tanggalFromBackend,
-    completestatus: completeFromBackend, // Ini sesuai dengan complete dari backend
+    // completestatus: completeFromBackend, // Ini sesuai dengan complete dari backend
     rating: ratingFromBackend,
     interviewstatus: inferredStatus, // Status yang sudah disimpulkan (berdasarkan prioritas status backend)
   };
 };
 export const mapBackendEssayToCard = (card: BackendEssayData): EssayCardProps => {
-  let aiReviewParsed = card.aireview; // Sekarang ini langsung objek AiReviewContent atau null
+  let aiReviewContent: AiReviewContent | null = null; // Deklarasi baru untuk hasil parsing/penyimpanan objek review
+
+  // ************ PERBAIKAN DI SINI: Parsing aiReviewParsed ************
+  if (card.aireview) {
+    if (typeof card.aireview === "string") {
+      try {
+        aiReviewContent = JSON.parse(card.aireview) as AiReviewContent;
+      } catch (e) {
+        console.error("Failed to parse aiReview string in mapBackendEssayToCard:", card.id, e);
+        // Biarkan aiReviewContent tetap null atau handle error sesuai kebutuhan
+      }
+    } else {
+      // Jika sudah objek, langsung gunakan
+      aiReviewContent = card.aireview;
+    }
+  }
+  // *******************************************************************
+
   let judulEssayFromReview = "Judul Essay Tidak Ditemukan";
   let ratingFromReview: number | null = null;
   let completeStatusCalculated = false;
@@ -99,29 +118,28 @@ export const mapBackendEssayToCard = (card: BackendEssayData): EssayCardProps =>
   let kesalahanReview: string[] | null = null;
   let tanggalReview: string = "";
 
-  if (aiReviewParsed) {
-    judulEssayFromReview = aiReviewParsed.judulessay || judulEssayFromReview;
-    ratingFromReview = aiReviewParsed.rating;
+  // Gunakan aiReviewContent yang sudah dipastikan objek
+  if (aiReviewContent) {
+    judulEssayFromReview = aiReviewContent.judulessay || judulEssayFromReview;
+    ratingFromReview = aiReviewContent.rating;
     completeStatusCalculated = ratingFromReview !== null && ratingFromReview !== undefined;
-    masukanReview = aiReviewParsed.masukan; // Ambil masukan
-    kelebihanReview = aiReviewParsed.kelebihan; // Ambil kelebihan
-    kesalahanReview = aiReviewParsed.kesalahan; // Ambil kesalahan
-    tanggalReview = aiReviewParsed.tanggal; // Tanggal sudah string dari backend
-  } // Default untuk namaBeasiswa (karena tidak ada di JSON essay)
+    masukanReview = aiReviewContent.masukan || masukanReview;
+    kelebihanReview = aiReviewContent.kelebihan || kelebihanReview;
+    kesalahanReview = aiReviewContent.kesalahan || kesalahanReview;
+    tanggalReview = aiReviewContent.tanggal || tanggalReview;
+  }
 
-  const essayNamaBeasiswa = "";
+  // const essayNamaBeasiswa = ""; // Variabel ini sepertinya tidak terpakai, bisa dihapus
 
   return {
-    id: card.id.toString(), // Gunakan card.id, bukan essayid, dan konversi ke string
-    uid: card.userid, // <-- KOREKSI: Gunakan userId (camelCase)
-    judulessay: judulEssayFromReview, // <-- KOREKSI: Gunakan judulEssay (camelCase)
-
-    tanggal: tanggalReview, // Tanggal sudah string dari backend
+    id: card.id.toString(),
+    userid: card.userid, // Pastikan 'userid' di BackendEssayData adalah properti yang benar
+    judulessay: judulEssayFromReview,
+    tanggal: tanggalReview,
     rating: ratingFromReview,
-    completestatus: completeStatusCalculated, // <-- KOREKSI: Gunakan completeStatus (camelCase)
-    // Tambahkan properti review lainnya jika EssayCardProps menampilkannya
-    masukanReview: masukanReview,
-    kelebihanReview: kelebihanReview,
-    kesalahanReview: kesalahanReview,
+    // completestatus: completeStatusCalculated,
+    masukanreview: masukanReview,
+    kelebihanreview: kelebihanReview,
+    kesalahanreview: kesalahanReview,
   };
 };

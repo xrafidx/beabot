@@ -62,12 +62,12 @@ const Page = () => {
           <p className="text-white my-4">Get expert feedback on your interview performance and essay writing. Our AI-powered platform and human reviewers help you succeed in your academic and career goals.</p>
 
           <div className="flex justify-center gap-5 mt-6">
-            <Link href="/" className="btn-outline">
+            <Link href="/register" className="btn-outline">
               Start Free Review
             </Link>
-            <Link href="/" className="btn-outline">
+            {/* <Link href="/" className="btn-outline">
               Watch Demo
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>

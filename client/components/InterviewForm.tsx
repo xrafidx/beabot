@@ -169,13 +169,13 @@ const InterviewForm = () => {
         judulinterview: newInterviewData.judulInterview, // Casing lowercase
         namabeasiswa: newInterviewData.namaBeasiswa, // Casing lowercase
         jenispertanyaan: newInterviewData.jenisPertanyaan as "regular" | "essay-driven", // Sesuaikan tipe
-        banyakPertanyaan: newInterviewData.banyakPertanyaan,
+        banyakPertanyaan: Number(newInterviewData.banyakPertanyaan),
         bahasa: newInterviewData.bahasa,
         tanggal: new Date().toISOString(), // ISO string
         // rating: null, // <-- KOREKSI: Ganti 0 menjadi null untuk pending state
         complete: false,
         // KOREKSI: Tambahkan properti status
-        status: InterviewStatus.PENDING_QUESTIONS, // <-- TAMBAHKAN INI
+        interviewstatus: InterviewStatus.PENDING_QUESTIONS, // <-- TAMBAHKAN INI
       };
 
       // Map ke InterviewCardProps untuk konsistensi cache frontend

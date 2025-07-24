@@ -23,6 +23,7 @@ const eslintConfig = [
       // Opsi 1: Menonaktifkan sepenuhnya aturan no-unused-vars
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
 
       // Opsi 2: Mengubah no-unused-vars menjadi warning (tidak akan mencegah build)
       // "no-unused-vars": "warn",

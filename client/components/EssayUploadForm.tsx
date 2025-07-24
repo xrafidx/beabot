@@ -44,7 +44,7 @@ const EssayUploadForm = () => {
     console.log("Validation errors:", errors);
     const firstErrorKey = Object.keys(errors)[0] as keyof typeof errors;
     const errorMessage = errors[firstErrorKey]?.message;
-    toast.error(errorMessage || "Mohon periksa form Anda.");
+    // toast.error(errorMessage || "Mohon periksa form Anda.");
   };
   const essayMutation = useMutation({
     mutationFn: async (dataToUpload: EssayUploadFormData) => {
@@ -122,7 +122,7 @@ const EssayUploadForm = () => {
             <p className="text-sm text-gray-600 text-center max-w-sm">Seret dan lepas esai Anda di sini atau pilih file dari perangkat Anda</p>
           </div>
 
-          <FormFileInput control={form.control} name="essay" className="w-full" />
+          <FormFileInput control={form.control} name="essay" label="" />
 
           <Button type="submit" disabled={isSubmitting} className="btn-primary self-center w-full sm:w-40">
             {isSubmitting ? "Mengunggah..." : "Upload"}

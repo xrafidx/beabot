@@ -34,7 +34,7 @@ const Page = () => {
       const pendingCount = currentInterviewCards?.filter((card) => card.interviewstatus === InterviewStatus.PENDING_QUESTIONS).length || 0;
       return pendingCount > 0 ? 5000 : false;
     },
-    refetchIntervalInBackground: true,
+    // refetchIntervalInBackground: true,
   });
 
   // Bakal fetch data essay
