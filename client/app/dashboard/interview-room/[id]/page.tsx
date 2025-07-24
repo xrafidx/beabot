@@ -91,9 +91,6 @@ export default function VapiWorkflowButton() {
       });
   }, [cards.id, cards.jenispertanyaan]);
 
-  // Fungsi untuk mengupdate status interview di backend
-  // Fungsi untuk mengupdate status interview di backend
-  // Menggunakan useCallback agar tidak dibuat ulang setiap render
   const updateInterviewStatus = useCallback(
     async (status: string) => {
       if (!cards.id) {
@@ -116,9 +113,6 @@ export default function VapiWorkflowButton() {
             banyakPertanyaan: cards.banyakpertanyaan,
             imageurl: cards.imageurl,
             userid: cards.userid,
-
-            // Anda bisa menambahkan properti lain di sini jika diperlukan,
-            // misalnya, `rating: 0` atau `complete: true`
           }),
         });
 
@@ -132,44 +126,7 @@ export default function VapiWorkflowButton() {
       }
     },
     [cards]
-  ); // cards.id sebagai dependency
-
-  // Fungsi baru untuk menyimpan respons interview dan memicu feedback
-  // const saveInterviewResponseAndGenerateFeedback = useCallback(
-  //   async (transcript: string[]) => {
-  //     if (!cards.id) {
-  //       console.warn("Tidak ada cards.id untuk menyimpan respons interview.");
-  //       return;
-  //     }
-  //     try {
-  //       // Endpoint ini asumsinya akan menerima transkrip dan memicu feedback di backend
-  //       const response = await fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${cards.id}`, {
-  //         method: "POST", // Atau PUT, tergantung desain API backend Anda
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         credentials: "include",
-  //         body: JSON.stringify({
-  //           // Kirim data yang relevan ke backend
-  //           interviewId: cards.id,
-  //           transcript: transcript,
-  //           // Anda bisa menambahkan durasi, pertanyaan yang diajukan, dll.
-  //           // Misalnya: duration: (new Date().getTime() - callStartTime) / 1000
-  //         }),
-  //       });
-
-  //       if (!response.ok) {
-  //         const errorData = await response.json();
-  //         throw new Error(errorData.message || `Failed to save interview response: ${response.status}`);
-  //       }
-  //       console.log("Interview response saved and feedback generation initiated (backend).");
-  //     } catch (error) {
-  //       console.error("Error saving interview response or generating feedback:", error);
-  //     }
-  //   },
-  //   [cards.id]
-  // ); // cards.id sebagai dependency
-
+  );
   const startWorkflowCall = async () => {
     try {
       if (!user.name || !cards.id || !cards.bahasa || questionList.length === 0) {

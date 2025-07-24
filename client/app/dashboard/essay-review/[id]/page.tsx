@@ -4,24 +4,33 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { notFound, useParams } from "next/navigation";
-// import dayjs from "dayjs";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import DataStatusDisplay from "@/components/DataStatusDisplay";
-import { API_ENDPOINTS } from "@/constants";
-import { AiReviewContent, BackendEssayData } from "@/Types"; // Pastikan AiReviewContent diimpor
-
-// essay detal props
-// interface EssayDetailPageProps {
-//   params: {
-//     id: string;
-//   };
-// }
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
+import { AiReviewContent, BackendEssayData } from "@/Types";
 
 const Page = () => {
-  const params = useParams(); // Ambil params dari router
-  const essayId = params?.id;
+  const params = useParams();
+  const rawEssayId = params?.id; // Ini akan menjadi string | string[] | undefined
+
+  if (typeof rawEssayId !== "string") {
+    console.error("Invalid essay ID format:", rawEssayId);
+    notFound(); // ID tidak valid, anggap 404
+  }
+
+  const essayIdAsNumber = Number(rawEssayId);
+
+  // 3. Tambahkan logika untuk menangani ID yang bukan angka,
+  //    kecuali jika itu adalah ID temporer seperti 'temp-...'
+  const isTemporaryId = rawEssayId.startsWith("temp-");
+
+  // Jika ID bukan temporer DAN bukan angka yang valid, maka anggap sebagai error
+  if (!isTemporaryId && isNaN(essayIdAsNumber)) {
+    console.error("Essay ID is not a valid number:", rawEssayId);
+    notFound(); // ID tidak valid, anggap 404
+  }
 
   const {
     data: rawEssayData,
@@ -30,9 +39,9 @@ const Page = () => {
     error,
     refetch,
   } = useQuery<BackendEssayData, Error>({
-    queryKey: ["essayDetail", essayId],
+    queryKey: ["essayDetail", rawEssayId], // Gunakan rawEssayId (string) untuk queryKey
     queryFn: async () => {
-      const response = await fetch(`http://localhost:5000${API_ENDPOINTS.ESSAY_REVIEW}/${essayId}`, {
+      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.ESSAY_REVIEW}/${rawEssayId}`, {
         method: "GET",
         credentials: "include",
       });
@@ -47,15 +56,17 @@ const Page = () => {
       const result = await response.json();
       return result.data as BackendEssayData;
     },
-    enabled: !!essayId && essayId !== "temp-user",
+    enabled: !!rawEssayId && rawEssayId !== "temp-user", // Tetap gunakan rawEssayId untuk kondisi enabled ini
   });
 
   if (isLoading || isError) {
-    return <DataStatusDisplay isLoading={isLoading} isError={isError} error={error} onRetry={refetch} loadingMessage="Memuat detail review essay..." errorMessage="Gagal memuat detail review essay."></DataStatusDisplay>;
+    return <DataStatusDisplay isLoading={isLoading} isError={isError} error={error} onRetry={refetch} loadingMessage="Memuat detail review essay..." errorMessage="Gagal memuat detail review essay." />;
   }
 
   if (!rawEssayData || !rawEssayData.aireview) {
-    if (essayId.startsWith("temp-")) {
+    // rawEssayId sudah pasti string di sini
+    if (rawEssayId.startsWith("temp-")) {
+      // Ini tetap benar karena 'temp-' adalah string
       return (
         <div className="flex flex-col items-center justify-center min-h-screen text-center p-4">
           <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-purple-500 mb-4"></div>
@@ -77,13 +88,12 @@ const Page = () => {
     );
   }
 
-  // KOREKSI UTAMA: Tangani kedua kemungkinan tipe untuk rawEssayData.aireview
   let parsedReview: AiReviewContent;
   if (typeof rawEssayData.aireview === "string") {
     try {
       parsedReview = JSON.parse(rawEssayData.aireview) as AiReviewContent;
     } catch (e) {
-      console.error("Failed to parse aireview JSON for detail page (string case):", essayId, e);
+      console.error("Failed to parse aireview JSON for detail page (string case):", rawEssayId, e);
       return (
         <div className="flex flex-col items-center justify-center min-h-screen text-center p-4">
           <p className="text-red-500 mb-4">Format review tidak valid (kesalahan parsing string).</p>
@@ -94,7 +104,6 @@ const Page = () => {
       );
     }
   } else {
-    // Jika sudah objek (bukan string), langsung gunakan
     parsedReview = rawEssayData.aireview;
   }
 
