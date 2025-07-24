@@ -16,6 +16,7 @@ export async function vapiWebHook(req,res,next){
 
 // }
     const {message} = req.body;
+    console.log(message);
     if(message.type === 'function-call'){
         try {
             const resultData = await handleFunctionCall(message);

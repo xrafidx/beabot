@@ -87,13 +87,13 @@ export async function deleteSpecificCardsServices(uid,cardId){
 export async function editSpecificCardsServices(cardId,uid,data){
     try {
         // parsing data body
-        let {judulInterview,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,imageurl} = data;
+        let {judulInterview,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,imageurl,interviewstatus} = data;
         // convert banyak pertanyaan
         banyakPertanyaan = Number(banyakPertanyaan);
         // generate tanggal
         const tanggal = new Date();
         // call function buat edit kartu
-        const result = await editSpecificCards(cardId,uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,judulInterview,tanggal,imageurl);
+        const result = await editSpecificCards(cardId,uid,namaBeasiswa,banyakPertanyaan,jenisPertanyaan,bahasa,judulInterview,tanggal,imageurl,interviewstatus);
         if(result.length < 1){
             throw new Error("Data Tidak Ditemukan");
         }
