@@ -13,7 +13,7 @@ import Link from "next/link";
 import FormField from "./FormField"; // Assuming this is your custom FormField component
 import { toast } from "sonner"; // Assuming you have sonner installed and <Toaster /> in your layout
 import { useRouter } from "next/navigation";
-import { API_ENDPOINTS } from "@/constants";
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
 
 // Define FormType if not already defined globally or in another type file
 type FormType = "sign-in" | "register";
@@ -84,7 +84,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
     // so no need to check form.formState.errors here.
 
     try {
-      const endpoint = type === "register" ? `http://localhost:5000${API_ENDPOINTS.REGISTER}` : `http://localhost:5000${API_ENDPOINTS.SIGN_IN}`;
+      const endpoint = type === "register" ? `${BASE_URL}${API_ENDPOINTS.REGISTER}` : `${BASE_URL}${API_ENDPOINTS.SIGN_IN}`;
 
       let payload;
 
