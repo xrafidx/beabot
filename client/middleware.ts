@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
   // 1. Jika user mencoba mengakses rute yang diproteksi DAN TIDAK ADA TOKEN
   if (isProtectedRoute && !token) {
     console.log("ACTION: Redirecting to /sign-in (User not authenticated)");
-    return NextResponse.redirect(new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`, request.url));
+    return NextResponse.redirect(new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/sign-in`, request.url));
   }
 
   // 2. Jika user mencoba mengakses rute autentikasi (login/register) SAAT SUDAH ADA TOKEN
