@@ -4,7 +4,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
