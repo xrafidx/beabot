@@ -38,7 +38,7 @@ export default function VapiWorkflowButton() {
       });
   }, []);
 
-  const [cards, setCards] = useState({ jenispertanyaan: "", userid: "", id: "", bahasa: "", judulinterview: "", namabeasiswa: "", banyakpertanyaan: "", imageurl: null as string | null });
+  const [cards, setCards] = useState({ jenispertanyaan: "", userid: "", id: "", bahasa: "", judulinterview: "", namabeasiswa: "", banyakpertanyaan: "" });
   const params = useParams();
   const cardsId = params?.id;
 
