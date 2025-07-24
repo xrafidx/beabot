@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Vapi from "@vapi-ai/web";
 import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import { useParams } from "next/navigation";
 import clsx from "clsx"; // pastikan ini di-install
 import Image from "next/image";
-import { Avatar } from "@radix-ui/react-avatar";
+// import { Avatar } from "@radix-ui/react-avatar";
 import { UserCircleIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const vapi = new Vapi(process.env.NEXT_PUBLIC_API_KEY);
 
@@ -15,7 +17,8 @@ export default function VapiWorkflowButton() {
   const [isCalling, setIsCalling] = useState(false);
   const [assistantSpeaking, setAssistantSpeaking] = useState(false);
   const [userSpeaking, setUserSpeaking] = useState(false);
-
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [user, setUser] = useState({ name: "Guest", email: "" });
 
   useEffect(() => {
@@ -35,7 +38,7 @@ export default function VapiWorkflowButton() {
       });
   }, []);
 
-  const [cards, setCards] = useState({ jenispertanyaan: "", userid: "", id: "", bahasa: "", judulinterview: "", namabeasiswa: "" });
+  const [cards, setCards] = useState({ jenispertanyaan: "", userid: "", id: "", bahasa: "", judulinterview: "", namabeasiswa: "", banyakpertanyaan: "", imageurl: null as string | null });
   const params = useParams();
   const cardsId = params?.id;
 
@@ -56,6 +59,8 @@ export default function VapiWorkflowButton() {
           bahasa: data.data.bahasa,
           judulinterview: data.data.judulinterview,
           namabeasiswa: data.data.namabeasiswa,
+          banyakpertanyaan: data.banyakpertanyaan ? String(data.banyakpertanyaan) : "", // Pastikan menjadi string
+          imageurl: data.data.imageurl === undefined ? null : data.imageurl, // Pastikan penanganan null/undefined
         });
       })
       .catch((err) => {
@@ -87,37 +92,83 @@ export default function VapiWorkflowButton() {
   }, [cards.id, cards.jenispertanyaan]);
 
   // Fungsi untuk mengupdate status interview di backend
-  const updateInterviewStatus = async (status: string) => {
-    if (!cards.id) {
-      console.warn("Tidak ada cards.id untuk memperbarui status interview.");
-      return;
-    }
-    try {
-      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${cards.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          interviewstatus: status,
-          // Anda bisa menambahkan properti lain di sini jika diperlukan,
-          // misalnya, `rating: 0` atau `complete: true`
-          // Untuk saat ini, kita hanya fokus pada interviewstatus
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `Failed to update interview status: ${response.status}`);
+  // Fungsi untuk mengupdate status interview di backend
+  // Menggunakan useCallback agar tidak dibuat ulang setiap render
+  const updateInterviewStatus = useCallback(
+    async (status: string) => {
+      if (!cards.id) {
+        console.warn("Tidak ada cards.id untuk memperbarui status interview.");
+        return;
       }
-      console.log(`Interview status updated to ${status}`);
-      // Opsional: Lakukan refresh data di dashboard jika Anda menggunakan react-query di sana
-      // queryClient.invalidateQueries(['userInterviewsDashboard']); // uncomment jika ada queryClient
-    } catch (error) {
-      console.error("Error updating interview status:", error);
-    }
-  };
+      try {
+        const response = await fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${cards.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            namaBeasiswa: cards.namabeasiswa,
+            interviewstatus: status,
+            jenisPertanyaan: cards.jenispertanyaan,
+            judulInterview: cards.judulinterview,
+            bahasa: cards.bahasa,
+            banyakPertanyaan: cards.banyakpertanyaan,
+            imageurl: cards.imageurl,
+            userid: cards.userid,
+
+            // Anda bisa menambahkan properti lain di sini jika diperlukan,
+            // misalnya, `rating: 0` atau `complete: true`
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || `Failed to update interview status: ${response.status}`);
+        }
+        console.log(`Interview status updated to ${status}`);
+      } catch (error) {
+        console.error("Error updating interview status:", error);
+      }
+    },
+    [cards]
+  ); // cards.id sebagai dependency
+
+  // Fungsi baru untuk menyimpan respons interview dan memicu feedback
+  // const saveInterviewResponseAndGenerateFeedback = useCallback(
+  //   async (transcript: string[]) => {
+  //     if (!cards.id) {
+  //       console.warn("Tidak ada cards.id untuk menyimpan respons interview.");
+  //       return;
+  //     }
+  //     try {
+  //       // Endpoint ini asumsinya akan menerima transkrip dan memicu feedback di backend
+  //       const response = await fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${cards.id}`, {
+  //         method: "POST", // Atau PUT, tergantung desain API backend Anda
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         credentials: "include",
+  //         body: JSON.stringify({
+  //           // Kirim data yang relevan ke backend
+  //           interviewId: cards.id,
+  //           transcript: transcript,
+  //           // Anda bisa menambahkan durasi, pertanyaan yang diajukan, dll.
+  //           // Misalnya: duration: (new Date().getTime() - callStartTime) / 1000
+  //         }),
+  //       });
+
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         throw new Error(errorData.message || `Failed to save interview response: ${response.status}`);
+  //       }
+  //       console.log("Interview response saved and feedback generation initiated (backend).");
+  //     } catch (error) {
+  //       console.error("Error saving interview response or generating feedback:", error);
+  //     }
+  //   },
+  //   [cards.id]
+  // ); // cards.id sebagai dependency
 
   const startWorkflowCall = async () => {
     try {
@@ -152,7 +203,14 @@ export default function VapiWorkflowButton() {
       setIsCalling(false);
       setAssistantSpeaking(false);
       setUserSpeaking(false);
-      await updateInterviewStatus("INTERVIEW_COMPLETED");
+      // 1. Update status interview di backend
+      await updateInterviewStatus("INTERVIEW_COMPLETED"); // Pastikan ini ada di enum InterviewStatus Anda
+
+      // 2. Simpan transkrip dan pemicu generate feedback
+      // await saveInterviewResponseAndGenerateFeedback(currentTranscript);
+      queryClient.invalidateQueries({ queryKey: ["userInterviews"] });
+      queryClient.invalidateQueries({ queryKey: ["userInterviewsDashboard"] });
+      router.push("/dashboard");
     };
 
     const onSpeechStart = () => setAssistantSpeaking(true);
@@ -175,7 +233,7 @@ export default function VapiWorkflowButton() {
       vapi.off("speech-end", onSpeechEnd);
       vapi.off("volume-level", onVolumeLevel);
     };
-  }, []);
+  }, [cards, cards.id, updateInterviewStatus, router, queryClient]);
 
   return (
     <div className="flex flex-col items-center justify-center p-4 min-h-screen">

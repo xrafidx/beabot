@@ -3,11 +3,12 @@
 import React from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
 
 const LogoutButton = () => {
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/auth/logout", {
+      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.LOGOUT}`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",

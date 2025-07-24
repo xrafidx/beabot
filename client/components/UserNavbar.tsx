@@ -11,6 +11,7 @@ import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { error } from "console";
 
 export default function UserNavbar() {
   const pathname = usePathname();

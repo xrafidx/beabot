@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { API_ENDPOINTS, BASE_URL } from "@/constants";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { MoreVertical } from "lucide-react";
+import { CheckCircle, MoreVertical } from "lucide-react";
 
 const InterviewCard = ({
   id,
@@ -127,9 +127,10 @@ const InterviewCard = ({
               <span>{tanggal}</span> {/* Gunakan formattedDate */}
             </div>
             {showCompletedUI && ( // Tampilkan rating hanya jika sudah selesai
-              <div className="flex items-center gap-1">
-                <Image src="/star.svg" alt="star" width={20} height={20} />
-                <span>{rating !== null && rating !== undefined ? rating.toFixed(1) : "---"}</span>
+              <div className="flex items-center gap-1 ml-auto">
+                <CheckCircle className="w-5 h-5 text-green-600"></CheckCircle>
+                {/* <Image src="/star.svg" alt="star" width={20} height={20} />
+                <span>{rating !== null && rating !== undefined ? rating.toFixed(1) : "---"}</span> */}
               </div>
             )}
           </div>
@@ -141,8 +142,8 @@ const InterviewCard = ({
               </Button>
             )}
             {showCompletedUI && ( // Tombol "Lihat Feedback" jika sudah selesai
-              <Button asChild className="btn-primary">
-                <Link href={`/dashboard/interview-feedback/${id}`}>Lihat Feedback</Link>
+              <Button asChild className="btn-outline-purple text-purple-600">
+                <Link href={`/dashboard/interview-feedback/${id}`}>Ulangi Interview</Link>
               </Button>
             )}
             {showCancelledUI && ( // Tombol "Interview Dibatalkan" jika dibatalkan

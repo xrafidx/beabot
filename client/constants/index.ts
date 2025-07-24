@@ -22,7 +22,7 @@ export const mappings: { [key: string]: string } = {
 
 export const interviewCovers = ["/kemdikbud.svg", "/tanoto.svg"];
 
-export const BASE_URL = "http://localhost:5000";
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const API_ENDPOINTS = {
   // Buat ambil semua kartu interview
@@ -38,6 +38,8 @@ export const API_ENDPOINTS = {
   REGISTER: "/api/v1/auth/register",
 
   SIGN_IN: "/api/v1/auth/sign-in",
+
+  LOGOUT: "/api/v1/auth/logout",
 
   USER_DATA: "/api/v1/user-data",
 

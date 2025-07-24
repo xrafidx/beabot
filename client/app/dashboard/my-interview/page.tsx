@@ -92,9 +92,11 @@ const Page = () => {
 
   return (
     <section className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col md:flex-row md:justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Interview Saya</h1>
-        <Link href="/dashboard/interview-form" className="btn btn-primary">
+        <Link href="/dashboard/interview-form" className="btn btn-primary mt-4 md:mt-0">
+          {" "}
+          {/* Tambah margin top di mobile, hilangkan di md */}
           Mulai Interview baru
         </Link>
       </div>
