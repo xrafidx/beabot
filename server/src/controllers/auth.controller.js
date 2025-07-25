@@ -6,15 +6,15 @@ export async function login(req, res, next) {
   try {
     const userData = await authServices.verifyUser(email, plainPassword);
     const accessToken = authServices.craftToken(userData); // Lebih baik pakai nama 'accessToken' atau 'token'
-    res.cookie("accessToken", accessToken, {
-      // <-- Perbaikan di sini, gunakan 'accessToken'
-      httpOnly: true,
-      secure: true, //process.env.NODE_ENV === "production", // Hanya secure di production
-      sameSite: "None",
-      maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hariSSSSS
-      path: '/',
+    // res.cookie("accessToken", accessToken, {
+    //   // <-- Perbaikan di sini, gunakan 'accessToken'
+    //   httpOnly: true,
+    //   secure: true, //process.env.NODE_ENV === "production", // Hanya secure di production
+    //   sameSite: "None",
+    //   maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hariSSSSS
+    //   path: '/',
       
-    });
+    // });
 
     res.status(200).json({
       success: true,
@@ -25,6 +25,7 @@ export async function login(req, res, next) {
         email: userData.email,
         name: userData.name, // Asumsikan userData memiliki name
       },
+      accessToken: accessToken
     });
     // res.redirect('/dashboard');
 
