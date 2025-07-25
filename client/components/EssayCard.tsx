@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import CardWrapper from "./CardWrapper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { API_ENDPOINTS, BASE_URL } from "@/constants";
+import { API_ENDPOINTS} from "@/constants";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
@@ -19,7 +19,7 @@ const EssayCard = ({ id, judulessay, tanggal, rating }: EssayCardProps) => {
 
   const deleteMutation = useMutation({
     mutationFn: async (essayIdToDelete: string) => {
-      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.ESSAY_REVIEW}/${essayIdToDelete}`, {
+      const response = await fetch(`${API_ENDPOINTS.ESSAY_REVIEW}/${essayIdToDelete}`, {
         method: "DELETE",
         credentials: "include",
       });
