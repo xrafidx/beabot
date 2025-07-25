@@ -1,4 +1,4 @@
-import { createRegQuestion, findRegQuestion, createEssQuestion, findEssQuestion, updateCardsStatus } from "../services/question.services.js";
+import { createRegQuestion, findRegQuestion, createEssQuestion, findEssQuestion, updateCardsStatus, hapusFile } from "../services/question.services.js";
 
 export async function getRegularQuestion(req,res,next){
     try {
@@ -61,6 +61,7 @@ export async function createEssayDrivenQuestion(req,res,next){
         const result = await createEssQuestion(cardsid,dataFile);
          // jalanin service buat update status di interviewcards
         const cards = await updateCardsStatus(cardsid);
+        const hapus = await hapusFile(dataFile);
 
 
         res.status(201).json({

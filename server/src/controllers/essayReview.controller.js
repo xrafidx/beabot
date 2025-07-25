@@ -11,10 +11,11 @@ export async function essayReview(req,res,next){
         // ambil id user
         const uid = Number(req.user.sub);
         const namaFile = req.file.originalname;
-        const rawResponseText = await essayReviewPrompt(namaFile);
+        const locfile = req.file.path;
+        const rawResponseText = await essayReviewPrompt(locfile);
         const jsonMatch = rawResponseText.match(/\{[\s\S]*\}/)
         const parsedResponse = jsonParser(jsonMatch);
-        await hapusFile(namaFile);
+        await hapusFile(locfile);
         const simpanEssay = await saveEssay(uid,parsedResponse);
         res.status(201).json({
             success:true,
