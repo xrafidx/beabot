@@ -38,7 +38,7 @@ export default function VapiWorkflowButton() {
       .catch((err) => {
         console.error(`Failed to fetch user: ${err}`);
       });
-  }, []);
+  }, [token]);
 
   const [cards, setCards] = useState({ jenispertanyaan: "", userid: "", id: "", bahasa: "", judulinterview: "", namabeasiswa: "", banyakpertanyaan: "" });
   const params = useParams();
@@ -69,7 +69,7 @@ export default function VapiWorkflowButton() {
       .catch((err) => {
         console.error(`Failed to fetch cards: ${err}`);
       });
-  }, [cardsId]);
+  }, [cardsId, token]);
 
   const [questionList, setQuestionsList] = useState<string[]>([]);
 
@@ -93,7 +93,7 @@ export default function VapiWorkflowButton() {
       .catch((err) => {
         console.error(`Failed to fetch questions: ${err}`);
       });
-  }, [cards.id, cards.jenispertanyaan]);
+  }, [cards.id, cards.jenispertanyaan, token]);
 
   const updateInterviewStatus = useCallback(
     async (status: string) => {
@@ -105,6 +105,7 @@ export default function VapiWorkflowButton() {
         const response = await fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${cards.id}`, {
           method: "PUT",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           credentials: "include",
@@ -129,7 +130,7 @@ export default function VapiWorkflowButton() {
         console.error("Error updating interview status:", error);
       }
     },
-    [cards]
+    [cards, token]
   );
   const startWorkflowCall = async () => {
     try {
