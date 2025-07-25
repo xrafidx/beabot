@@ -118,7 +118,7 @@ const InterviewForm = () => {
       toast.success("Interview berhasil dibuat!");
 
       if (values.jenisPertanyaan === "regular") {
-        const generateResponse = await fetch(`${BASE_URL}${API_ENDPOINTS.GENERATE_REGULAR_QUESTION}/${cardId}`, {
+        const generateResponse = await fetch(`${API_ENDPOINTS.GENERATE_REGULAR_QUESTION}/${cardId}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
