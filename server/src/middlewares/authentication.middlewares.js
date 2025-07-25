@@ -1,29 +1,35 @@
-
 import { jwtvalidate } from "../config/JWT.js";
 import { blacklistCheck } from "../services/auth.services.js";
+
 // buat autentikasi route protection
-export async function isAuthenticated(req,res,next){
-    try {
-    // kita akses cookiesnya
-    const JWTuser = req.cookies.accessToken;
-    if(!JWTuser){
-        return res.status(401).json({
+export async function isAuthenticated(req, res, next) {
+  try {
+    // Ambil token dari header Authorization
+    const authHeader = req.headers.authorization;
+    const JWTuser = authHeader && authHeader.startsWith('Bearer ')
+      ? authHeader.split(' ')[1]
+      : null;
+
+    if (!JWTuser) {
+      return res.status(401).json({
         success: false,
         message: 'Token Not Found, Access Denied'
       });
     }
-    // kita verifikasi apakah JWT asli atau tidak dan expired atau tidak
+
+    // Verifikasi apakah JWT valid dan belum expired
     const validationResult = jwtvalidate(JWTuser);
-    // kita verifikasi apakah JWT ada di blacklist atau tidak
+
+    // Cek apakah token ada di blacklist
     const blacklistResult = await blacklistCheck(validationResult);
-    // kalo berhasil verifikasi, tambahin data user ke situ.
+
+    // Jika semua valid, tambahkan user ke req
     req.user = validationResult;
     next();
-    } catch (error) {
-        // Unauthorized access
-        res.status(401).send({
-            success: false,
-            message: "Unauthorized Access"
-        })
-    }
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: "Unauthorized Access"
+    });
+  }
 }
