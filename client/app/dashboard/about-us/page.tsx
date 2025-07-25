@@ -14,7 +14,7 @@ const AboutPage: React.FC = () => {
       icon: "💬", // Placeholder ikon. Ganti dengan komponen atau <img> jika diperlukan
       title: "Simulasi Wawancara AI Realistis",
       description: "Latih kemampuan wawancara Anda kapan saja dan di mana saja. AI kami akan mengajukan pertanyaan-pertanyaan umum hingga skenario spesifik industri, memberikan Anda pengalaman wawancara yang paling otentik.",
-      link: "/services/mock-interview", // Ganti dengan link yang sesuai
+      link: "/dashboard", // Ganti dengan link yang sesuai
     },
     {
       id: 2,
@@ -22,14 +22,14 @@ const AboutPage: React.FC = () => {
       title: "Review Esai Komprehensif",
       description:
         "Jangan biarkan esai yang kurang sempurna menghambat Anda. Unggah esai lamaran kerja, motivasi letter, atau tulisan penting lainnya. AI kami akan menganalisis tata bahasa, struktur, alur pemikiran, konsistensi, dan dampak keseluruhan.",
-      link: "/services/essay-review", // Ganti dengan link yang sesuai
+      link: "/dashboard", // Ganti dengan link yang sesuai
     },
     {
       id: 3,
       icon: "🚀", // Placeholder ikon. Ganti dengan komponen atau <img> jika diperlukan
       title: "Peningkatan Kepercayaan Diri",
       description: "Dengan latihan berkelanjutan dan umpan balik yang konstruktif, Beabot membantu Anda membangun kepercayaan diri secara signifikan.",
-      link: "/services/confidence-boost", // Ganti dengan link yang sesuai
+      link: "/dashboard", // Ganti dengan link yang sesuai
     },
   ];
 
