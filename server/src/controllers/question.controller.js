@@ -61,7 +61,7 @@ export async function createEssayDrivenQuestion(req,res,next){
         const result = await createEssQuestion(cardsid,dataFile);
          // jalanin service buat update status di interviewcards
         const cards = await updateCardsStatus(cardsid);
-        const hapus = await hapusFile(dataFile);
+        // const hapus = await hapusFile(dataFile);
 
 
         res.status(201).json({

@@ -6,9 +6,10 @@ import fsp from 'fs/promises'; // Gunakan 'fs/promises'
 
 export async function hapusFile(datafile) {
   try {
-    const locfile = datafile.path;
+    const locfile = toString(datafile.path);
+    console.log(locfile)
     await fsp.unlink(locfile);
-    console.log(`File ${fileName} berhasil dihapus.`);
+    console.log(`File berhasil dihapus.`);
   } catch (error) {
     // Tangani error, misalnya jika file tidak ditemukan
     console.error(`Gagal menghapus file: ${error.message}`);

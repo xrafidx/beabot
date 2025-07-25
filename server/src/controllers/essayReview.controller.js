@@ -15,7 +15,7 @@ export async function essayReview(req,res,next){
         const rawResponseText = await essayReviewPrompt(locfile);
         const jsonMatch = rawResponseText.match(/\{[\s\S]*\}/)
         const parsedResponse = jsonParser(jsonMatch);
-        await hapusFile(locfile);
+        // await hapusFile(locfile);
         const simpanEssay = await saveEssay(uid,parsedResponse);
         res.status(201).json({
             success:true,
