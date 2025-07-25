@@ -21,9 +21,8 @@ export default function VapiWorkflowButton() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [user, setUser] = useState({ name: "Guest", email: "" });
-
+  const token = getCookie("accessToken");
   useEffect(() => {
-    const token = getCookie("accessToken");
     fetch(`${BASE_URL}${API_ENDPOINTS.USER_DATA}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" },
@@ -48,6 +47,7 @@ export default function VapiWorkflowButton() {
   useEffect(() => {
     fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${cardsId}`, {
       method: "GET",
+      headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" },
       credentials: "include",
     })
       .then((res) => {
@@ -80,6 +80,7 @@ export default function VapiWorkflowButton() {
 
     fetch(`${BASE_URL}${endpoint}/${cards.id}`, {
       method: "GET",
+      headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" },
       credentials: "include",
     })
       .then((res) => {
