@@ -13,7 +13,7 @@ export async function login(req, res, next) {
       sameSite: "None",
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hariSSSSS
       path: '/',
-      domain: '.beabot.vercel.app'
+      domain: 'beabot-fe.vercel.app'
     });
 
     res.status(200).json({
