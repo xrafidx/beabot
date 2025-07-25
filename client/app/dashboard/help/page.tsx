@@ -11,7 +11,7 @@ const HelpPage: React.FC = () => {
     {
       question: "Bagaimana cara kerja AI Interview?",
       answer:
-        "AI Interview kami menggunakan pemrosesan bahasa alami canggih untuk mensimulasikan pengalaman wawancara sungguhan. Ini mengajukan pertanyaan, mendengarkan jawaban Anda, dan memberikan umpan balik instan tentang ucapan, konten, dan bahasa tubuh Anda (jika webcam digunakan).",
+        "Pertama, klik tombol Start an Interview, isi form interview untuk melakukan setup interview seperti durasi interview, bahasa, jenis interview dan sebagainya. Setelah klik submit, tunggu beberapa saat hingga interview anda muncul di dashboard, dan kamu bisa memulai interview dengan klik 'Mulai Interview'. (Pastikan akses microphone pada browser diizinkan.)",
     },
     {
       question: "Apa itu mode Regular dan Essay-driven?",
@@ -24,8 +24,8 @@ const HelpPage: React.FC = () => {
         "AI Interview akan memiliki 4 fase pada interview yang akan ditemani Bella sang assistant. Pada fase pertama Bella akan bertanya beberapa pertanyaan dasar seperti perkenalan, prestasi, kelebihan dan kekurangan, serta rencana masa depan. Lalu pada fase kedua Bella akan bertanya seputar pertanyaan lain (jika memilih essay-driven Bella akan bertanya terkait esai yang kamu buat). Lalu pada fase ketiga Bella akan menggali lebih dalam jawaban yang anda buat dari pertanyaan sebelumnya. Pada fase keempat, Bella akan memberikan penilaian oleh jawaban anda.",
     },
     {
-      question: "Apakah Beabot gratis untuk digunakan?",
-      answer: "Kami menawarkan tingkatan gratis dengan fitur dasar untuk Anda memulai. Untuk akses tak terbatas ke alat AI canggih, ulasan manusia, dan fitur komunitas premium, kami menawarkan paket langganan yang fleksibel.",
+      question: "Bagaimana cara saya memulai Essay Review?",
+      answer: "Klik tombol 'Start Essay Review' pada halaman dashboard, lalu upload file essay dalam format .pdf, dan tunggu beberapa saat hingga review selesai. Setelah itu anda bisa melihat hasil penilaian anda.",
     },
     {
       question: "Bagaimana cara menghapus riwayat interview saya?",
