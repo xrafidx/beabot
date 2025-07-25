@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import DataStatusDisplay from "@/components/DataStatusDisplay";
 import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import { AiReviewContent, BackendEssayData } from "@/Types";
+import { getCookie } from "cookies-next/client";
 
 const Page = () => {
   const params = useParams();
@@ -32,6 +33,7 @@ const Page = () => {
     notFound(); // ID tidak valid, anggap 404
   }
 
+  const token = getCookie("accessToken");
   const {
     data: rawEssayData,
     isLoading,
@@ -43,6 +45,7 @@ const Page = () => {
     queryFn: async () => {
       const response = await fetch(`${BASE_URL}${API_ENDPOINTS.ESSAY_REVIEW}/${rawEssayId}`, {
         method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
         credentials: "include",
       });
 

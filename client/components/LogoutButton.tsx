@@ -4,13 +4,16 @@ import React from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { API_ENDPOINTS, BASE_URL } from "@/constants";
+import { deleteCookie, getCookie } from "cookies-next/client";
 
 const LogoutButton = () => {
   const handleLogout = async () => {
     try {
+      const token = getCookie("accessToken");
       const response = await fetch(`${BASE_URL}${API_ENDPOINTS.LOGOUT}`, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-type": "application/json",
         },
         credentials: "include",
@@ -19,6 +22,7 @@ const LogoutButton = () => {
       if (response.ok) {
         const data = await response.json();
         toast.success(data.message || "Logout success.");
+        deleteCookie("accessToken");
         window.location.href = "/sign-in";
       } else {
         const errorData = await response.json();
