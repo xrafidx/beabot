@@ -77,13 +77,11 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // <<-- PERBAIKAN DI SINI: Gunakan BASE_URL untuk endpoint
-      const endpoint = type === "register" ? `${BASE_URL}${API_ENDPOINTS.REGISTER}` : `${BASE_URL}${API_ENDPOINTS.SIGN_IN}`;
+      // Panggilan ke backend eksternal Anda
+      const externalBackendEndpoint = type === "register" ? `${BASE_URL}${API_ENDPOINTS.REGISTER}` : `${BASE_URL}${API_ENDPOINTS.SIGN_IN}`;
 
       let payload;
-
       if (type === "register") {
-        // <<-- PERBAIKAN DI SINI: Hapus (values as any)
         payload = {
           name: (values as any).name,
           email: values.email,
@@ -96,45 +94,54 @@ const AuthForm = ({ type }: { type: FormType }) => {
         };
       }
 
-      const response = await fetch(endpoint, {
+      const externalResponse = await fetch(externalBackendEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: "include", // <<-- PERBAIKAN DI SINI: UNCOMMENT INI
+        credentials: "include", // Tetap include jika backend eksternal Anda juga membaca/menyetel cookie
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        toast.success(`${type === "register" ? "Registered" : "Signed in"} successfully!`);
-        console.log("Server response:", data);
+      if (externalResponse.ok) {
+        const data = await externalResponse.json();
+        console.log("Server respons backend eksternal:", data);
 
         // ******************************************************
-        // START: LOGIKA SET COOKIE DARI FRONTEND
+        // START: PANGGIL NEXT.JS API ROUTE UNTUK MENYETEL COOKIE
         if (data.accessToken) {
-          // Asumsi backend mengirim { accessToken: "your.token.here", ... }
-          Cookies.set("accessToken", data.accessToken, {
-            expires: 2, // Masa berlaku cookie dalam hari (sesuai maxAge backend sebelumnya)
-            path: "/", // Path cookie, tersedia di seluruh situs
-            secure: true, // <<-- WAJIB true di production (HTTPS)
-            sameSite: "None", // <<-- Gunakan 'None' jika FE dan BE beda domain
-            // INGAT: 'None' memerlukan 'secure: true'
-            domain: "beabot-fe.vercel.app", // <<-- Opsional: Jika ingin eksplisit set domain FE
-            // Ini adalah domain FE kamu.
-            // Jika dihilangkan, akan default ke domain saat ini (FE).
-            // HATI-HATI jika FE dan BE berada di sub-subdomain yang kompleks.
+          // Pastikan backend eksternal mengirim accessToken di body
+          const setCookieResponse = await fetch("/api/auth/set-cookie", {
+            // Panggil API Route internal Next.js Anda
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ accessToken: data.accessToken }),
+            // credentials: 'same-origin' atau tidak perlu karena ini same-origin
           });
-          console.log("Cookie accessToken berhasil disetel oleh frontend.");
+
+          if (!setCookieResponse.ok) {
+            const errorData = await setCookieResponse.json();
+            console.error("Gagal menyetel cookie via Next.js API Route:", errorData);
+            toast.error("Gagal menyimpan sesi. Mohon coba lagi.");
+            return; // Hentikan alur jika cookie gagal disetel
+          }
+          console.log("Cookie accessToken berhasil disetel oleh Next.js API Route.");
+          toast.success(`${type === "register" ? "Registered" : "Signed in"} successfully!`);
+        } else {
+          toast.error("Access token tidak diterima dari backend. Login gagal.");
+          console.error("Backend response did not contain accessToken:", data);
+          return;
         }
-        // END: LOGIKA SET COOKIE DARI FRONTEND
+        // END: PANGGIL NEXT.JS API ROUTE UNTUK MENYETEL COOKIE
         // ******************************************************
 
         router.push(`${type === "register" ? "/sign-in" : "/dashboard"}`);
       } else {
-        const errorData = await response.json();
+        const errorData = await externalResponse.json();
         toast.error(`Failed to ${type === "register" ? "register" : "sign in"}: ${errorData.message || "An unknown error occurred."}`);
-        console.error("Failed to send data:", errorData);
+        console.error("Failed to send data to external backend:", errorData);
       }
     } catch (error) {
       toast.error(`An error occurred: ${error instanceof Error ? error.message : "Unknown error."}`);
@@ -143,7 +150,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
   }
 
   const isSignIn = type === "sign-in";
-
   return (
     <div>
       <div className="flex flex-row gap-2 justify-center mb-3">
