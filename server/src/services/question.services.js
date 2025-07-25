@@ -4,9 +4,10 @@ import ai from "../config/gemini.js";
 import fsp from 'fs/promises'; // Gunakan 'fs/promises'
 
 
-export async function hapusFile(fileName) {
+export async function hapusFile(datafile) {
   try {
-    await fsp.unlink(`./upload/${fileName}`);
+    const locfile = datafile.path;
+    await fsp.unlink(locfile);
     console.log(`File ${fileName} berhasil dihapus.`);
   } catch (error) {
     // Tangani error, misalnya jika file tidak ditemukan
@@ -70,6 +71,7 @@ export async function findRegQuestion(cardsid){
 
 export async function createEssQuestion(cardsid,datafile){
     try {
+        const locfile = datafile.path;
         // dapetin file name
         const fileName = datafile.filename;
         // dapetin nama user
@@ -93,7 +95,7 @@ export async function createEssQuestion(cardsid,datafile){
         {
             inlineData: {
                 mimeType: 'application/pdf',
-                data: Buffer.from(fs.readFileSync(`../../beabot/server/upload/${fileName}`)).toString("base64")
+                data: Buffer.from(fs.readFileSync(locfile)).toString("base64")
             }
         }
     ];
