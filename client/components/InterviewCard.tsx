@@ -15,6 +15,7 @@ import { API_ENDPOINTS, BASE_URL } from "@/constants";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CheckCircle, MoreVertical } from "lucide-react";
+import { getCookie } from "cookies-next/client";
 
 const InterviewCard = ({
   id,
@@ -39,10 +40,12 @@ const InterviewCard = ({
   const showCompletedUI = interviewstatus === InterviewStatus.INTERVIEW_COMPLETED;
   const showCancelledUI = interviewstatus === InterviewStatus.INTERVIEW_CANCELLED;
 
+  const token = getCookie("accessToken");
   const deleteMutation = useMutation({
     mutationFn: async (interviewIdToDelete: string) => {
       const response = await fetch(`${BASE_URL}${API_ENDPOINTS.BASE_INTERVIEW_CARD_BY_ID}/${interviewIdToDelete}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
         credentials: "include",
       });
 

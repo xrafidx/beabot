@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from "@/constants";
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import { BackendEssayData } from "@/Types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import FormFileInput from "./FormFileInput";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { FileUp } from "lucide-react";
+import { getCookie } from "cookies-next/client";
 
 const EssayUploadFormSchema = z.object({
   essay:
@@ -55,9 +56,10 @@ const EssayUploadForm = () => {
       } else {
         throw new Error("Tidak ada file yang diunggah");
       }
-
-      const response = await fetch(`http://localhost:5000${API_ENDPOINTS.ESSAY_REVIEW}`, {
+      const token = getCookie("accessToken");
+      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.ESSAY_REVIEW}`, {
         method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
         body: formData,
         credentials: "include",
       });

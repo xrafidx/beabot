@@ -99,7 +99,7 @@ const InterviewForm = () => {
       const token = getCookie("accessToken");
       const response = await fetch(`${API_ENDPOINTS.CREATE_INTERVIEW_CARD}`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" },
+        headers: { Authorization: `Bearer ${token}` },
         body: formData,
         credentials: "include",
       });

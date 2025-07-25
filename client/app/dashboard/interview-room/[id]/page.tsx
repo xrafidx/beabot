@@ -10,6 +10,7 @@ import Image from "next/image";
 import { UserCircleIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { getCookie } from "cookies-next/client";
 
 const vapi = new Vapi(process.env.NEXT_PUBLIC_API_KEY);
 
@@ -22,8 +23,10 @@ export default function VapiWorkflowButton() {
   const [user, setUser] = useState({ name: "Guest", email: "" });
 
   useEffect(() => {
+    const token = getCookie("accessToken");
     fetch(`${BASE_URL}${API_ENDPOINTS.USER_DATA}`, {
       method: "GET",
+      headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" },
       credentials: "include",
     })
       .then((res) => {
