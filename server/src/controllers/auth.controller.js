@@ -14,7 +14,7 @@ export async function login(req, res, next) {
       maxAge: 2 * 24 * 60 * 60 * 1000, // 2 hariSSSSS
       path: '/',
       domain: '.beabot.vercel.app',
-      credentials: 'true'
+      credentials: 'include'
     });
 
     res.status(200).json({
