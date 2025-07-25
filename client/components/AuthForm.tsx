@@ -7,12 +7,13 @@ import { useForm, FieldErrors } from "react-hook-form"; // Import FieldErrors fo
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import Image from "next/image"; // If you are using Image from next/image
+import Image from "next/image";
 import Link from "next/link";
-import FormField from "./FormField"; // Assuming this is your custom FormField component
-import { toast } from "sonner"; // Assuming you have sonner installed and <Toaster /> in your layout
+import FormField from "./FormField";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { API_ENDPOINTS } from "@/constants";
+import { API_ENDPOINTS, BASE_URL } from "@/constants"; // <<-- PASTIKAN BASE_URL DIIMPOR
+import Cookies from "js-cookie"; // <<-- PERBAIKAN DI SINI: Import 'js-cookie' (singular)
 
 // Define FormType if not already defined globally or in another type file
 type FormType = "sign-in" | "register";
@@ -32,10 +33,9 @@ const AuthFormSchema = (type: FormType) => {
       })
       .refine((data) => data.password === data.confirmPassword, {
         message: "Passwords don't match",
-        path: ["confirmPassword"], // This path ensures the error message shows under the confirmPassword field
+        path: ["confirmPassword"],
       });
   } else {
-    // For 'sign-in', only include relevant fields from the base schema
     return z.object({
       email: baseSchema.shape.email,
       password: baseSchema.shape.password,
@@ -47,65 +47,49 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
   const formSchema = AuthFormSchema(type);
 
-  // 1. Define your form with zodResolver and defaultValues
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues:
       type === "register"
         ? {
-            // Untuk register, semua field ada
             name: "",
             email: "",
             password: "",
             confirmPassword: "",
           }
         : {
-            // Untuk sign-in, hanya email dan password
             email: "",
             password: "",
           },
   });
 
-  // Function to handle validation errors from React Hook Form
-  // This function is called by form.handleSubmit ONLY when validation fails
   const onError = (errors: FieldErrors<z.infer<typeof formSchema>>) => {
-    // Log all validation errors for debugging purposes in the console
     console.log("Validation errors detected (onError callback):", errors);
-
-    // Get the message of the first error found
     const firstErrorKey = Object.keys(errors)[0] as keyof typeof errors;
     const errorMessage = errors[firstErrorKey]?.message;
 
     if (errorMessage) {
-      toast.error(errorMessage); // Display the specific error message as a toast
+      toast.error(errorMessage);
     } else {
-      toast.error("Please check the form for errors."); // Fallback message
+      toast.error("Please check the form for errors.");
     }
-    // IMPORTANT: No 'return;' here, allow the component to render the form with error messages
   };
 
-  // 2. Define a submit handler.
-  // This function is called by form.handleSubmit ONLY when validation passes
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // At this point, the form data is already validated by Zod,
-    // so no need to check form.formState.errors here.
-
     try {
-      const endpoint = type === "register" ? `${API_ENDPOINTS.REGISTER}` : `${API_ENDPOINTS.SIGN_IN}`;
+      // <<-- PERBAIKAN DI SINI: Gunakan BASE_URL untuk endpoint
+      const endpoint = type === "register" ? `${BASE_URL}${API_ENDPOINTS.REGISTER}` : `${BASE_URL}${API_ENDPOINTS.SIGN_IN}`;
 
       let payload;
 
-      // let payload;
-
       if (type === "register") {
-        // values sudah pasti bertipe: { name, email, password, confirmPassword }
+        // <<-- PERBAIKAN DI SINI: Hapus (values as any)
         payload = {
           name: (values as any).name,
           email: values.email,
           password: values.password,
         };
       } else {
-        // values hanya: { email, password }
         payload = {
           email: values.email,
           password: values.password,
@@ -118,7 +102,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: "include",
+        credentials: "include", // <<-- PERBAIKAN DI SINI: UNCOMMENT INI
       });
 
       if (response.ok) {
@@ -126,15 +110,29 @@ const AuthForm = ({ type }: { type: FormType }) => {
         toast.success(`${type === "register" ? "Registered" : "Signed in"} successfully!`);
         console.log("Server response:", data);
 
-        // Store token if provided by the backend
-        // if (data.token) {
-        //   localStorage.setItem("authToken", data.token);
-        // }
+        // ******************************************************
+        // START: LOGIKA SET COOKIE DARI FRONTEND
+        if (data.accessToken) {
+          // Asumsi backend mengirim { accessToken: "your.token.here", ... }
+          Cookies.set("accessToken", data.accessToken, {
+            expires: 2, // Masa berlaku cookie dalam hari (sesuai maxAge backend sebelumnya)
+            path: "/", // Path cookie, tersedia di seluruh situs
+            secure: true, // <<-- WAJIB true di production (HTTPS)
+            sameSite: "None", // <<-- Gunakan 'None' jika FE dan BE beda domain
+            // INGAT: 'None' memerlukan 'secure: true'
+            domain: "beabot-fe.vercel.app", // <<-- Opsional: Jika ingin eksplisit set domain FE
+            // Ini adalah domain FE kamu.
+            // Jika dihilangkan, akan default ke domain saat ini (FE).
+            // HATI-HATI jika FE dan BE berada di sub-subdomain yang kompleks.
+          });
+          console.log("Cookie accessToken berhasil disetel oleh frontend.");
+        }
+        // END: LOGIKA SET COOKIE DARI FRONTEND
+        // ******************************************************
 
-        router.push(`${type === "register" ? "/sign-in" : "/dashboard"}`); // Redirect to the dashboard on success
+        router.push(`${type === "register" ? "/sign-in" : "/dashboard"}`);
       } else {
         const errorData = await response.json();
-        // Display specific error message from the backend if available
         toast.error(`Failed to ${type === "register" ? "register" : "sign in"}: ${errorData.message || "An unknown error occurred."}`);
         console.error("Failed to send data:", errorData);
       }
@@ -156,7 +154,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
           <h6 className="text-purple-600 font-semibold">{isSignIn ? "Sign in to Beabot" : "Get started on Beabot"}</h6>
 
           <Form {...form}>
-            {/* IMPORTANT: Pass both onSubmit and onError to form.handleSubmit */}
             <form onSubmit={form.handleSubmit(onSubmit, onError)} className="w-full space-y-3 form">
               {!isSignIn && <FormField control={form.control} name="name" label="Name" placeholder="Enter your name" type="text" description="For your display name"></FormField>}
               <FormField control={form.control} name="email" label="Email" placeholder="Enter your email" type="email" description={isSignIn ? "" : "For sign in and to receive latest newsletter"}></FormField>
