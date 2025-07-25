@@ -96,7 +96,7 @@ const InterviewForm = () => {
         formData.append("essay", values.essay[0]);
       }
 
-      const response = await fetch(`${BASE_URL}${API_ENDPOINTS.CREATE_INTERVIEW_CARD}`, {
+      const response = await fetch(`${API_ENDPOINTS.CREATE_INTERVIEW_CARD}`, {
         method: "POST",
         body: formData,
         credentials: "include",
