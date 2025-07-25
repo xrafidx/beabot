@@ -12,13 +12,22 @@ import { API_ENDPOINTS, BASE_URL } from "@/constants";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { error } from "console";
+import { getCookie } from "cookies-next/client";
 
 export default function UserNavbar() {
   const pathname = usePathname();
   const [user, setUser] = useState({ name: "Guest", email: "-" });
+
   useEffect(() => {
+    const token = getCookie("accessToken");
+
+    if (!token) return;
+
     fetch(`${BASE_URL}${API_ENDPOINTS.USER_DATA}`, {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       credentials: "include",
     })
       .then((res) => {

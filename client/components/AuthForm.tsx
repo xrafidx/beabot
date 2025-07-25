@@ -6,14 +6,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FieldErrors } from "react-hook-form"; // Import FieldErrors for type safety
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import Image from "next/image";
+import { Form, FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import Image from "next/image"; // If you are using Image from next/image
 import Link from "next/link";
-import FormField from "./FormField";
-import { toast } from "sonner";
+import FormField from "./FormField"; // Assuming this is your custom FormField component
+import { toast } from "sonner"; // Assuming you have sonner installed and <Toaster /> in your layout
 import { useRouter } from "next/navigation";
-import { API_ENDPOINTS, BASE_URL } from "@/constants"; // <<-- PASTIKAN BASE_URL DIIMPOR
-import Cookies from "js-cookie"; // <<-- PERBAIKAN DI SINI: Import 'js-cookie' (singular)
+import { API_ENDPOINTS, BASE_URL } from "@/constants";
+import setCookies, { setCookie } from "cookies-next/client";
 
 // Define FormType if not already defined globally or in another type file
 type FormType = "sign-in" | "register";
@@ -33,9 +34,10 @@ const AuthFormSchema = (type: FormType) => {
       })
       .refine((data) => data.password === data.confirmPassword, {
         message: "Passwords don't match",
-        path: ["confirmPassword"],
+        path: ["confirmPassword"], // This path ensures the error message shows under the confirmPassword field
       });
   } else {
+    // For 'sign-in', only include relevant fields from the base schema
     return z.object({
       email: baseSchema.shape.email,
       password: baseSchema.shape.password,
@@ -47,101 +49,92 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
   const formSchema = AuthFormSchema(type);
 
+  // 1. Define your form with zodResolver and defaultValues
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues:
-      type === "register"
-        ? {
-            name: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-          }
-        : {
-            email: "",
-            password: "",
-          },
+    defaultValues: {
+      name: "", // Keep these even if optional, to ensure React Hook Form manages them
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 
+  // Function to handle validation errors from React Hook Form
+  // This function is called by form.handleSubmit ONLY when validation fails
   const onError = (errors: FieldErrors<z.infer<typeof formSchema>>) => {
+    // Log all validation errors for debugging purposes in the console
     console.log("Validation errors detected (onError callback):", errors);
+
+    // Get the message of the first error found
     const firstErrorKey = Object.keys(errors)[0] as keyof typeof errors;
     const errorMessage = errors[firstErrorKey]?.message;
 
     if (errorMessage) {
-      toast.error(errorMessage);
+      toast.error(errorMessage); // Display the specific error message as a toast
     } else {
-      toast.error("Please check the form for errors.");
+      toast.error("Please check the form for errors."); // Fallback message
     }
+    // IMPORTANT: No 'return;' here, allow the component to render the form with error messages
   };
 
+  // 2. Define a submit handler.
+  // This function is called by form.handleSubmit ONLY when validation passes
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    // At this point, the form data is already validated by Zod,
+    // so no need to check form.formState.errors here.
+
     try {
-      // Panggilan ke backend eksternal Anda
-      const externalBackendEndpoint = type === "register" ? `${BASE_URL}${API_ENDPOINTS.REGISTER}` : `${BASE_URL}${API_ENDPOINTS.SIGN_IN}`;
+      const endpoint = type === "register" ? `${BASE_URL}${API_ENDPOINTS.REGISTER}` : `${BASE_URL}${API_ENDPOINTS.SIGN_IN}`;
 
       let payload;
+
       if (type === "register") {
+        // Ensure only relevant data is sent to the backend for registration
         payload = {
           name: (values as any).name,
           email: values.email,
           password: values.password,
         };
       } else {
+        // Ensure only relevant data is sent for sign-in
         payload = {
           email: values.email,
           password: values.password,
         };
       }
 
-      const externalResponse = await fetch(externalBackendEndpoint, {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: "include", // Tetap include jika backend eksternal Anda juga membaca/menyetel cookie
+        credentials: "include",
       });
 
-      if (externalResponse.ok) {
-        const data = await externalResponse.json();
-        console.log("Server respons backend eksternal:", data);
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(`${type === "register" ? "Registered" : "Signed in"} successfully!`);
+        console.log("Server response:", data);
+        setCookie("accessToken", data.accessToken, {
+          maxAge: 2 * 24 * 60 * 60 * 1000,
+          path: "/",
+          sameSite: "strict",
+          secure: true,
+        });
 
-        // ******************************************************
-        // START: PANGGIL NEXT.JS API ROUTE UNTUK MENYETEL COOKIE
-        if (data.accessToken) {
-          // Pastikan backend eksternal mengirim accessToken di body
-          const setCookieResponse = await fetch("/api/auth/set-cookie", {
-            // Panggil API Route internal Next.js Anda
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ accessToken: data.accessToken }),
-            // credentials: 'same-origin' atau tidak perlu karena ini same-origin
-          });
+        // Store token if provided by the backend
+        // if (data.token) {
+        //   localStorage.setItem("authToken", data.token);
+        // }
 
-          if (!setCookieResponse.ok) {
-            const errorData = await setCookieResponse.json();
-            console.error("Gagal menyetel cookie via Next.js API Route:", errorData);
-            toast.error("Gagal menyimpan sesi. Mohon coba lagi.");
-            return; // Hentikan alur jika cookie gagal disetel
-          }
-          console.log("Cookie accessToken berhasil disetel oleh Next.js API Route.");
-          toast.success(`${type === "register" ? "Registered" : "Signed in"} successfully!`);
-        } else {
-          toast.error("Access token tidak diterima dari backend. Login gagal.");
-          console.error("Backend response did not contain accessToken:", data);
-          return;
-        }
-        // END: PANGGIL NEXT.JS API ROUTE UNTUK MENYETEL COOKIE
-        // ******************************************************
-
-        router.push(`${type === "register" ? "/sign-in" : "/dashboard"}`);
+        router.push(`${type === "register" ? "/sign-in" : "/dashboard"}`); // Redirect to the dashboard on success
       } else {
-        const errorData = await externalResponse.json();
+        const errorData = await response.json();
+        // Display specific error message from the backend if available
         toast.error(`Failed to ${type === "register" ? "register" : "sign in"}: ${errorData.message || "An unknown error occurred."}`);
-        console.error("Failed to send data to external backend:", errorData);
+        console.error("Failed to send data:", errorData);
       }
     } catch (error) {
       toast.error(`An error occurred: ${error instanceof Error ? error.message : "Unknown error."}`);
@@ -150,6 +143,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
   }
 
   const isSignIn = type === "sign-in";
+
   return (
     <div>
       <div className="flex flex-row gap-2 justify-center mb-3">
@@ -160,6 +154,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
           <h6 className="text-purple-600 font-semibold">{isSignIn ? "Sign in to Beabot" : "Get started on Beabot"}</h6>
 
           <Form {...form}>
+            {/* IMPORTANT: Pass both onSubmit and onError to form.handleSubmit */}
             <form onSubmit={form.handleSubmit(onSubmit, onError)} className="w-full space-y-3 form">
               {!isSignIn && <FormField control={form.control} name="name" label="Name" placeholder="Enter your name" type="text" description="For your display name"></FormField>}
               <FormField control={form.control} name="email" label="Email" placeholder="Enter your email" type="email" description={isSignIn ? "" : "For sign in and to receive latest newsletter"}></FormField>

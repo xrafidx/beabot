@@ -1,6 +1,7 @@
 import { BASE_URL } from "@/constants";
 import { AiReviewContent, BackendCardData, BackendEssayData, BackendInterviewData, CardProps, EssayCardProps, InterviewCardProps, InterviewStatus } from "@/Types";
 import { useQuery } from "@tanstack/react-query";
+import { getCookie } from "cookies-next/client";
 import { useMemo } from "react";
 
 interface UseFetchCardsDataProps<TBackend extends BackendCardData, TFrontend extends CardProps> {
@@ -11,6 +12,7 @@ interface UseFetchCardsDataProps<TBackend extends BackendCardData, TFrontend ext
 }
 
 export function useFetchCardsData<TBackend extends BackendCardData, TFrontend extends CardProps>({ queryKey, apiEndpoint, mapper }: UseFetchCardsDataProps<TBackend, TFrontend>) {
+  const token = getCookie("accessToken");
   const {
     data: rawData = [],
     isLoading,
@@ -22,6 +24,10 @@ export function useFetchCardsData<TBackend extends BackendCardData, TFrontend ex
     queryFn: async () => {
       const response = await fetch(`${BASE_URL}${apiEndpoint}`, {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
         credentials: "include",
       });
 

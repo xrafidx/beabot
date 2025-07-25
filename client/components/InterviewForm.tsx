@@ -17,6 +17,7 @@ import { Button } from "./ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 // Import mapper
 import { mapBackendInterviewToCard } from "@/hooks/useFetchCardsData";
+import { getCookie } from "cookies-next/client";
 
 const InterviewFormSchema = z
   .object({
@@ -95,9 +96,10 @@ const InterviewForm = () => {
       if (values.jenisPertanyaan === "essay-driven" && values.essay && values.essay.length > 0) {
         formData.append("essay", values.essay[0]);
       }
-
+      const token = getCookie("accessToken");
       const response = await fetch(`${API_ENDPOINTS.CREATE_INTERVIEW_CARD}`, {
         method: "POST",
+        headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" },
         body: formData,
         credentials: "include",
       });
@@ -121,6 +123,7 @@ const InterviewForm = () => {
         const generateResponse = await fetch(`${API_ENDPOINTS.GENERATE_REGULAR_QUESTION}/${cardId}`, {
           method: "POST",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           credentials: "include",
@@ -147,6 +150,10 @@ const InterviewForm = () => {
         const generateEssayResponse = await fetch(`${BASE_URL}${API_ENDPOINTS.GENERATE_ESSAY_QUESTION}/${cardId}`, {
           method: "POST",
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
           body: essayQuestionUpload,
         });
         if (!generateEssayResponse.ok) {
