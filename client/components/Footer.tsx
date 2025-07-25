@@ -14,7 +14,7 @@ export default function Footer() {
           <div className="flex items-center gap-2 mb-4">
             <Image src="/beabot-icon/beabot-logo-putih-samping.png" alt="beabot logo" width={100} height={100}></Image>
           </div>
-          <p className="text-sm text-gray-200">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.</p>
+          <p className="text-sm text-gray-200">Ace your interview and perfect your essays.</p>
         </div>
 
         {/* Tengah */}
