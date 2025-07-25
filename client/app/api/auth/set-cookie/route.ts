@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       // <<-- Tambahkan 'as string' untuk memastikan tipenya
       httpOnly: true,
       secure: true, // <<-- Pastikan ini literal 'true', bukan variabel boolean jika ada
-      //   sameSite: "none", // <<-- PERBAIKAN DI SINI: Gunakan huruf kecil "none"
+      sameSite: "none", // <<-- PERBAIKAN DI SINI: Gunakan huruf kecil "none"
       path: "/",
       maxAge: 2 * 24 * 60 * 60, // 2 hari dalam detik
       domain: ".beabot-fe.vercel.app", // Opsional: Sesuaikan jika perlu
