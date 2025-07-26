@@ -10,7 +10,7 @@ interface UseFetchCardsDataProps<TBackend extends BackendCardData, TFrontend ext
   mapper: (card: TBackend) => TFrontend;
   refetchInterval?: number | false | ((query: any) => number | false);
 }
-
+//Buat Fetch Data
 export function useFetchCardsData<TBackend extends BackendCardData, TFrontend extends CardProps>({ queryKey, apiEndpoint, mapper }: UseFetchCardsDataProps<TBackend, TFrontend>) {
   const token = getCookie("accessToken");
   const {
