@@ -22,7 +22,7 @@ const LogoutButton = () => {
       if (response.ok) {
         const data = await response.json();
         toast.success(data.message || "Logout success.");
-        deleteCookie("accessToken", { path: "/" });
+        deleteCookie("accessToken", `${token}`);
         window.location.href = "/sign-in";
       } else {
         const errorData = await response.json();
