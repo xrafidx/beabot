@@ -146,7 +146,7 @@ const InterviewCard = ({
             )}
             {showCompletedUI && ( // Tombol "Lihat Feedback" jika sudah selesai
               <Button asChild className="btn-outline-purple text-purple-600">
-                <Link href={`/dashboard/interview-feedback/${id}`}>Ulangi Interview</Link>
+                <Link href={`/dashboard/interview-room/${id}`}>Ulangi Interview</Link>
               </Button>
             )}
             {showCancelledUI && ( // Tombol "Interview Dibatalkan" jika dibatalkan
